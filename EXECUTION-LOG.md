@@ -298,3 +298,14 @@ No implementation is claimed complete. Future agents should not mistake proposed
   - *Mutation check.* Dropping the "toilet above" direction made the real-geometry test fail.
   - *Results.* Nepal Node suite **58/59**; the only failure is still the missing-original-PDF test. Python geometry suite: OK.
 - **Next.** Make generation avoid these conflicts rather than only report them: puja placement needs the plan of the floors above and below. Moving the puja can trade against its NE preference, so any trade-off must be shown to the owner, not silently chosen.
+
+## 2026-09-30 — why the rental top-floor puja sits over the bathrooms (owner decision needed)
+
+- **Cause, measured on all six rental review candidates.** The partial third floor is 5,264 × 7,599 mm (40 m², the brief's target). The stair core takes 2,600 mm of its width and the unit corridor 1,102 mm. That leaves a 1,562 mm main strip, below the 1,800 mm minimum puja dimension used by the validator. `roomPlanner.js` also routes the puja into the service bay whenever a level has no living room (`pujaInService`). That bay is the continuation of the stair-core column, where both second-floor bathrooms stack. Any puja position in that column is over a bathroom.
+- **No NE trade-off in the current position.** The puja's NE/N/E preferred share on its floor domain is 0.11 (east-core) or 0.00 (west-core).
+- **Options.** None has been implemented; they need the owner's choice.
+  - *A. Widen the partial top floor by about 240 mm or more* (to about 5.5 m, keeping about 40 m² by shortening its depth to about 7.27 m). Then place the puja in the main strip over the second-floor living/kitchen/bedrooms, where there is no bathroom below. This changes the terrace-floor massing and needs a new planner branch for "no living room, puja fits in main strip". It would change the geometry of review plans 5–10.
+  - *B. Keep the current massing* and record V06 as an explicit, owner-accepted departure.
+  - *C. Move the puja to the second (owner) floor.* This conflicts with the current "puja on the highest owner floor" preference (`PUJA_NOT_ON_HIGHEST_OWNER_FLOOR`).
+  - *D. Re-plan the second-floor wet rooms out of the service column.* This is the larger multi-floor wet-zone topology task already in the backlog.
+- **Status.** Detection and reporting are in place (previous entry). Generation is unchanged until the owner chooses, as DESIGN-PRINCIPLES §1 requires. Option A is the smallest change that could satisfy V06 on plans 5–10. It is a massing/program change and must be visible to the household, not silently applied.
