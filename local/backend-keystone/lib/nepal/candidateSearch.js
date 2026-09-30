@@ -164,9 +164,15 @@ const PHYSICAL_PLACEMENT_BLOCKERS=new Set(['NO_PHYSICAL_EXTERIOR_WINDOW_RESERVAT
   'ROOM_OVERLAP','ROOM_SIZE_BELOW_PROVISIONAL_NBC206','MAIN_ROOM_GRID_CELL_NOT_MET',
   'COLUMN_IN_ROOM_CLEAR_AREA','CIRCULATION_COLUMN_OBSTRUCTION',
   'PARKING_AND_GATE_NOT_PLACED','ENTRY_NOT_FACING_LIVING']);
+// Measured core-Vaastu conflicts (DESIGN-PRINCIPLES §1 tier 2) rank after physical
+// placement defects and before the preference score, so decorative gains cannot
+// outweigh a puja over a toilet or stair, or a toilet in the NE/centre.
+const CORE_VAASTU_CONFLICTS=new Set(['PUJA_TOILET_SEPARATION_NOT_MET','PUJA_STAIR_VERTICAL_OVERLAP',
+  'TOILET_IN_NE_OR_CENTER']);
 function compare(a,b) {
-  const physicalCount=c=>c.validation.blockers.filter(x=>PHYSICAL_PLACEMENT_BLOCKERS.has(x.code)).length;
-  const delta=physicalCount(a)-physicalCount(b);
+  const count=(c,codes)=>c.validation.blockers.filter(x=>codes.has(x.code)).length;
+  const delta=count(a,PHYSICAL_PLACEMENT_BLOCKERS)-count(b,PHYSICAL_PLACEMENT_BLOCKERS)||
+    count(a,CORE_VAASTU_CONFLICTS)-count(b,CORE_VAASTU_CONFLICTS);
   if(delta)return delta;
   for(let i=0;i<a.score.length;i++)if(a.score[i]!==b.score[i])return b.score[i]-a.score[i];
   return a.id.localeCompare(b.id);}
@@ -318,4 +324,4 @@ function searchConcepts(brief,{provisionalSetbacksMm,workingCoverageLimit=null,
   return {candidates:chosen,attempts,variations,rulePackVersion:rulePack.version,
     status:'unverified_concepts_only',generationAvailable:false};
 }
-module.exports={searchConcepts};
+module.exports={searchConcepts,compare,CORE_VAASTU_CONFLICTS};

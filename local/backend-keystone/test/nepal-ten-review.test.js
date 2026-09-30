@@ -165,3 +165,16 @@ test('a tighter top-floor cap keeps the puja/toilet conflict visible instead of 
     assert.ok(candidate.validation.blockers.some(b=>b.code==='PUJA_TOILET_SEPARATION_NOT_MET'));
   }
 });
+
+test('ranking puts core-Vaastu conflicts after physical defects and before the preference score',()=>{
+  const {compare}=require('../lib/nepal/candidateSearch');
+  const c=(id,codes,score)=>({id,score,validation:{blockers:codes.map(code=>({code}))}});
+  const better=c('a-conflict-free',[],[0.2,0,0,-90]);
+  const decorative=c('b-high-score',['TOILET_IN_NE_OR_CENTER'],[1,1,1,-80]);
+  const physical=c('c-physical',['ROOM_OVERLAP'],[1,1,1,-80]);
+  assert.deepEqual([decorative,physical,better].sort(compare).map(x=>x.id),
+    ['a-conflict-free','b-high-score','c-physical']);
+  // Review-only findings (e.g. C17 routes) do not reorder candidates.
+  const routed=c('d-routed',['OFFSET_WET_ROOM_DRAIN_ROUTE_UNVERIFIED'],[0.3,0,0,-90]);
+  assert.deepEqual([better,routed].sort(compare).map(x=>x.id),['d-routed','a-conflict-free']);
+});
