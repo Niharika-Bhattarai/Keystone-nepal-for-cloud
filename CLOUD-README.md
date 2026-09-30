@@ -18,10 +18,17 @@ A trimmed copy of `Keystone Nepal` for cloud work under a 100-file cap. The fold
 - `node_modules`, so run `npm install` in `local/backend-keystone`.
 
 ## Known effect of the trimmed copy
-`resolveRulePack.js` checks the original source PDFs by hash. Without them it reports `RULE_SOURCE_DRIFT`. That makes `nepal-milestone-c` test "Kathmandu overlay is explicit and unreviewed…" fail, and it is expected. The other Nepal tests passed in a verification run.
+`resolveRulePack.js` (`verifyCatalog`) checks two things. The first check hashes `knowledge/rules.json` and `knowledge/manifest.json` against the pins in `catalog.json`. The second hashes each original source file in `Design Files/` against the manifest's SHA-256.
+
+The first check used to fail on every non-Windows checkout. The pins had been computed over CRLF bytes, and git stores these files with LF (`* text=auto`). The pins now hash line-ending-normalized text, so this check passes on Linux, macOS and Windows.
+
+The second check still fails here because the PDFs and EPUBs are not in this trimmed copy. That is expected and not masked. It reports `RULE_SOURCE_DRIFT`, so `nepal-milestone-c` test "Kathmandu overlay is explicit and unreviewed…" fails. It is the only expected failure: in a verification run the other 54 of 55 Nepal tests passed.
+
+The polygon-study tests also need Python Shapely. Without it, two more tests fail with "Polygon study unavailable". Install it with `pip install -r local/planner/requirements.txt`.
 
 ## Run
 ```
+pip install -r local/planner/requirements.txt
 cd local/backend-keystone && npm install
 node --test test/nepal-*.test.js
 ```

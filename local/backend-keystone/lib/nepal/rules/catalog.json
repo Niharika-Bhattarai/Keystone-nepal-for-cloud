@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "builtAt": "2026-09-30",
-  "knowledgeRulesSha256": "69bfa946d3ec725e2084641ae816dc070406cbd92fff1ba1eedf9da8cececff5",
-  "knowledgeManifestSha256": "1f392d40de2782bc0aaf5e47c6d342684a9085b8661e59609d255da001740cbf",
+  "knowledgeRulesSha256": "0948fa2020e00dea0d19561a23f84aadd5a959056f4265449bf841bcd028f961",
+  "knowledgeManifestSha256": "c1978dc1a66b87a24841783ca88713dc7da096e5b6f32a292e8ccd1efaa2ff1e",
   "sources": [
     {
       "id": "bylaws-resource-2023",

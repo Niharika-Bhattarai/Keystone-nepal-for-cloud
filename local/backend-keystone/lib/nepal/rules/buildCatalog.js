@@ -5,6 +5,9 @@ const crypto=require('node:crypto');
 const NEPAL_ROOT=path.resolve(__dirname,'../../../../..');
 const KNOWLEDGE=path.join(NEPAL_ROOT,'knowledge');
 const sha=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
+// Git stores knowledge JSON with LF (`* text=auto`) but may check it out as CRLF on Windows.
+// Pin text catalogs over LF-normalized content; binary originals keep raw-byte hashes.
+const normalizedTextSha256=bytes=>sha(Buffer.from(bytes.toString('utf8').replace(/\r\n/g,'\n'),'utf8'));
 function buildCatalog() {
   const manifest=JSON.parse(fs.readFileSync(path.join(KNOWLEDGE,'manifest.json')));
   const sourceById=new Map(manifest.map(source=>[source.id,source]));
@@ -19,8 +22,8 @@ function buildCatalog() {
     if (!fs.existsSync(original) || sha(fs.readFileSync(original))!==source.sha256)
       throw new Error(`Original source drift: ${source.id}`);
   }
-  const result={schemaVersion:1,builtAt:'2026-09-30',knowledgeRulesSha256:sha(fs.readFileSync(path.join(KNOWLEDGE,'rules.json'))),
-    knowledgeManifestSha256:sha(fs.readFileSync(path.join(KNOWLEDGE,'manifest.json'))),
+  const result={schemaVersion:1,builtAt:'2026-09-30',knowledgeRulesSha256:normalizedTextSha256(fs.readFileSync(path.join(KNOWLEDGE,'rules.json'))),
+    knowledgeManifestSha256:normalizedTextSha256(fs.readFileSync(path.join(KNOWLEDGE,'manifest.json'))),
     sources:manifest.map(({id,sha256,status})=>({id,sha256,status})),
     rules:data.rules.filter(rule=>rule.id!=='G02'),
     exclusions:[{ruleId:'G02',reason:'Draft commentary documents exclusion only; no executable threshold is imported from it.'}]};
@@ -29,4 +32,4 @@ function buildCatalog() {
   return result;
 }
 if (require.main===module) console.log(`Compiled ${buildCatalog().rules.length} source-pinned rules`);
-module.exports={buildCatalog};
+module.exports={buildCatalog,normalizedTextSha256};

@@ -3,20 +3,22 @@ const crypto=require('node:crypto');
 const fs=require('node:fs');
 const path=require('node:path');
 const catalog=require('./catalog.json');
+const {normalizedTextSha256}=require('./buildCatalog');
 const kmc=require('./profiles/kmc.json');
 const nepalRoot=path.resolve(__dirname,'../../../../..');
 const sha=file=>crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+const textSha=file=>normalizedTextSha256(fs.readFileSync(file));
 const cached=new Map();
-function unchanged(file,expected) {
+function unchanged(file,expected,hash=sha) {
   const stat=fs.statSync(file),signature=`${stat.size}:${stat.mtimeMs}`;
   const prior=cached.get(file);
   if(prior?.signature===signature)return prior.valid;
-  const valid=sha(file)===expected;cached.set(file,{signature,valid});return valid;
+  const valid=hash(file)===expected;cached.set(file,{signature,valid});return valid;
 }
 function verifyCatalog() {
   try {
-    if(!unchanged(path.join(nepalRoot,'knowledge','rules.json'),catalog.knowledgeRulesSha256))return false;
-    if(!unchanged(path.join(nepalRoot,'knowledge','manifest.json'),catalog.knowledgeManifestSha256))return false;
+    if(!unchanged(path.join(nepalRoot,'knowledge','rules.json'),catalog.knowledgeRulesSha256,textSha))return false;
+    if(!unchanged(path.join(nepalRoot,'knowledge','manifest.json'),catalog.knowledgeManifestSha256,textSha))return false;
     const manifest=JSON.parse(fs.readFileSync(path.join(nepalRoot,'knowledge','manifest.json')));
     const byId=new Map(manifest.map(item=>[item.id,item]));
     return catalog.sources.every(ref=>{
