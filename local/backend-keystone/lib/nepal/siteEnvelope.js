@@ -40,15 +40,18 @@ function footprints(envelope,{compactRectangle=false}={}) {
     openCourt:rect([courtLeft,b.y2-courtD,courtRight,b.y2]),voids:[]});
   return cases.map(c=>({...c,areaSqM:areaSqM(c.slabs),envelopeStatus:envelope.legalStatus}));
 }
-function partialTopFootprint(full,core,targetAreaSqM,{preferredDepthMm=0}={}) {
+function partialTopFootprint(full,core,targetAreaSqM,{preferredDepthMm=0,minWidthMm=0}={}) {
   if(!Number.isFinite(targetAreaSqM)||targetAreaSqM<=0)throw new Error('Partial top floor needs a positive target area');
   const slabs=full.slabs.map(rect),c=rect(core.box);
   const x1=Math.min(...slabs.map(b=>b.x1)),x2=Math.max(...slabs.map(b=>b.x2));
   const y1=Math.min(...slabs.map(b=>b.y1)),y2=Math.max(...slabs.map(b=>b.y2));
-  const width=preferredDepthMm?Math.max(c.x2-c.x1+1000,
+  const baseWidth=preferredDepthMm?Math.max(c.x2-c.x1+1000,
     Math.ceil(targetAreaSqM*1e6/preferredDepthMm)):
     Math.max(c.x2-c.x1+1000,Math.ceil(Math.sqrt(targetAreaSqM*1e6)/100)*100);
-  const height=Math.ceil(targetAreaSqM*1e6/width);
+  // A widened floor keeps its preferred depth, so its area grows above the target.
+  const width=Math.max(baseWidth,minWidthMm);
+  const height=width>baseWidth?Math.max(Math.ceil(targetAreaSqM*1e6/width),preferredDepthMm):
+    Math.ceil(targetAreaSqM*1e6/width);
   const box=rect(core.side==='west'?[x1,y1,x1+width,y1+height]:[x2-width,y1,x2,y1+height]);
   if(box.y2>y2||areaSqM([box],slabs)>1e-9||areaSqM([c],[box])>1e-9)
     throw new Error('Partial top floor cannot contain the continuous stair within this footprint');

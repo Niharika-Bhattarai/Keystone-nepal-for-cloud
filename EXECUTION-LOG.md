@@ -309,3 +309,29 @@ No implementation is claimed complete. Future agents should not mistake proposed
   - *C. Move the puja to the second (owner) floor.* This conflicts with the current "puja on the highest owner floor" preference (`PUJA_NOT_ON_HIGHEST_OWNER_FLOOR`).
   - *D. Re-plan the second-floor wet rooms out of the service column.* This is the larger multi-floor wet-zone topology task already in the backlog.
 - **Status.** Detection and reporting are in place (previous entry). Generation is unchanged until the owner chooses, as DESIGN-PRINCIPLES §1 requires. Option A is the smallest change that could satisfy V06 on plans 5–10. It is a massing/program change and must be visible to the household, not silently applied.
+
+## 2026-09-30 — option A applied: top-floor puja moved off the bathroom stack
+
+- **Owner decision (2026-09-30).** Option A. The partial top floor "can be any sq ft, up to 60–65% of each floor". Implemented as `searchConcepts({partialTopMaxShare=0.65})`: a hard cap of 65% of the full-floor slab area. The planner uses only the widening needed, not the cap.
+- **Generator change.**
+  - *Detection.* While floors are planned bottom-up, `candidateSearch.js` checks whether the planned puja overlaps a bathroom on the floor below (≥ 0.01 m²).
+  - *Re-plan.* Only then does it re-plan that level with `planFloorRooms({pujaInMainStrip:true,toiletBoxesAdjacent})`, placing the puja in the main strip. The strip must be at least `PUJA_MAIN_STRIP_MIN_WIDTH_MM` = 1,800 clear + 229 exterior wall + 51 half partition = 2,080 mm.
+  - *Widening.* A partial top floor is widened with `partialTopFootprint({minWidthMm})`. The new edge is snapped outward to the next frame column line (column face flush with the slab edge, as on the full floors). The floor keeps its 7,600 mm preferred depth.
+  - *Position.* Tried every 300 mm along the strip, ranked by toilet overlap, then NE/N/E share.
+  - *Evidence.* Each level records `pujaReplan`: original, proposed and cap area, width, column-line snap and status. The status is `applied`, `rejected_area_cap`, `rejected_<reason>` or `rejected_still_over_toilet`. A rejected re-plan keeps the original layout, and its V06 finding stays visible.
+- **Result: rental plans 5–10.**
+  - *Top floor.* 40.00 → 45.03 m² (52.6% of the 85.56 m² full floor; cap 55.6 m²). Width 5,264 → 5,925 mm; the minimum needed was 5,782, and the extra aligns the edge with column axis 4,500 or 6,750.
+  - *Puja.* 1.94 × 1.92 m clear (3.7 m²), directly above the second-floor living room.
+  - *Findings.* `PUJA_TOILET_SEPARATION_NOT_MET` 2 → 0 on all six plans, with no other finding count changed. Ground coverage unchanged (67.6%). Sum of floor envelopes 296.69 → 301.72 m².
+  - *North-east.* The puja's preferred share rises from 0.00 to 1.00 in the three west-core plans and stays at 0.11 in the east-core plans. The core-Vaastu ranking score is equal or higher for every plan.
+- **Unchanged.** Owner plans 1–4 are byte-identical (same geometry hashes and findings), because their top-floor puja had no toilet below. The old service bay on the rental top floor is now unassigned top-floor area.
+- **Visual check.** Plan 6 was rendered with the local headless Chromium. The puja sits in the NE corner of the partial third floor, entered from the corridor, with both second-floor bathrooms at the opposite corner below.
+- **Not solved by this change.**
+  - *Owner fixture with the puja on the ground floor.* A bathroom is above it (living-first plans). Floors are planned bottom-up, so the floor above is not known when the ground-floor puja is placed; that needs the joint multi-floor planning in the backlog.
+  - *Structure and slab.* Terrace-floor enclosure, the slab edge on the new column line, and puja door/sightline facing remain unverified. The C17 wet-stack findings are unchanged.
+- **Tests.** Added to `nepal-ten-review.test.js`:
+  - *Fix applied.* All six rental plans have `applied`, the edge on a column line, area within 65%, no V06, and a puja of at least 1,800 mm clear. Owner plans are untouched.
+  - *Tighter cap.* With a 50% cap, every plan reports `rejected_area_cap` and keeps its V06 finding.
+  - *Mutation check.* Disabling the re-plan made both tests fail.
+  - *Results.* Nepal Node suite **60/61**; the only failure is still the missing-original-PDF test. Python geometry suite 10/10.
+- The ten-plan review HTML/CSV/JSON was regenerated locally; no PDF, because that step needs Windows Edge.

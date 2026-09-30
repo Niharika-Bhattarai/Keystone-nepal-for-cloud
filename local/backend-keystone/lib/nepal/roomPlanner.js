@@ -2,7 +2,11 @@
 const {rect,areaSqM}=require('./areaLedger');
 const {vastuFindings}=require('./vastuAllocator');
 const {doorOnSharedEdge,reserveWindow}=require('./spatialReservations');
-const {INTERIOR_WALL_MM,CLEAR_CORRIDOR_MM}=require('./constructionProfile');
+const {INTERIOR_WALL_MM,EXTERIOR_WALL_MM,CLEAR_CORRIDOR_MM}=require('./constructionProfile');
+// 1,800 mm clear puja plus one exterior wall and half a partition to the corridor.
+const PUJA_MAIN_STRIP_MIN_WIDTH_MM=1800+EXTERIOR_WALL_MM+INTERIOR_WALL_MM/2;
+const overlapSqM=(a,b)=>Math.max(0,Math.min(a.x2,b.x2)-Math.max(a.x1,b.x1))*
+  Math.max(0,Math.min(a.y2,b.y2)-Math.max(a.y1,b.y1))/1e6;
 const SERVICE=new Set(['puja','store','laundry']);
 const minimumHeight={bedroom:2280,primaryBedroom:2280,guestBedroom:2280,
   livingRoom:2500,kitchen:2080,study:2280,dining:2280};
@@ -180,7 +184,7 @@ function planOwnerBedroomFloor({level,footprint,core,bearingDegrees}){
     unresolved:['Family landing furniture fit, balcony guard and bath detailing remain unverified.']};
 }
 function planFloorRooms({level,footprint,core,bearingDegrees,order='living-first',
-  groundParking=null}) {
+  groundParking=null,pujaInMainStrip=false,toiletBoxesAdjacent=[]}) {
   if(level.occupancy==='owner'&&level.bedrooms===3&&level.bathrooms===1&&
     level.attachedBathrooms===1&&!level.livingRooms&&!level.kitchens){
     const owner=planOwnerBedroomFloor({level,footprint,core,bearingDegrees});
@@ -210,7 +214,12 @@ function planFloorRooms({level,footprint,core,bearingDegrees,order='living-first
     return {ok:false,reason:'A continuous, 1 m unit corridor does not fit beside the stair core.'};
   if(level.specialRooms?.includes('puja')&&!level.livingRooms&&level.occupancy!=='owner')
     return {ok:false,reason:'A private puja room requires an owner-only unit.'};
-  const pujaInService=level.specialRooms?.includes('puja')&&
+  // Requested only when the service-bay puja would stack over a toilet (V06).
+  const pujaInMain=pujaInMainStrip&&level.specialRooms?.includes('puja')&&
+    !level.livingRooms&&!main.length&&width>=PUJA_MAIN_STRIP_MIN_WIDTH_MM;
+  if(pujaInMainStrip&&!pujaInMain)
+    return {ok:false,reason:'Puja does not fit in the main strip of this floor.'};
+  const pujaInService=level.specialRooms?.includes('puja')&&!pujaInMain&&
     (width<4300||!level.livingRooms);
   if(pujaInService)service.push('puja');
   const priority=order==='bedrooms-south'?{bedroom:0,guestBedroom:0,primaryBedroom:0,kitchen:1,dining:2,livingRoom:3,study:4}:
@@ -319,6 +328,23 @@ function planFloorRooms({level,footprint,core,bearingDegrees,order='living-first
       ...(type==='kitchen'&&!level.separateDiningRoom?{diningWithinKitchen:true}:{}),
       openingFace:side==='west'?'east':'west',
       openingStatus:'legal_exposure_unverified'});
+  }
+  if(pujaInMain){
+    const depth=Math.min(2200,ymax-ymin),options=[];
+    for(let y1=ymin;y1+depth<=ymax;y1+=300)options.push(rect([mainX1,y1,mainX2,y1+depth]));
+    options.push(rect([mainX1,ymax-depth,mainX2,ymax]));
+    const share=box=>vastuFindings([{id:'puja',type:'puja',box}],
+      {bearingDegrees,domainBoxes:slabs})[0].preferredShare;
+    const toilet=box=>toiletBoxesAdjacent.reduce((sum,t)=>sum+overlapSqM(box,t),0);
+    const pujaBox=options.filter(box=>areaSqM([box],slabs)<=1e-9)
+      .map(box=>({box,toilet:toilet(box),share:share(box)}))
+      .sort((a,b)=>a.toilet-b.toilet||b.share-a.share||a.box.y1-b.box.y1)[0]?.box;
+    if(!pujaBox)return {ok:false,reason:'Puja does not fit in the main strip of this floor.'};
+    rooms.push({id:`${level.id}-puja-main`,levelId:level.id,type:'puja',box:pujaBox,
+      areaSqM:areaSqM([pujaBox]),entryFrom:'unit-corridor',suggestedByPlanner:false,
+      privacyIntent:'owner_only_behind_unit_entry',
+      placementNote:'Main strip chosen so the puja is not above or below a toilet (V06).',
+      openingFace:side==='west'?'east':'west',openingStatus:'legal_exposure_unverified'});
   }
   const serviceX1=side==='west'?b.x1:b.x1,serviceX2=b.x2;
   const serviceY1=b.y2;
@@ -445,4 +471,4 @@ function planFloorRooms({level,footprint,core,bearingDegrees,order='living-first
       landingAlignmentStatus:'plan_overlap_reserved_vertical_clearance_unverified'},vastuFindings:findings,
     unresolved:['Door swings, arrival-pad vertical clearance, clear routes and all exterior opening legality must be checked against drawn walls and municipal rules.']};
 }
-module.exports={roomTypes,planFloorRooms};
+module.exports={roomTypes,planFloorRooms,PUJA_MAIN_STRIP_MIN_WIDTH_MM,overlapSqM};

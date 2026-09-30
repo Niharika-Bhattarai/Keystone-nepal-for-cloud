@@ -3,7 +3,7 @@ const crypto=require('node:crypto');
 const {siteEnvelope,footprints,partialTopFootprint}=require('./siteEnvelope');
 const {frameGrid}=require('./frameGrid');
 const {reserveCore}=require('./corePlanner');
-const {planFloorRooms}=require('./roomPlanner');
+const {planFloorRooms,PUJA_MAIN_STRIP_MIN_WIDTH_MM,overlapSqM}=require('./roomPlanner');
 const {measureAreaLedger}=require('./areaLedger');
 const {resolveRulePack}=require('./rules/resolveRulePack');
 const {validateSpatialHypothesis,roomGridCrossings,columnsInsideRoom,
@@ -12,7 +12,7 @@ const {vastuFindings}=require('./vastuAllocator');
 const {buildWallGeometry}=require('./wallGeometry');
 const {doorOnSharedEdge,reserveWindow}=require('./spatialReservations');
 const {rect}=require('./areaLedger');
-const {COLUMN_WIDTH_MM,INTERIOR_WALL_MM}=require('./constructionProfile');
+const {COLUMN_WIDTH_MM,INTERIOR_WALL_MM,CLEAR_CORRIDOR_MM}=require('./constructionProfile');
 const {attachResidentialDetails}=require('./residentialDetails');
 const {reserveRainChajjas}=require('./rainChajja');
 function gridTargetVariants(base,partitionLines){
@@ -170,7 +170,9 @@ function compare(a,b) {
   if(delta)return delta;
   for(let i=0;i<a.score.length;i++)if(a.score[i]!==b.score[i])return b.score[i]-a.score[i];
   return a.id.localeCompare(b.id);}
+// Owner instruction (2026-09-30): a partial top floor may grow up to 65% of a full floor.
 function searchConcepts(brief,{provisionalSetbacksMm,workingCoverageLimit=null,
+  partialTopMaxShare=0.65,
   tankLitres=brief.buildingProgram.services?.groundReservoirLitres||8000,
   maxCandidates=3}={}) {
   if(!Number.isSafeInteger(maxCandidates)||maxCandidates<1||maxCandidates>24)
@@ -196,11 +198,47 @@ function searchConcepts(brief,{provisionalSetbacksMm,workingCoverageLimit=null,
           level.targetAreaSqM,{preferredDepthMm:level.specialRooms?.includes('puja')?7600:0}):footprint;
         const hasRooms=['bedrooms','bathrooms','kitchens','livingRooms'].some(k=>level[k]>0)||
           (level.specialRooms?.length||0)>0;
-        const rooms=hasRooms?planFloorRooms({level,footprint:floorprint,core,
-          bearingDegrees:brief.site.north.bearingDegrees,order,
-          groundParking:level.id===levels[0].id?brief.buildingProgram.parking:null}):null;
+        const planArgs={level,core,bearingDegrees:brief.site.north.bearingDegrees,order,
+          groundParking:level.id===levels[0].id?brief.buildingProgram.parking:null};
+        let rooms=hasRooms?planFloorRooms({...planArgs,footprint:floorprint}):null;
         if(rooms&&!rooms.ok)throw new Error(`${level.id}: ${rooms.reason}`);
-        plannedLevels.push({id:level.id,kind:level.kind,footprint:floorprint,rooms,
+        // V06: if the puja lands over a toilet on the floor below, retry it in the
+        // main strip, widening a partial top floor up to the owner's area cap.
+        const toiletsBelow=(plannedLevels.at(-1)?.rooms?.rooms||[])
+          .filter(r=>r.type==='bathroom').map(r=>r.box);
+        const pujaOverToilet=plan=>(plan?.rooms||[]).filter(r=>r.type==='puja')
+          .reduce((sum,p)=>sum+toiletsBelow.reduce((n,t)=>n+overlapSqM(p.box,t),0),0);
+        let floorprintUsed=floorprint,pujaReplan=null;
+        if(rooms&&pujaOverToilet(rooms)>=0.01){
+          const corridorMm=CLEAR_CORRIDOR_MM+INTERIOR_WALL_MM;
+          const needWidthMm=core.box.x2-core.box.x1+corridorMm+PUJA_MAIN_STRIP_MIN_WIDTH_MM;
+          const fullAreaSqM=footprint.areaSqM;
+          try{
+            // Put the widened edge on a column line (column face flush with the slab
+            // edge, as on the full floors) rather than a few mm off an axis.
+            const fx1=Math.min(...footprint.slabs.map(b=>b.x1)),fx2=Math.max(...footprint.slabs.map(b=>b.x2));
+            const half=COLUMN_WIDTH_MM/2;
+            let axisWidths=[];
+            try{axisWidths=frameGrid(footprint,{protectedCore:core.box}).xAxesMm.map(a=>
+              core.side==='west'?a+half-fx1:fx2-(a-half)).filter(w=>w>=needWidthMm);}catch{}
+            const widthMm=axisWidths.length?Math.min(...axisWidths):needWidthMm;
+            const wider=level.kind==='partial'?partialTopFootprint(footprint,core,level.targetAreaSqM,
+              {preferredDepthMm:level.specialRooms?.includes('puja')?7600:0,minWidthMm:widthMm}):floorprint;
+            const withinCap=wider.areaSqM<=partialTopMaxShare*fullAreaSqM+1e-9;
+            const retry=withinCap&&planFloorRooms({...planArgs,footprint:wider,pujaInMainStrip:true,
+              toiletBoxesAdjacent:toiletsBelow});
+            pujaReplan={ruleId:'V06',reason:'service-bay puja was above a toilet on the floor below',
+              originalAreaSqM:floorprint.areaSqM,proposedAreaSqM:wider.areaSqM,
+              minimumWidthMm:needWidthMm,widthMm,edgeOnColumnLine:axisWidths.length>0,
+              areaCapSqM:partialTopMaxShare*fullAreaSqM,areaCapShare:partialTopMaxShare,
+              fullFloorAreaSqM:fullAreaSqM,status:!withinCap?'rejected_area_cap':
+                !retry?.ok?`rejected_${retry?.reason||'no_plan'}`:
+                pujaOverToilet(retry)>=0.01?'rejected_still_over_toilet':'applied'};
+            if(pujaReplan.status==='applied'){rooms=retry;floorprintUsed=wider;}
+          }catch(error){pujaReplan={ruleId:'V06',status:`rejected_${error.message}`};}
+        }
+        plannedLevels.push({id:level.id,kind:level.kind,footprint:floorprintUsed,rooms,
+          ...(pujaReplan?{pujaReplan}:{}),
           rainChajjas:reserveRainChajjas(floorprint,envelope.site),
           hasRequestedRooms:hasRooms,attachedBathroomsRequested:level.attachedBathrooms});
       }

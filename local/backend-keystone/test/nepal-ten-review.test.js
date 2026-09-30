@@ -69,3 +69,36 @@ test('generated owner layouts expose a ground puja under a first-floor bathroom'
     for(const finding of v6)assert.deepEqual([finding.ruleId,finding.relation,finding.overlapSqM],['V06','toilet_above',3.3]);
   }
 });
+
+test('rental top-floor puja is moved off the bathroom stack by widening within the owner area cap',()=>{
+  const rental=concepts('rental-3_5');
+  assert.equal(rental.length,6);
+  for(const candidate of rental){
+    const top=candidate.levels.at(-1),replan=top.pujaReplan;
+    assert.equal(replan.status,'applied',candidate.id);
+    assert.equal(replan.edgeOnColumnLine,true);
+    assert.ok(replan.widthMm>=replan.minimumWidthMm);
+    assert.ok(replan.proposedAreaSqM<=0.65*replan.fullFloorAreaSqM);
+    assert.ok(replan.proposedAreaSqM>replan.originalAreaSqM);
+    assert.equal(candidate.validation.verticalStack.pujaToilet.length,0);
+    const puja=top.rooms.rooms.find(room=>room.type==='puja');
+    assert.ok(Math.min(puja.clearBox.x2-puja.clearBox.x1,puja.clearBox.y2-puja.clearBox.y1)>=1800);
+    assert.ok(!candidate.validation.blockers.some(b=>b.code==='ROOM_SIZE_BELOW_PROVISIONAL_NBC206'&&b.roomId===puja.id));
+  }
+  for(const candidate of concepts('rectangle-2_5'))
+    assert.ok(candidate.levels.every(level=>!level.pujaReplan),candidate.id);
+});
+
+test('a tighter top-floor cap keeps the puja/toilet conflict visible instead of hiding it',()=>{
+  const raw=structuredClone(require('./fixtures/nepal/rental-3_5.json'));
+  for(const level of raw.buildingProgram.levels)
+    level.specialRooms=level.specialRooms.filter(room=>room!=='puja');
+  raw.buildingProgram.levels.at(-1).specialRooms.push('puja');
+  const candidates=searchConcepts(normalizeBrief(raw).brief,{provisionalSetbacksMm:[1000,1000,1000,1000],
+    workingCoverageLimit:0.7,maxCandidates:6,partialTopMaxShare:0.5}).candidates;
+  assert.equal(candidates.length,6);
+  for(const candidate of candidates){
+    assert.equal(candidate.levels.at(-1).pujaReplan.status,'rejected_area_cap');
+    assert.ok(candidate.validation.blockers.some(b=>b.code==='PUJA_TOILET_SEPARATION_NOT_MET'));
+  }
+});
