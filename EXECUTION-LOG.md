@@ -391,3 +391,65 @@ No implementation is claimed complete. Future agents should not mistake proposed
   - *West bedrooms-south V06/V13 conflict.* Needs an owner decision or the mirrored primary-bedroom band.
   - *Ranking.* V06/V07/V13 are reported but still not ranked.
   - *Carried over.* C17 routes, and the other backlog items in the previous entries.
+
+## 2026-09-30 — remaining-issues pass: C17 routes, ranking, floor rework, V05 retry, seismic findings, 3D view, research
+
+- **Push.** After the owner fixed GitHub access, the seven earlier commits and every commit below were pushed to `claude/affectionate-dijkstra-uukliw`.
+- **Owner decisions (2026-09-30).**
+  - *Living-room balcony.* The connection is **closable glazing**. Recorded as:
+    - `residentialDetails.livingBalconyConnection='closable_glazing_owner_confirmed_2026_09_30'`;
+    - polygon-worker boundary `closable_glazed_opening_owner_confirmed`.
+  - *West-stair bedrooms-south floor.* **Rework the floor** rather than accept the NE toilet.
+- **C17 drain routes (`validateNepalPlan.js`).**
+  - *Routes.* Each wet room with no wet room below gets a reserved route:
+    - `branch_to_adjacent_stack`: through a shared wall into a neighbouring wet room that stacks; or
+    - `new_stack_on_exterior_wall`: only on a face that is exterior on every lower floor, so a stack never drops through a room below. Faces are drawing-frame sides, not compass directions.
+  - *Findings.* A routed room reports `OFFSET_WET_ROOM_DRAIN_ROUTE_UNVERIFIED` (pipe size, fall, sunken slab, outfall and access unverified). A room with no route keeps `WET_ROOM_NOT_OVER_WET_ZONE_REVIEW`.
+  - *Results.* Rental plans get a 1,155–1,167 mm branch into the stacked second-floor bath. Owner living-first plans get an exterior stack with a 750–1,300 mm run.
+- **Ranking (`candidateSearch.js compare`).** Measured core-Vaastu conflicts (V06, V07, V13) now rank after physical-placement defects and before the preference score (DESIGN-PRINCIPLES §1). The owner fixture's conflict-free plan moved to first place.
+- **Floor rework (`roomPlanner.js placeAttachedBath`).**
+  - *New option.* The `inner` side puts the attached bath against the family foyer, with its exterior wall on the band end. The alcove becomes the bedroom's entry vestibule: a door from the foyer, then an open portal into the bedroom.
+  - *Ranking.* It ranks after the outer-wall options by change size, so it is used only where they cannot clear V06/V13.
+  - *Supporting changes.* `candidateSearch.js` opening coordination learned the `primary-alcove` entry, and the review sheet labels the room "BEDROOM VESTIBULE".
+  - *Result.* Both west-core owner plans: V13 1 → 0 (NE 3.90 m² before); primary bedroom 12.36 m² clear (was 11.83 after the earlier move); bath 3.24 m² clear; vestibule 2.63 m² clear.
+  - *Visual check.* Doors checked visually: foyer → vestibule has a door leaf, vestibule → bedroom an open portal, bedroom → bath a door.
+  - *Grid side effect.* The west living-first plan now has no main-room grid exception. The grid test was changed from "every plan has a primary-bedroom exception" to "reported crossings equal measured crossings", and it still checks the east plan's real exception.
+- **V05 puja retry (`candidateSearch.js`).**
+  - *Trigger.* The top-floor re-plan now also triggers when a service-bay puja is mostly outside NE/N/E.
+  - *Acceptance.* A preference-only move is applied only if the new spot reaches a majority (≥ 0.5) preferred share. Otherwise it records `rejected_preferred_zone_not_reached`.
+  - *Column avoidance.* Main-strip puja positions avoid frame columns fixed before rooms exist: x axes on the outer and stair-corner rows.
+  - *Result on fixtures.* No geometry change. Owner plans reach only 0.30 (west, whose NE corner is above the reworked first-floor bath) or 0.24 (east).
+  - *Why the threshold.* An earlier version applied the 0.30 move; it blocked the only service-shaft route on the 16 m polygon-study case (`nepal-polygon-study` failed). The threshold keeps that feasibility item ahead of a partial preference gain.
+- **Seismic configuration findings.** `structuralConfigurationFacts` adds two review-only findings (NBC 105:2025 catalog S04–S06):
+  - `OPEN_GROUND_BAY_SOFT_STOREY_AND_TORSION_REVIEW`: the open bike bay's floor share and offset from the floor centroid;
+  - `UPPER_FLOOR_SETBACK_IRREGULARITY_REVIEW`: each partial floor's area ratio and centroid offset.
+  
+  No structural verdict is made.
+- **3D study massing (website).**
+  - *Backend.* `POST /api/nepal/concepts` with `format:'json'` returns `geometryExport.js` output: slabs, rooms, engine wall segments with door/window cut intervals, columns, core, brief elevations, findings and the unverified list.
+  - *Frontend.* `NepalBrief.jsx` gains "View 3D study massing", and `NepalModel3D.jsx` is a lazy-loaded three.js viewer (4.6 kB chunk). It extrudes the walls, keeps a "not a floor plan" banner and the findings list visible, and has a "show floors up to" control.
+  - *Verified.* In the running local studio (`node tools/run.cjs dev`, headless Chromium): brief check → 3D view rendered with no page errors, for all floors and for floors up to the first.
+  - *Build and checks.* `KEYSTONE_RUNTIME=local` build passes and `check:contrast` passes. `check:a11y` could not run: `axe-core` is not installed here.
+  - *Not done.* The Nepal geometry is **not** connected to the US GLB/CAD/estimate pipelines.
+- **Research.** `NEPAL-HOUSE-RESEARCH-AND-PLAN-REVIEW.md` covers:
+  - Nepali urban and Newar house organisation;
+  - bylaws, NBC 205/105 and Gorkha 2015 lessons;
+  - climate;
+  - a plan-by-plan review with measured Vaastu shares.
+  
+  Some sources were blocked by the network proxy and are marked as search summaries.
+  - *Key new risk.* The 2015 bylaws are reported to require **1.5 m** setbacks for buildings up to 10 m, while the fixtures use 1 m working setbacks. This must be confirmed against the adopted ward rule.
+  - *Key reading.* No plan meets puja NE + kitchen SE + primary bedroom SW together. That needs the zone-first multi-floor solver; it is not a patch.
+- **Tests.** Nepal Node suite **65/66**; the only failure is still the missing-original-PDF test. New or changed tests cover:
+  - C17 routes, with a mutation check;
+  - ranking tiers, with a mutation check;
+  - the vestibule rework;
+  - V05 rejection;
+  - seismic findings;
+  - geometry export.
+- **Next.**
+  1. Zone-first multi-floor allocation with joint core position (NEPAL-SPATIAL-PLANNING-RESEARCH steps 3–5).
+  2. Adopted setbacks per ward.
+  3. Rental parking.
+  4. Connect the Nepal geometry to the CAD/GLB exporters.
+  5. Install `axe-core` and run the a11y scan.
