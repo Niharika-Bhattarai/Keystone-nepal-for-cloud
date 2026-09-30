@@ -29,8 +29,14 @@ test('owner review puts bike bay at entrance, opens unit entry to living and att
   assert.ok(ground.rooms.parking.box.y2-ground.rooms.parking.box.y1>=3500);
   const bath=first.rooms.rooms.find(r=>r.attachedTo);
   assert.equal(bath.doorReservation.from,'primary-bedroom');
-  assert.equal(bath.box.x2-bath.box.x1,1500);
-  assert.equal(bath.box.y2-bath.box.y1,2600);
+  // 1,500 x 2,600 mm unless the bath had to move off a ground puja or the NE (V06/V13).
+  const replan=first.rooms.bathReplan;
+  const [width,length]=[bath.box.x2-bath.box.x1,bath.box.y2-bath.box.y1];
+  if(replan?.status==='applied')assert.deepEqual([width,length],
+    [replan.proposed.widthMm,replan.proposed.lengthMm]);
+  else assert.deepEqual([width,length],[1500,2600]);
+  assert.ok(Math.min(bath.clearBox.x2-bath.clearBox.x1,bath.clearBox.y2-bath.clearBox.y1)>=1200);
+  assert.ok(bath.clearAreaSqM>=2.8);
   assert.equal(first.rooms.rooms.filter(r=>r.type==='bedroom').length,2);
   assert.ok(first.rooms.rooms.filter(r=>r.type==='bedroom').every(r=>r.clearAreaSqM<14));
   assert.ok(first.rooms.balcony?.doorReservation);

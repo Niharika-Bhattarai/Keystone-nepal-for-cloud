@@ -100,7 +100,67 @@ function planCompactRental({level,footprint,core,bearingDegrees}){
     vastuFindings:vastuFindings(rooms,{bearingDegrees,domainBoxes:slabs}),
     unresolved:['Door swings, parking, legal openings and egress remain unverified.']};
 }
-function planOwnerBedroomFloor({level,footprint,core,bearingDegrees}){
+// Attached bath on the owner bedroom floor: 1,500 x 2,600 mm at the start of the
+// primary-bedroom band by default. Alternatives are searched only when that box
+// would stack over a puja on the floor below (V06) or overlap the NE/centre
+// toilet-excluded zones (V13); they are ranked by puja overlap, then NE/centre
+// overlap, then NW/W share (V12), then the smallest change from the default.
+// The primary bedroom keeps at least 2,800 mm of its band width.
+const ATTACHED_BATH_DEFAULT={widthMm:1500,lengthMm:2600,end:'start'};
+const BATH_MIN_CLEAR_MM=1200,BATH_MIN_CLEAR_SQM=2.8,ALCOVE_MIN_CLEAR_MM=1200,ALCOVE_MIN_CLEAR_SQM=2.0;
+function attachedBathLayout({west,mainX1,mainX2,y0,y1,widthMm,lengthMm,end}){
+  const bathX1=west?mainX2-widthMm:mainX1,bathX2=west?mainX2:mainX1+widthMm;
+  const [bathY1,bathY2]=end==='start'?[y0,y0+lengthMm]:[y1-lengthMm,y1];
+  const [alcoveY1,alcoveY2]=end==='start'?[bathY2,y1]:[y0,bathY1];
+  return {bathBox:rect([bathX1,bathY1,bathX2,bathY2]),alcoveBox:rect([bathX1,alcoveY1,bathX2,alcoveY2]),
+    primaryBox:rect(west?[mainX1,y0,bathX1,y1]:[bathX2,y0,mainX2,y1])};
+}
+function placeAttachedBath({west,mainX1,mainX2,y0,y1,slabs,bearingDegrees,pujaBoxesBelow}){
+  const args={west,mainX1,mainX2,y0,y1};
+  const pujaOverlap=box=>pujaBoxesBelow.reduce((sum,p)=>sum+overlapSqM(box,p),0);
+  const zones=box=>vastuFindings([{id:'bath',type:'bathroom',box}],{bearingDegrees,domainBoxes:slabs})[0];
+  const excluded=box=>{const z=zones(box).zoneAreasSqM;return z.NE+z.C;};
+  const initial=attachedBathLayout({...args,...ATTACHED_BATH_DEFAULT});
+  const initialOverlap=pujaOverlap(initial.bathBox),initialExcluded=excluded(initial.bathBox);
+  if(initialOverlap<0.01&&initialExcluded<0.01)return {...initial,replan:null};
+  // Conservative clear sizes: the bath/alcove take the 229 mm exterior wall on
+  // the outer face and the band end at y0 is treated as exterior as well.
+  const clear=(box,atStart)=>[box.x2-box.x1-EXTERIOR_WALL_MM-INTERIOR_WALL_MM/2,
+    box.y2-box.y1-INTERIOR_WALL_MM/2-(atStart?EXTERIOR_WALL_MM:INTERIOR_WALL_MM/2)];
+  const options=[];
+  for(const end of ['start','end'])for(const widthMm of [1500,1600,1800])
+    for(let lengthMm=2600;lengthMm>=2200;lengthMm-=50){
+      const layout=attachedBathLayout({...args,widthMm,lengthMm,end});
+      const [bw,bl]=clear(layout.bathBox,end==='start'),[aw,al]=clear(layout.alcoveBox,end!=='start');
+      if(Math.min(bw,bl)<BATH_MIN_CLEAR_MM||bw*bl/1e6<BATH_MIN_CLEAR_SQM+0.05)continue;
+      if(Math.min(aw,al)<ALCOVE_MIN_CLEAR_MM||aw*al/1e6<ALCOVE_MIN_CLEAR_SQM)continue;
+      if(layout.primaryBox.x2-layout.primaryBox.x1<2800)continue;
+      const finding=zones(layout.bathBox);
+      options.push({layout,end,widthMm,lengthMm,pujaOverlapSqM:pujaOverlap(layout.bathBox),
+        excludedZoneSqM:excluded(layout.bathBox),preferredShare:finding.preferredShare,
+        change:Math.abs(widthMm-1500)+Math.abs(lengthMm-2600)+(end==='start'?0:1)});
+    }
+  options.sort((a,b)=>a.pujaOverlapSqM-b.pujaOverlapSqM||a.excludedZoneSqM-b.excludedZoneSqM||
+    b.preferredShare-a.preferredShare||a.change-b.change);
+  const best=options[0];
+  const round=n=>Math.round(n*100)/100;
+  const improves=best&&(best.pujaOverlapSqM<initialOverlap-1e-9||
+    best.pujaOverlapSqM<=initialOverlap+1e-9&&best.excludedZoneSqM<initialExcluded-1e-9);
+  const replan={ruleIds:['V06','V13','V12'],
+    reason:[initialOverlap>=0.01&&'attached bath was above a puja on the floor below',
+      initialExcluded>=0.01&&'attached bath overlapped the NE/centre toilet-excluded zones']
+      .filter(Boolean).join('; '),
+    original:{...ATTACHED_BATH_DEFAULT,box:initial.bathBox,pujaOverlapSqM:round(initialOverlap),
+      excludedZoneSqM:round(initialExcluded)},
+    optionsTested:options.length,
+    status:!best?'rejected_no_fitting_option':!improves?'rejected_no_improvement':
+      best.pujaOverlapSqM>=0.01?'applied_still_over_puja':'applied',
+    ...(best?{proposed:{end:best.end,widthMm:best.widthMm,lengthMm:best.lengthMm,box:best.layout.bathBox,
+      pujaOverlapSqM:round(best.pujaOverlapSqM),excludedZoneSqM:round(best.excludedZoneSqM),
+      preferredShare:round(best.preferredShare)}}:{})};
+  return replan.status.startsWith('applied')?{...best.layout,replan}:{...initial,replan};
+}
+function planOwnerBedroomFloor({level,footprint,core,bearingDegrees,pujaBoxesBelow=[]}){
   const slabs=footprint.slabs.map(rect),b=rect(core.box);
   if(slabs.length!==1)return null;
   const slab=slabs[0],west=core.side==='west',y0=slab.y1,y1=b.y2,y2=slab.y2;
@@ -115,13 +175,8 @@ function planOwnerBedroomFloor({level,footprint,core,bearingDegrees}){
   const coreAxis=west?b.x2-175:b.x1+175,
     outerAxis=west?slab.x2-175:slab.x1+175,
     bedroomSplit=Math.round((coreAxis+outerAxis)/2)+(west?175:-175);
-  const primaryWhole=rect([mainX1,y0,mainX2,y1]);
-  const bathX1=west?mainX2-1500:mainX1,
-    bathX2=west?mainX2:mainX1+1500,bathEnd=y0+2600;
-  const primaryBox=rect(west?[mainX1,y0,bathX1,y1]:
-    [bathX2,y0,mainX2,y1]);
-  const bathBox=rect([bathX1,y0,bathX2,bathEnd]);
-  const alcoveBox=rect([bathX1,bathEnd,bathX2,y1]);
+  const {primaryBox,bathBox,alcoveBox,replan:bathReplan}=placeAttachedBath({west,mainX1,mainX2,
+    y0,y1,slabs,bearingDegrees,pujaBoxesBelow});
   const bedroomA=rect(west?[near,y1+1000,bedroomSplit,y2]:
     [bedroomSplit,y1+1000,near,y2]);
   const bedroomB=rect(west?[bedroomSplit,y1+1000,far,y2]:
@@ -175,7 +230,7 @@ function planOwnerBedroomFloor({level,footprint,core,bearingDegrees}){
   balcony.doorReservation={...balconyDoor,leafCount:1,material:'wood',
     from:'cross-hall',to:'first-floor-balcony'};
   return {ok:true,levelId:level.id,occupancy:level.occupancy,rooms,corridor,crossHall,
-    balcony,attachedBathroomsPlaced:1,
+    balcony,attachedBathroomsPlaced:1,...(bathReplan?{bathReplan}:{}),
     circulationPortal:{...circulationPortal,status:'open_portal_reserved_no_door',
       openingStyle:'open_connection',from:'family-landing',to:'cross-hall'},
     unitEntry:{from:'shared-floor-level-arrival',to:'family-landing',doorReservation:{
@@ -184,10 +239,10 @@ function planOwnerBedroomFloor({level,footprint,core,bearingDegrees}){
     unresolved:['Family landing furniture fit, balcony guard and bath detailing remain unverified.']};
 }
 function planFloorRooms({level,footprint,core,bearingDegrees,order='living-first',
-  groundParking=null,pujaInMainStrip=false,toiletBoxesAdjacent=[]}) {
+  groundParking=null,pujaInMainStrip=false,toiletBoxesAdjacent=[],pujaBoxesBelow=[]}) {
   if(level.occupancy==='owner'&&level.bedrooms===3&&level.bathrooms===1&&
     level.attachedBathrooms===1&&!level.livingRooms&&!level.kitchens){
-    const owner=planOwnerBedroomFloor({level,footprint,core,bearingDegrees});
+    const owner=planOwnerBedroomFloor({level,footprint,core,bearingDegrees,pujaBoxesBelow});
     if(owner)return owner;
   }
   if(level.occupancy==='rental'&&level.bedrooms===2&&level.bathrooms===1&&

@@ -44,6 +44,8 @@ const rows=plans.map(p=>{
     candidate_id:c.id,geometry_hash:c.geometryHash,core_side:c.coreSide,
     room_order:c.order,puja_level:puja,interior_column_rooms:count('COLUMN_IN_ROOM_CLEAR_AREA'),
     puja_toilet_v06_conflicts:count('PUJA_TOILET_SEPARATION_NOT_MET'),
+    toilets_in_ne_center_v13:count('TOILET_IN_NE_OR_CENTER'),
+    attached_bath_replan:c.levels.map(l=>l.rooms?.bathReplan?.status).find(Boolean)||'',
     wet_rooms_not_over_wet_c17:c.validation.verticalStack.wetStack.filter(w=>w.overWetShare===0).length,
     planning_columns:c.grid.columns.length,
     stair_bay_axis_span_mm:c.core.box.y2-c.core.box.y1-c.grid.columnWidthMm,

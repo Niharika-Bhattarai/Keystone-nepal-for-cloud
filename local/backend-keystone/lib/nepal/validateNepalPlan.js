@@ -84,6 +84,29 @@ function verticalStackFacts(candidate){
     unmeasured:['V06 puja/toilet door sightline facing','V06 bathroom vs separate WC distinction (bathrooms treated as containing a WC)',
       'C17 pipe routes, falls, shafts and maintenance access']};
 }
+// Catalog V13 (no toilets in NE or centre) and V12 (NW/W preferred), measured per
+// bathroom on its own floor's 3x3 domain. Bathrooms are treated as containing a WC.
+const TOILET_EXCLUDED_ZONES=['NE','C'];
+function toiletZoneFacts(candidate){
+  const bathrooms=candidate.levels.flatMap(level=>(level.rooms?.vastuFindings||[])
+    .filter(f=>f.type==='bathroom').map(f=>({level,f})));
+  const excluded=[],outsidePreferred=[];
+  for(const {level,f} of bathrooms){
+    const total=Object.values(f.zoneAreasSqM).reduce((a,b)=>a+b,0);
+    const zones=Object.fromEntries(TOILET_EXCLUDED_ZONES.map(z=>[z,round2(f.zoneAreasSqM[z])]));
+    const areaSqM=TOILET_EXCLUDED_ZONES.reduce((sum,z)=>sum+f.zoneAreasSqM[z],0);
+    if(areaSqM>=STACK_TOLERANCE_SQM)excluded.push({levelId:level.id,roomId:f.roomId,
+      excludedZoneSqM:round2(areaSqM),excludedZoneShare:round2(areaSqM/total),zonesSqM:zones});
+    if(f.preferredShare<1-1e-9)outsidePreferred.push({levelId:level.id,roomId:f.roomId,
+      preferredShare:round2(f.preferredShare)});
+  }
+  return {toleranceSqM:STACK_TOLERANCE_SQM,domain:'floor-footprint',excluded,outsidePreferred,
+    facts:{
+      'bathrooms.avoid_ne_center':bathrooms.length?excluded.length===0:null,
+      'bathrooms.all_in_nw_w':bathrooms.length?outsidePreferred.length===0:null},
+    unmeasured:['V13/V12 boundary tolerance and mandala domain need consultant review',
+      'bathroom vs separate WC distinction (bathrooms treated as containing a WC)']};
+}
 function validateSpatialHypothesis(candidate) {
   const blockers=[];
   for(const level of candidate.levels){
@@ -187,6 +210,9 @@ function validateSpatialHypothesis(candidate) {
     blockers.push({code:'PUJA_TOILET_SEPARATION_NOT_MET',ruleId:'V06',...conflict});
   for(const conflict of verticalStack.pujaStair)
     blockers.push({code:'PUJA_STAIR_VERTICAL_OVERLAP',ruleId:'V07',...conflict});
+  const toiletZones=toiletZoneFacts(candidate);
+  for(const item of toiletZones.excluded)
+    blockers.push({code:'TOILET_IN_NE_OR_CENTER',ruleId:'V13',...item});
   const offset=verticalStack.wetStack.filter(item=>item.overWetShare===0);
   if(offset.length)blockers.push({code:'WET_ROOM_NOT_OVER_WET_ZONE_REVIEW',ruleId:'C17',
     rooms:offset.map(({levelId,roomId,type,belowLevelId})=>({levelId,roomId,type,belowLevelId}))});
@@ -211,7 +237,7 @@ function validateSpatialHypothesis(candidate) {
   return {structuralGeometryOkay:!blockers.some(b=>[
     'ROOM_OVERLAP','COLUMN_IN_ROOM_CLEAR_AREA','CIRCULATION_COLUMN_OBSTRUCTION',
     'WALL_CROSSES_COLUMN_CORE','OPENING_OVERLAPS_COLUMN'].includes(b.code)),
-    eligibility:'unverified_concept_only',blockers,verticalStack};
+    eligibility:'unverified_concept_only',blockers,verticalStack,toiletZones};
 }
-module.exports={validateSpatialHypothesis,verticalStackFacts,roomGridCrossings,columnsInsideRoom,
+module.exports={validateSpatialHypothesis,verticalStackFacts,toiletZoneFacts,roomGridCrossings,columnsInsideRoom,
   routeColumnObstructions,MAIN_GRID_ROOM_TYPES};

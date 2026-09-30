@@ -340,3 +340,54 @@ No implementation is claimed complete. Future agents should not mistake proposed
 
 - In the entries above, "rental plans 5–10" means the **3.5-storey rental-plus-owner** review program, not a puja on a rental floor. In that fixture the ground and first floors are rental flats with no puja. The second floor is the owner home, and the partial third floor is the owner terrace. The puja is only ever on an owner floor: second floor as supplied, partial third floor in the review set. The second-floor bathrooms it was above belong to the owner home.
 - The owner confirmed (2026-09-30) that pujas are for the home owners only. `roomPlanner.js` already enforces this by rejecting a puja on any floor that is not owner-only ("A private puja room requires an owner-only unit."). No code change was needed.
+
+## 2026-09-30 — attached bath moved off a ground puja (V06) and toilet NE/centre measured (V13)
+
+- **Setting.** Applied the six unpushed commits from the previous session (`git am`, no conflicts) to `Niharika-Bhattarai/Keystone-nepal-for-cloud`. This copy has 751 files but still no original PDFs/EPUBs, so the one PDF-dependent test still fails with `causes: ['original_missing']` only. `knowledge/tools/knowledge.py rules` also refuses to run without the originals (correct behaviour); rule text was read from the pinned `knowledge/rules.json`.
+- **Problem.** In the owner fixture (puja on the ground floor, as supplied), both living-first plans put the first-floor primary-bedroom attached bath directly over the ground puja (3.30 m², V06 `toilet_above`). The default bath (1,500 × 2,600 mm at the start of the primary-bedroom band) was also 100% in the NE zone (3.90 m²) on west-core plans. V13, "Avoid toilets in northeast and center" (Jain section-0019, Pathi section-0008), was not measured anywhere.
+- **Joint check across each adjacent floor pair.** `candidateSearch.js` now passes the puja boxes of the floor below (`pujaBoxesBelow`) to the next floor's planner. Together with the existing option-A re-plan (a puja avoids toilets on the floor below), every adjacent pair is now resolved while planning its upper floor, whichever of the two rooms is on that floor. This is still a bottom-up sequence, not a full simultaneous search. It only moves rooms where the planner has a branch for it:
+  - the top-floor puja (option A);
+  - the owner bedroom floor's attached bath (this entry).
+- **Generator change (`roomPlanner.js`, `placeAttachedBath`).** The search runs only when the default bath overlaps a puja below or the NE/centre zones (≥ 0.01 m²).
+  - *Options.* Band start or end; width 1,500/1,600/1,800 mm; length 2,600 → 2,200 mm in 50 mm steps.
+  - *Minimum sizes.* Conservative clear sizes: bath ≥ 1,200 mm and ≥ 2.85 m²; alcove ≥ 1,200 mm and ≥ 2.0 m²; primary bedroom band ≥ 2,800 mm wide.
+  - *Ranking.* Puja overlap, then NE+centre overlap, then NW/W share (V12), then smallest change from the default.
+  - *No trade-offs.* A move is applied only if it reduces puja overlap, or keeps it and reduces NE/centre overlap. A V06 conflict is never traded for V13.
+  - *Evidence.* The level records `rooms.bathReplan` with original, proposed, options tested and status: `applied`, `applied_still_over_puja`, `rejected_no_improvement` or `rejected_no_fitting_option`.
+- **Measurement change (`validateNepalPlan.js`, `toiletZoneFacts`).**
+  - *Finding.* Each bathroom's own-floor 3×3 zone areas give a `TOILET_IN_NE_OR_CENTER` finding (rule V13) when NE+C ≥ 0.01 m², with area, share and per-zone areas.
+  - *Facts.* `bathrooms.avoid_ne_center` and `bathrooms.all_in_nw_w` are derived, or `null` when there is no bathroom. Stored as `validation.toiletZones`.
+  - *Limits.* Bathrooms are treated as containing a WC. Boundary tolerance and the mandala domain still need consultant review. V13 is reported, not ranked.
+- **Results: owner fixture, puja on ground (4 candidates).**
+  - *V06.* 2 → 0. Both living-first plans have `applied`; the bath moves to the other end of the band, clear of the puja.
+    - West core: 1,800 × 2,200 mm, NE 3.90 → 1.02 m².
+    - East core: 1,600 × 2,350 mm, not in NE before or after.
+  - *West-core bedrooms-south.* `rejected_no_improvement`. Leaving the NE would put the bath over its ground puja, so the NE toilet (3.90 m², 100%) stays and is reported. **This is a real V06/V13 conflict for the owner:** it needs the primary bedroom/bath band re-planned (for example, mirrored so the primary bedroom sits SW, which V-rules also prefer), or the owner accepts one departure.
+  - *Other findings.* No other finding changed in any candidate. Rental candidates are byte-identical.
+- **Results: ten-plan review (puja on the top floor).**
+  - *Plans 1 and 4 (west core).* `applied` for V13 alone. The bath moves from the NE corner (3.90 m²) to the north wall beside the cross hall (1.02 m² NE); the open alcove takes the NE corner.
+  - *Primary bedroom.* Clear area 13.12 → 11.83 m². The drawing shows 2.75 × 4.30 m clear.
+  - *Bath.* 3.19 m² clear.
+  - *C17.* Plan 4's bath is now 82% over the ground kitchen (was 100%).
+  - *Other plans.* Plans 2, 3 and 5–10 are unchanged. The CSV gained `toilets_in_ne_center_v13` and `attached_bath_replan`.
+  - *Visual check.* Plan 1's first floor was rendered with headless Chromium: the bath door is from the primary bedroom, and its exterior wall faces north.
+- **Owner-visible change.** The primary bedroom on west-core owner plans is 300 mm narrower, because core Vaastu (V13) ranks above room-size preference in DESIGN-PRINCIPLES §1. If the household prefers the larger bedroom and accepts the NE toilet, that is a departure to record, not a silent default.
+- **Tests.**
+  - *Replaced.* "generated owner layouts expose a ground puja under a first-floor bathroom" is replaced by a test that expects:
+    - no V06 on any owner candidate;
+    - `applied` on living-first;
+    - the moved bath/alcove meet minimum sizes and keep the primary-bedroom door;
+    - the west bedrooms-south conflict stays visible.
+  - *Added.* A unit test for `toiletZoneFacts`, covering tolerance, share and null facts.
+  - *Relaxed with reason.* The architect-feedback test's fixed 1,500 × 2,600 bath now allows the recorded `bathReplan` size, and it additionally checks clear size ≥ 1,200 mm / 2.8 m². That size was a planner default, not an owner requirement.
+  - *Mutation checks.* Each of these made the new tests fail:
+    - not passing `pujaBoxesBelow`;
+    - dropping C from the excluded zones;
+    - allowing a V06-for-V13 trade.
+  - *Results.* Nepal Node suite **61/62** (only the missing-original-PDF test fails). Python geometry suite 10/10.
+- **Push.** `git push` returned 403 again: Claude's GitHub App has no access to this repository. The commits are local only until access is fixed.
+- **Next.**
+  - *Generic floors.* A lower-floor puja can still sit under service-bay bathrooms, but only the owner-bedroom branch moves its bath. There is no fixture case yet.
+  - *West bedrooms-south V06/V13 conflict.* Needs an owner decision or the mirrored primary-bedroom band.
+  - *Ranking.* V06/V07/V13 are reported but still not ranked.
+  - *Carried over.* C17 routes, and the other backlog items in the previous entries.

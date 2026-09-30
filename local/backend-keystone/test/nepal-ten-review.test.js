@@ -59,15 +59,54 @@ test('section checks report puja/toilet (V06), puja/stair (V07) and offset wet r
   assert.equal(verticalStackFacts(candidate).facts['puja.toilet_conflict'],null);
 });
 
-test('generated owner layouts expose a ground puja under a first-floor bathroom',()=>{
+test('owner bedroom floor moves its attached bath off the ground puja below (V06) and reports NE toilets (V13)',()=>{
   const raw=structuredClone(require('./fixtures/nepal/rectangle-2_5.json'));
   const candidates=searchConcepts(normalizeBrief(raw).brief,{provisionalSetbacksMm:[1000,1000,1000,1000],
     workingCoverageLimit:0.7,maxCandidates:6}).candidates;
+  assert.equal(candidates.length,4);
   for(const candidate of candidates){
-    const v6=candidate.validation.blockers.filter(b=>b.code==='PUJA_TOILET_SEPARATION_NOT_MET');
-    assert.equal(v6.length>0,candidate.order==='living-first',candidate.id);
-    for(const finding of v6)assert.deepEqual([finding.ruleId,finding.relation,finding.overlapSqM],['V06','toilet_above',3.3]);
+    const [ground,first]=candidate.levels,replan=first.rooms.bathReplan;
+    const puja=ground.rooms.rooms.find(r=>r.type==='puja');
+    const bath=first.rooms.rooms.find(r=>r.attachedTo);
+    assert.equal(candidate.validation.verticalStack.pujaToilet.length,0,candidate.id);
+    assert.ok(Math.max(0,Math.min(puja.box.x2,bath.box.x2)-Math.max(puja.box.x1,bath.box.x1))*
+      Math.max(0,Math.min(puja.box.y2,bath.box.y2)-Math.max(puja.box.y1,bath.box.y1))<1e4,candidate.id);
+    // The moved bath and the alcove left beside it keep usable clear sizes and doors.
+    assert.ok(!candidate.validation.blockers.some(b=>b.code==='ROOM_SIZE_BELOW_PROVISIONAL_NBC206'&&
+      b.levelId==='first'),candidate.id);
+    assert.equal(bath.doorReservation.from,'primary-bedroom');
+    const v13=candidate.validation.blockers.filter(b=>b.code==='TOILET_IN_NE_OR_CENTER');
+    assert.deepEqual(v13.map(b=>b.excludedZoneSqM),
+      candidate.validation.toiletZones.excluded.map(x=>x.excludedZoneSqM));
+    if(candidate.order==='living-first'){
+      assert.equal(replan.status,'applied',candidate.id);
+      assert.equal(replan.original.pujaOverlapSqM,3.3);
+      assert.equal(replan.proposed.pujaOverlapSqM,0);
+      assert.ok(replan.proposed.excludedZoneSqM<=replan.original.excludedZoneSqM);
+    }
   }
+  // West core, bedrooms south: leaving the NE would put the bath over the ground
+  // puja, so the NE toilet stays and is reported rather than traded for a V06 conflict.
+  const kept=candidates.find(c=>c.id==='rectangle-west-bedrooms-south');
+  assert.equal(kept.levels[1].rooms.bathReplan.status,'rejected_no_improvement');
+  assert.deepEqual(kept.validation.blockers.filter(b=>b.code==='TOILET_IN_NE_OR_CENTER')
+    .map(b=>[b.ruleId,b.levelId,b.excludedZoneSqM,b.excludedZoneShare]),[['V13','first',3.9,1]]);
+  assert.equal(kept.validation.toiletZones.facts['bathrooms.avoid_ne_center'],false);
+});
+
+test('toilet zone facts measure each bathroom against NE/centre and stay unknown without bathrooms',()=>{
+  const {toiletZoneFacts}=require('../lib/nepal/validateNepalPlan');
+  const finding=(roomId,zones,preferredShare)=>({roomId,type:'bathroom',preferredShare,
+    zoneAreasSqM:{NE:0,N:0,NW:0,E:0,C:0,W:0,SE:0,S:0,SW:0,...zones}});
+  const level=(id,findings)=>({id,rooms:{rooms:[],vastuFindings:findings}});
+  const facts=toiletZoneFacts({levels:[level('a',[finding('a-nw',{NW:3},1),
+    finding('a-mix',{C:0.5,W:2.5},2.5/3)]),level('b',[finding('b-edge',{NE:0.005,E:3},0)])]});
+  assert.deepEqual(facts.excluded,[{levelId:'a',roomId:'a-mix',excludedZoneSqM:0.5,
+    excludedZoneShare:0.17,zonesSqM:{NE:0,C:0.5}}]);
+  assert.deepEqual(facts.outsidePreferred.map(x=>x.roomId),['a-mix','b-edge']);
+  assert.deepEqual(facts.facts,{'bathrooms.avoid_ne_center':false,'bathrooms.all_in_nw_w':false});
+  assert.deepEqual(toiletZoneFacts({levels:[level('a',[])]}).facts,
+    {'bathrooms.avoid_ne_center':null,'bathrooms.all_in_nw_w':null});
 });
 
 test('rental top-floor puja is moved off the bathroom stack by widening within the owner area cap',()=>{

@@ -198,8 +198,12 @@ function searchConcepts(brief,{provisionalSetbacksMm,workingCoverageLimit=null,
           level.targetAreaSqM,{preferredDepthMm:level.specialRooms?.includes('puja')?7600:0}):footprint;
         const hasRooms=['bedrooms','bathrooms','kitchens','livingRooms'].some(k=>level[k]>0)||
           (level.specialRooms?.length||0)>0;
+        // V06 from the other side: bathrooms planned on this floor can see a puja
+        // placed on the floor below (the owner bedroom floor moves its attached bath).
+        const pujaBoxesBelow=(plannedLevels.at(-1)?.rooms?.rooms||[])
+          .filter(r=>r.type==='puja').map(r=>r.box);
         const planArgs={level,core,bearingDegrees:brief.site.north.bearingDegrees,order,
-          groundParking:level.id===levels[0].id?brief.buildingProgram.parking:null};
+          groundParking:level.id===levels[0].id?brief.buildingProgram.parking:null,pujaBoxesBelow};
         let rooms=hasRooms?planFloorRooms({...planArgs,footprint:floorprint}):null;
         if(rooms&&!rooms.ok)throw new Error(`${level.id}: ${rooms.reason}`);
         // V06: if the puja lands over a toilet on the floor below, retry it in the
