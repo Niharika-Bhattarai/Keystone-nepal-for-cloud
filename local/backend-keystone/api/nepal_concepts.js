@@ -11,6 +11,12 @@ module.exports=async(req,res)=>{
     message:preflight.message,blockers:preflight.blockers});
   try{
     const review=buildReviewCase('Your Nepal survey',preflight.normalizedBrief);
+    if(req.body?.format==='json'){
+      const {exportCandidateGeometry}=require('../lib/nepal/geometryExport');
+      return res.status(200).json({success:true,status:'unverified_concepts_only',generationAvailable:false,
+        candidates:review.result.candidates.map(c=>exportCandidateGeometry(c,preflight.normalizedBrief)),
+        attempts:review.result.attempts.filter(a=>a.status==='rejected').length});
+    }
     if(req.body?.spatialStudy===true){
       if(!review.result.candidates.length)return res.status(422).json({success:false,
         code:'NO_SPATIAL_STUDY_CANDIDATES',message:'No starting layout was found for this brief. Review the floor program, site dimensions and working setbacks before trying again.'});

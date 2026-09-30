@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
+
+const NepalModel3D = lazy(() => import('./NepalModel3D.jsx'));
 
 const DRAFT_KEY = 'keystone-nepal:brief-v1';
 const INITIAL = {
@@ -87,8 +89,10 @@ export function NepalBrief() {
   const [report, setReport] = useState(null);
   const [checking, setChecking] = useState(false);
   const [previewing, setPreviewing] = useState(false);
+  const [massing, setMassing] = useState(null);
+  const [massingIndex, setMassingIndex] = useState(0);
   useEffect(() => { try { localStorage.setItem(DRAFT_KEY, JSON.stringify(form)); } catch { /* private browser */ } }, [form]);
-  const set = key => value => { setForm(prev => ({ ...prev, [key]: value })); setReport(null); };
+  const set = key => value => { setForm(prev => ({ ...prev, [key]: value })); setReport(null); setMassing(null); };
   const setLevel = (key, index) => value => { setForm(prev => {
     const next = [...(prev[key] || [])]; next[index] = value; return { ...prev, [key]: next };
   }); setReport(null); };
@@ -101,6 +105,20 @@ export function NepalBrief() {
       setReport(result);
     } catch { setReport({ message: 'Could not reach the local preflight server.', blockers: [] }); }
     finally { setChecking(false); }
+  }
+  async function openMassing() {
+    setPreviewing(true);
+    try {
+      const res = await fetch('/api/nepal/concepts', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ surveyData: buildNepalSurvey(form), format: 'json' }) });
+      const data = await res.json();
+      if (!res.ok || !data.candidates?.length) {
+        setReport(prev => ({ ...prev, message: data.message || 'No study massing could be built for this brief.' })); return;
+      }
+      setMassing(data.candidates); setMassingIndex(0);
+    } catch {
+      setReport(prev => ({ ...prev, message: 'Could not reach the local review-plan server.' }));
+    } finally { setPreviewing(false); }
   }
   async function openWorkingPlans(spatialStudy=false) {
     const tab=window.open('about:blank','_blank');
@@ -269,6 +287,19 @@ export function NepalBrief() {
       {report.contractReady && <button type="button" className="studio-btn" onClick={()=>openWorkingPlans(true)} disabled={previewing}>
         Explore balconies, lightwells and irregular rooms
       </button>}
+      {report.contractReady && <button type="button" className="studio-btn" onClick={openMassing} disabled={previewing}>
+        View 3D study massing
+      </button>}
+      {massing && <>
+        {massing.length > 1 && <label style={{ display: 'grid', gap: 5, fontSize: 12, marginTop: 10 }}>Hypothesis
+          <select value={massingIndex} onChange={e => setMassingIndex(Number(e.target.value))}>
+            {massing.map((c, i) => <option key={c.id} value={i}>{i + 1}. {c.id}</option>)}
+          </select>
+        </label>}
+        <Suspense fallback={<p className="studio-empty-note">Loading 3D view…</p>}>
+          <NepalModel3D key={massing[massingIndex].id} geometry={massing[massingIndex]}/>
+        </Suspense>
+      </>}
       {!!report.blockers?.length && <ul>{report.blockers.map((b, i) => <li key={`${b.code}-${i}`}>{b.message} <small>({b.field})</small></li>)}</ul>}
     </div>}
   </div>;
