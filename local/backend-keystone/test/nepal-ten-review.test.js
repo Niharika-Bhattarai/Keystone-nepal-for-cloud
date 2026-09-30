@@ -49,6 +49,8 @@ test('section checks report puja/toilet (V06), puja/stair (V07) and offset wet r
   assert.equal(v.facts['puja.toilet_conflict'],true);
   assert.equal(v.facts['puja.stair_overlap'],false);
   assert.deepEqual(v.wetStack.map(x=>[x.roomId,x.overWetShare]),[['f-bath',0.5],['f-kit',0]]);
+  // Synthetic levels carry no slabs, so no exterior stack can be proven.
+  assert.deepEqual(v.drainRoutes.map(r=>[r.roomId,r.status]),[['f-kit','no_route_found']]);
   candidate.levels[2].rooms.rooms[0].box=b(500,3000,2500,5000);
   candidate.levels[1].rooms.rooms[0].box=b(4000,4000,6000,6000);
   const moved=verticalStackFacts(candidate);
@@ -57,6 +59,28 @@ test('section checks report puja/toilet (V06), puja/stair (V07) and offset wet r
   // No found conflict does not prove separation: door sightlines are unmeasured.
   candidate.levels[1].rooms.rooms[0].box=b(0,5000,1000,7000);
   assert.equal(verticalStackFacts(candidate).facts['puja.toilet_conflict'],null);
+});
+
+test('offset wet rooms get a reserved drain route: shared-wall branch first, exterior stack only past exterior faces below',()=>{
+  const {verticalStackFacts}=require('../lib/nepal/validateNepalPlan');
+  const b=(x1,y1,x2,y2)=>({x1,y1,x2,y2});
+  const room=(id,type,box)=>({id,type,box});
+  const level=(id,slab,rooms)=>({id,footprint:{slabs:[slab]},rooms:{rooms}});
+  const candidate={levels:[
+    level('g',b(0,0,10000,8000),[room('g-bath','bathroom',b(0,0,2000,2000))]),
+    level('f',b(0,0,10000,8000),[room('f-bath1','bathroom',b(0,0,2000,2000)),
+      room('f-bath2','bathroom',b(0,2000,2000,4500)),room('f-bath3','bathroom',b(8000,3000,10000,5000)),
+      room('f-kit','kitchen',b(4000,3000,6000,5000))]),
+    level('t',b(0,0,6000,6000),[room('t-bath','bathroom',b(4000,5000,6000,6000))])]};
+  const routes=Object.fromEntries(verticalStackFacts(candidate).drainRoutes.map(r=>[r.roomId,r]));
+  assert.deepEqual([routes['f-bath2'].kind,routes['f-bath2'].toRoomId,routes['f-bath2'].horizontalRunMm],
+    ['branch_to_adjacent_stack','f-bath1',1250]);
+  assert.deepEqual([routes['f-bath3'].kind,routes['f-bath3'].planFace,routes['f-bath3'].horizontalRunMm],
+    ['new_stack_on_exterior_wall','east',1000]);
+  // An interior kitchen with no stacked neighbour has no route and stays a C17 finding.
+  assert.equal(routes['f-kit'].status,'no_route_found');
+  // The partial top's east/north faces sit over the full floor below: no exterior drop there.
+  assert.equal(routes['t-bath'].status,'no_route_found');
 });
 
 test('owner bedroom floor moves its attached bath off the ground puja below (V06) and reports NE toilets (V13)',()=>{

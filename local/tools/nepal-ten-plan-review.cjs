@@ -47,6 +47,8 @@ const rows=plans.map(p=>{
     toilets_in_ne_center_v13:count('TOILET_IN_NE_OR_CENTER'),
     attached_bath_replan:c.levels.map(l=>l.rooms?.bathReplan?.status).find(Boolean)||'',
     wet_rooms_not_over_wet_c17:c.validation.verticalStack.wetStack.filter(w=>w.overWetShare===0).length,
+    c17_drain_routes:c.validation.verticalStack.drainRoutes.map(r=>r.status==='route_reserved'?
+      `${r.roomId}:${r.kind}:${r.horizontalRunMm}mm`:`${r.roomId}:${r.status}`).join(' '),
     planning_columns:c.grid.columns.length,
     stair_bay_axis_span_mm:c.core.box.y2-c.core.box.y1-c.grid.columnWidthMm,
     main_room_grid_exceptions:issues.filter(b=>b.code==='MAIN_ROOM_GRID_CELL_NOT_MET')

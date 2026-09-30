@@ -41,6 +41,42 @@ const sharedEdgeMm=(a,b)=>{
   return 0;
 };
 const round2=n=>Math.round(n*100)/100;
+// C17 repair ("move routing"): a wet room with no wet room below gets a reserved
+// drain route. Preferred: a branch through a shared wall into a neighbouring wet
+// room that does stack. Otherwise: a new stack on one of its exterior faces, but
+// only if that face is also outside every lower floor (a stack must not drop
+// through a room below). Faces are drawing-frame sides (x1 = 'west' of the sheet),
+// not compass directions. Slopes, pipe sizes, outfall and access are not designed.
+const inside=(p,box)=>p.x>box.x1&&p.x<box.x2&&p.y>box.y1&&p.y<box.y2;
+function exteriorFaces(box,levelsBelowAndSelf){
+  const cx=(box.x1+box.x2)/2,cy=(box.y1+box.y2)/2;
+  return [['west',{x:box.x1-1,y:cy},cx-box.x1],['east',{x:box.x2+1,y:cy},box.x2-cx],
+    ['south',{x:cx,y:box.y1-1},cy-box.y1],['north',{x:cx,y:box.y2+1},box.y2-cy]]
+    .filter(([,probe])=>levelsBelowAndSelf.every(l=>(l.footprint?.slabs||[]).length&&
+      !l.footprint.slabs.some(slab=>inside(probe,slab))))
+    .map(([face,,runMm])=>({face,runMm:Math.round(runMm)}));
+}
+function offsetDrainRoute(levels,item,wetStack){
+  const index=levels.findIndex(l=>l.id===item.levelId),level=levels[index];
+  const room=(level.rooms?.rooms||[]).find(r=>r.id===item.roomId);
+  const stacked=new Set(wetStack.filter(w=>w.levelId===level.id&&w.overWetShare>0).map(w=>w.roomId));
+  const cx=(room.box.x1+room.box.x2)/2,cy=(room.box.y1+room.box.y2)/2;
+  const neighbours=(level.rooms?.rooms||[]).filter(r=>stacked.has(r.id)&&sharedEdgeMm(room.box,r.box)>0)
+    .map(r=>({toRoomId:r.id,sharedEdgeMm:sharedEdgeMm(room.box,r.box),
+      horizontalRunMm:Math.round(r.box.x1===room.box.x2?room.box.x2-cx:r.box.x2===room.box.x1?cx-room.box.x1:
+        r.box.y1===room.box.y2?room.box.y2-cy:cy-room.box.y1)}))
+    .sort((a,b)=>a.horizontalRunMm-b.horizontalRunMm);
+  const base={levelId:item.levelId,roomId:item.roomId,type:item.type,
+    unverified:['pipe size and fall (NBC 208 adoption review)','sunken slab or raised floor depth for the branch',
+      'outfall, trap/vent and cleanout access']};
+  if(neighbours.length)return {...base,status:'route_reserved',kind:'branch_to_adjacent_stack',
+    ...neighbours[0]};
+  const faces=exteriorFaces(room.box,levels.slice(0,index+1)).sort((a,b)=>a.runMm-b.runMm);
+  if(faces.length)return {...base,status:'route_reserved',kind:'new_stack_on_exterior_wall',
+    planFace:faces[0].face,horizontalRunMm:faces[0].runMm,dropsPastLevelIds:levels.slice(0,index).map(l=>l.id),
+    unverified:[...base.unverified,'external stack position against lower-floor windows and doors']};
+  return {...base,status:'no_route_found'};
+}
 function verticalStackFacts(candidate){
   const levels=candidate.levels,roomsOf=l=>l?.rooms?.rooms||[];
   const coreLevels=new Set(candidate.core?.levelIds||[]);
@@ -75,8 +111,10 @@ function verticalStackFacts(candidate){
         overWetRoomIds:wetBelow.filter(r=>overlapSqM(room.box,r.box)>=STACK_TOLERANCE_SQM).map(r=>r.id)});
     }
   });
+  const drainRoutes=wetStack.filter(item=>item.overWetShare===0)
+    .map(item=>offsetDrainRoute(levels,item,wetStack));
   const hasPuja=levels.some(l=>roomsOf(l).some(r=>r.type==='puja'));
-  return {toleranceSqM:STACK_TOLERANCE_SQM,pujaToilet,pujaStair,wetStack,
+  return {toleranceSqM:STACK_TOLERANCE_SQM,pujaToilet,pujaStair,wetStack,drainRoutes,
     facts:{
       // Door/sightline facing is not measured, so absence of a found conflict stays unknown.
       'puja.toilet_conflict':!hasPuja?null:pujaToilet.length?true:null,
@@ -213,9 +251,13 @@ function validateSpatialHypothesis(candidate) {
   const toiletZones=toiletZoneFacts(candidate);
   for(const item of toiletZones.excluded)
     blockers.push({code:'TOILET_IN_NE_OR_CENTER',ruleId:'V13',...item});
-  const offset=verticalStack.wetStack.filter(item=>item.overWetShare===0);
-  if(offset.length)blockers.push({code:'WET_ROOM_NOT_OVER_WET_ZONE_REVIEW',ruleId:'C17',
-    rooms:offset.map(({levelId,roomId,type,belowLevelId})=>({levelId,roomId,type,belowLevelId}))});
+  const unrouted=verticalStack.drainRoutes.filter(r=>r.status!=='route_reserved');
+  if(unrouted.length)blockers.push({code:'WET_ROOM_NOT_OVER_WET_ZONE_REVIEW',ruleId:'C17',
+    rooms:unrouted.map(({levelId,roomId,type})=>({levelId,roomId,type}))});
+  const routed=verticalStack.drainRoutes.filter(r=>r.status==='route_reserved');
+  if(routed.length)blockers.push({code:'OFFSET_WET_ROOM_DRAIN_ROUTE_UNVERIFIED',ruleId:'C17',
+    routes:routed.map(({levelId,roomId,kind,toRoomId,planFace,horizontalRunMm})=>
+      ({levelId,roomId,kind,...(toRoomId?{toRoomId}:{planFace}),horizontalRunMm}))});
   if(!candidate.rulePack.permitRulesReady)blockers.push({code:'MUNICIPAL_RULES_UNVERIFIED'});
   if(!candidate.grid.engineerReviewed)blockers.push({code:'RC_FRAME_NOT_ENGINEERED'});
   if(candidate.levels[0]?.rooms?.occupancy==='rental')
