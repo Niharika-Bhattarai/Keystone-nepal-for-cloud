@@ -194,3 +194,19 @@ test('ranking puts core-Vaastu conflicts after physical defects and before the p
   const routed=c('d-routed',['OFFSET_WET_ROOM_DRAIN_ROUTE_UNVERIFIED'],[0.3,0,0,-90]);
   assert.deepEqual([better,routed].sort(compare).map(x=>x.id),['d-routed','a-conflict-free']);
 });
+
+test('open ground bays and partial upper floors are reported as NBC 105 configuration reviews (S04-S06)',()=>{
+  const {structuralConfigurationFacts}=require('../lib/nepal/validateNepalPlan');
+  const b=(x1,y1,x2,y2)=>({x1,y1,x2,y2});
+  const facts=structuralConfigurationFacts({levels:[
+    {id:'g',footprint:{slabs:[b(0,0,10000,10000)]},rooms:{rooms:[],parking:{box:b(7000,0,10000,5000)}}},
+    {id:'f',footprint:{slabs:[b(0,0,10000,10000)]},rooms:{rooms:[]}},
+    {id:'t',footprint:{slabs:[b(0,0,6000,5000)]},rooms:{rooms:[]}}]});
+  assert.deepEqual(facts.openGroundBays.map(x=>[x.floorShare,x.bayOffsetShare]),[[0.15,{x:0.35,y:0.25}]]);
+  assert.deepEqual(facts.upperOffsets,[{levelId:'t',belowLevelId:'f',areaRatio:0.3,
+    centroidOffsetShare:{x:0.2,y:0.25}}]);
+  const owner=concepts('rectangle-2_5')[0];
+  assert.ok(owner.levels[0].rooms.parking);
+  assert.ok(owner.validation.blockers.some(x=>x.code==='OPEN_GROUND_BAY_SOFT_STOREY_AND_TORSION_REVIEW'));
+  assert.ok(owner.validation.blockers.some(x=>x.code==='UPPER_FLOOR_SETBACK_IRREGULARITY_REVIEW'));
+});

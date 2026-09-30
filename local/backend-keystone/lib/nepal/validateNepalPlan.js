@@ -145,6 +145,39 @@ function toiletZoneFacts(candidate){
     unmeasured:['V13/V12 boundary tolerance and mandala domain need consultant review',
       'bathroom vs separate WC distinction (bathrooms treated as containing a WC)']};
 }
+// NBC 105:2025 configuration checks the engine can only flag, not decide
+// (catalog S04 weak/soft storey, S05 vertical/offset irregularity, S06 torsion).
+// Gorkha 2015 damage surveys single out open ground storeys and upper-floor
+// offsets in Kathmandu RC houses. Values are plan-geometry evidence for the engineer.
+const boxArea=b=>(b.x2-b.x1)*(b.y2-b.y1);
+function centroidOf(boxes){const a=boxes.reduce((n,b)=>n+boxArea(b),0);
+  return {x:boxes.reduce((n,b)=>n+boxArea(b)*(b.x1+b.x2)/2,0)/a,
+    y:boxes.reduce((n,b)=>n+boxArea(b)*(b.y1+b.y2)/2,0)/a,areaMm2:a};}
+function structuralConfigurationFacts(candidate){
+  const levels=candidate.levels,out={openGroundBays:[],upperOffsets:[]};
+  const ground=levels[0],slabs=ground?.footprint?.slabs||[];
+  const parking=ground?.rooms?.parking?.box;
+  if(parking&&slabs.length){
+    const floor=centroidOf(slabs),bay=centroidOf([parking]);
+    const xs=slabs.flatMap(b=>[b.x1,b.x2]),ys=slabs.flatMap(b=>[b.y1,b.y2]);
+    const width=Math.max(...xs)-Math.min(...xs),depth=Math.max(...ys)-Math.min(...ys);
+    out.openGroundBays.push({levelId:ground.id,box:parking,
+      floorShare:round2(bay.areaMm2/floor.areaMm2),
+      bayOffsetShare:{x:round2(Math.abs(bay.x-floor.x)/width),y:round2(Math.abs(bay.y-floor.y)/depth)},
+      note:'open bay without infill beside infilled bays: soft/weak storey and torsion need analysis'});
+  }
+  levels.forEach((level,i)=>{
+    if(!i||!level.footprint?.slabs?.length||!levels[i-1].footprint?.slabs?.length)return;
+    const above=centroidOf(level.footprint.slabs),below=centroidOf(levels[i-1].footprint.slabs);
+    const ratio=above.areaMm2/below.areaMm2;
+    if(ratio>0.999)return;
+    const xs=levels[i-1].footprint.slabs.flatMap(b=>[b.x1,b.x2]),ys=levels[i-1].footprint.slabs.flatMap(b=>[b.y1,b.y2]);
+    out.upperOffsets.push({levelId:level.id,belowLevelId:levels[i-1].id,areaRatio:round2(ratio),
+      centroidOffsetShare:{x:round2(Math.abs(above.x-below.x)/(Math.max(...xs)-Math.min(...xs))),
+        y:round2(Math.abs(above.y-below.y)/(Math.max(...ys)-Math.min(...ys)))}});
+  });
+  return out;
+}
 function validateSpatialHypothesis(candidate) {
   const blockers=[];
   for(const level of candidate.levels){
@@ -258,6 +291,11 @@ function validateSpatialHypothesis(candidate) {
   if(routed.length)blockers.push({code:'OFFSET_WET_ROOM_DRAIN_ROUTE_UNVERIFIED',ruleId:'C17',
     routes:routed.map(({levelId,roomId,kind,toRoomId,planFace,horizontalRunMm})=>
       ({levelId,roomId,kind,...(toRoomId?{toRoomId}:{planFace}),horizontalRunMm}))});
+  const configuration=structuralConfigurationFacts(candidate);
+  for(const bay of configuration.openGroundBays)
+    blockers.push({code:'OPEN_GROUND_BAY_SOFT_STOREY_AND_TORSION_REVIEW',ruleIds:['S04','S06'],...bay});
+  for(const offset of configuration.upperOffsets)
+    blockers.push({code:'UPPER_FLOOR_SETBACK_IRREGULARITY_REVIEW',ruleId:'S05',...offset});
   if(!candidate.rulePack.permitRulesReady)blockers.push({code:'MUNICIPAL_RULES_UNVERIFIED'});
   if(!candidate.grid.engineerReviewed)blockers.push({code:'RC_FRAME_NOT_ENGINEERED'});
   if(candidate.levels[0]?.rooms?.occupancy==='rental')
@@ -279,7 +317,7 @@ function validateSpatialHypothesis(candidate) {
   return {structuralGeometryOkay:!blockers.some(b=>[
     'ROOM_OVERLAP','COLUMN_IN_ROOM_CLEAR_AREA','CIRCULATION_COLUMN_OBSTRUCTION',
     'WALL_CROSSES_COLUMN_CORE','OPENING_OVERLAPS_COLUMN'].includes(b.code)),
-    eligibility:'unverified_concept_only',blockers,verticalStack,toiletZones};
+    eligibility:'unverified_concept_only',blockers,verticalStack,toiletZones,configuration};
 }
-module.exports={validateSpatialHypothesis,verticalStackFacts,toiletZoneFacts,roomGridCrossings,columnsInsideRoom,
+module.exports={validateSpatialHypothesis,verticalStackFacts,toiletZoneFacts,structuralConfigurationFacts,roomGridCrossings,columnsInsideRoom,
   routeColumnObstructions,MAIN_GRID_ROOM_TYPES};
