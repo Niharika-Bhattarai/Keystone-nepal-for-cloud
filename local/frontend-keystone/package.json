@@ -1,0 +1,42 @@
+{
+  "name": "keystone-frontend",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "prebuild": "node scripts/prebuild.mjs",
+    "predev": "node scripts/prebuild.mjs",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check:refs": "python ../scripts/check-module-refs.py",
+    "check:a11y": "node ../scripts/a11y-scan.js",
+    "check:contrast": "node ../scripts/check-contrast.js",
+    "check:studio": "node ../scripts/check-studio-contrast.js"
+  },
+  "dependencies": {
+    "@babylonjs/core": "^8.56.2",
+    "@babylonjs/loaders": "^8.56.2",
+    "@babylonjs/serializers": "^8.56.2",
+    "@phosphor-icons/react": "^2.1.10",
+    "dompurify": "^3.4.16",
+    "firebase": "^12.19.0",
+    "motion": "^13.4.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.0",
+    "@babel/preset-react": "^7.28.5",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@vitejs/plugin-react": "^6.1.1",
+    "axe-core": "^4.13.0",
+    "playwright": "^1.56.0",
+    "postcss": "^8.5.28",
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.3.0"
+  }
+}

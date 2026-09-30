@@ -1,0 +1,5390 @@
+{
+  "schemaVersion": 1,
+  "historicalOnly": true,
+  "provenance": {
+    "backendCommit": "9f08f372933d442c2b0aafc0c6776c271522f671",
+    "frontendCommit": "e1561cc52af16d9518c93811ed6760ba337d7b1d",
+    "httpReport": {
+      "path": "tmp/stairs-committed-http-20260924.json",
+      "date": "2026-09-24T22:34:52.599Z",
+      "legacyFallbackEnabled": true
+    },
+    "surveyReport": {
+      "path": "tmp/stairs-committed-survey-20260924/report.json",
+      "date": "2026-09-24T22:30:01.382Z",
+      "legacyFallbackEnabled": false
+    },
+    "regressionLogSha256": "5db78847b9be585c466749bb8150a7c090f27bfac8a17420d754975983d44023",
+    "note": "Historical reports did not record Node version or command; do not infer them from the capture environment."
+  },
+  "gridId": "structure-96-three-bathrooms-v1",
+  "gridSha256": "38cb5ada13d2ed792d7023c789bdbaf161b38d7d1d444a2493f52e137bfe22fb",
+  "structure": [
+    {
+      "id": "structure-001",
+      "survey": {
+        "totalArea": "1200",
+        "stories": "1 Stories",
+        "bedrooms": "2 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 2,
+        "valid": true,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-002",
+      "survey": {
+        "totalArea": "1200",
+        "stories": "1 Stories",
+        "bedrooms": "2 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "one_story_garage_requires_min_1500_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 1,500 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "one_story_garage_requires_min_1500_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 1,500 sq ft in the generator."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-003",
+      "survey": {
+        "totalArea": "1200",
+        "stories": "1 Stories",
+        "bedrooms": "2 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "one_story_garage_requires_min_1500_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 1,500 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "one_story_garage_requires_min_1500_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 1,500 sq ft in the generator."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-004",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "1 Stories",
+        "bedrooms": "2 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-005",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "1 Stories",
+        "bedrooms": "2 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-006",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "1 Stories",
+        "bedrooms": "2 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 2,
+        "valid": true,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-007",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "1 Stories",
+        "bedrooms": "2 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-008",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "1 Stories",
+        "bedrooms": "2 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-009",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "1 Stories",
+        "bedrooms": "2 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-010",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "1 Stories",
+        "bedrooms": "2 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-011",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "1 Stories",
+        "bedrooms": "2 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-012",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "1 Stories",
+        "bedrooms": "2 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-013",
+      "survey": {
+        "totalArea": "1200",
+        "stories": "1 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 1,
+        "valid": true,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-014",
+      "survey": {
+        "totalArea": "1200",
+        "stories": "1 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "one_story_garage_requires_min_1500_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 1,500 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "one_story_garage_requires_min_1500_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 1,500 sq ft in the generator."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-015",
+      "survey": {
+        "totalArea": "1200",
+        "stories": "1 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "one_story_garage_requires_min_1500_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 1,500 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "one_story_garage_requires_min_1500_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 1,500 sq ft in the generator."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-016",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "1 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-017",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "1 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 2,
+        "valid": true,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-018",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "1 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 2,
+        "valid": true,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-019",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "1 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-020",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "1 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-021",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "1 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-022",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "1 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-023",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "1 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-024",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "1 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-025",
+      "survey": {
+        "totalArea": "1200",
+        "stories": "1 Stories",
+        "bedrooms": "4 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "one_story_four_bed_requires_min_1800_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 1,800 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "one_story_four_bed_requires_min_1800_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 1,800 sq ft in the generator."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-026",
+      "survey": {
+        "totalArea": "1200",
+        "stories": "1 Stories",
+        "bedrooms": "4 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "one_story_garage_requires_min_1500_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 1,500 sq ft in the generator."
+            },
+            {
+              "code": "one_story_four_bed_requires_min_2200_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 2,200 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "one_story_garage_requires_min_1500_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 1,500 sq ft in the generator."
+          },
+          {
+            "code": "one_story_four_bed_requires_min_2200_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 2,200 sq ft in the generator."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-027",
+      "survey": {
+        "totalArea": "1200",
+        "stories": "1 Stories",
+        "bedrooms": "4 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "one_story_garage_requires_min_1500_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 1,500 sq ft in the generator."
+            },
+            {
+              "code": "one_story_four_bed_requires_min_2200_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 2,200 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "one_story_garage_requires_min_1500_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 1,500 sq ft in the generator."
+          },
+          {
+            "code": "one_story_four_bed_requires_min_2200_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 2,200 sq ft in the generator."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-028",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "1 Stories",
+        "bedrooms": "4 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-029",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "1 Stories",
+        "bedrooms": "4 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "one_story_four_bed_requires_min_2200_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 2,200 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "one_story_four_bed_requires_min_2200_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 2,200 sq ft in the generator."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-030",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "1 Stories",
+        "bedrooms": "4 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "one_story_four_bed_requires_min_2200_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 2,200 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "one_story_four_bed_requires_min_2200_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 2,200 sq ft in the generator."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-031",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "1 Stories",
+        "bedrooms": "4 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 3,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-032",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "1 Stories",
+        "bedrooms": "4 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 3,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-033",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "1 Stories",
+        "bedrooms": "4 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 1,
+        "valid": true,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-034",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "1 Stories",
+        "bedrooms": "4 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-035",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "1 Stories",
+        "bedrooms": "4 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-036",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "1 Stories",
+        "bedrooms": "4 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-037",
+      "survey": {
+        "totalArea": "1200",
+        "stories": "1 Stories",
+        "bedrooms": "5 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "one_story_five_bed_requires_min_2400_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 2,400 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "one_story_five_bed_requires_min_2400_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 2,400 sq ft in the generator."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-038",
+      "survey": {
+        "totalArea": "1200",
+        "stories": "1 Stories",
+        "bedrooms": "5 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "one_story_garage_requires_min_1500_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 1,500 sq ft in the generator."
+            },
+            {
+              "code": "one_story_five_bed_requires_min_2800_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 2,800 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "one_story_garage_requires_min_1500_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 1,500 sq ft in the generator."
+          },
+          {
+            "code": "one_story_five_bed_requires_min_2800_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 2,800 sq ft in the generator."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-039",
+      "survey": {
+        "totalArea": "1200",
+        "stories": "1 Stories",
+        "bedrooms": "5 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "one_story_garage_requires_min_1500_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 1,500 sq ft in the generator."
+            },
+            {
+              "code": "one_story_five_bed_requires_min_2800_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 2,800 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "one_story_garage_requires_min_1500_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 1,500 sq ft in the generator."
+          },
+          {
+            "code": "one_story_five_bed_requires_min_2800_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 2,800 sq ft in the generator."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-040",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "1 Stories",
+        "bedrooms": "5 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "one_story_five_bed_requires_min_2400_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 2,400 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "one_story_five_bed_requires_min_2400_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 2,400 sq ft in the generator."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-041",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "1 Stories",
+        "bedrooms": "5 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "one_story_five_bed_requires_min_2800_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 2,800 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "one_story_five_bed_requires_min_2800_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 2,800 sq ft in the generator."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-042",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "1 Stories",
+        "bedrooms": "5 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "one_story_five_bed_requires_min_2800_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 2,800 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "one_story_five_bed_requires_min_2800_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 2,800 sq ft in the generator."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-043",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "1 Stories",
+        "bedrooms": "5 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-044",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "1 Stories",
+        "bedrooms": "5 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "one_story_five_bed_requires_min_2800_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 2,800 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "one_story_five_bed_requires_min_2800_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 2,800 sq ft in the generator."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-045",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "1 Stories",
+        "bedrooms": "5 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "one_story_five_bed_requires_min_2800_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 2,800 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "one_story_five_bed_requires_min_2800_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 2,800 sq ft in the generator."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-046",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "1 Stories",
+        "bedrooms": "5 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-047",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "1 Stories",
+        "bedrooms": "5 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 2,
+        "valid": true,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-048",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "1 Stories",
+        "bedrooms": "5 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 1,
+        "valid": true,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-049",
+      "survey": {
+        "totalArea": "1200",
+        "stories": "2 Stories",
+        "bedrooms": "2 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "two_story_compact_two_bed_requires_min_1500_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 1,500 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "two_story_compact_two_bed_requires_min_1500_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 1,500 sq ft in the generator."
+          },
+          {
+            "code": "house_pattern_not_supported",
+            "field": "stories",
+            "message": "No current layout family matches all of these choices."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-050",
+      "survey": {
+        "totalArea": "1200",
+        "stories": "2 Stories",
+        "bedrooms": "2 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "two_story_garage_requires_min_1800_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 1,800 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "two_story_garage_requires_min_1800_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 1,800 sq ft in the generator."
+          },
+          {
+            "code": "house_pattern_not_supported",
+            "field": "stories",
+            "message": "No current layout family matches all of these choices."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-051",
+      "survey": {
+        "totalArea": "1200",
+        "stories": "2 Stories",
+        "bedrooms": "2 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "two_story_garage_requires_min_1800_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 1,800 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "two_story_garage_requires_min_1800_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 1,800 sq ft in the generator."
+          },
+          {
+            "code": "house_pattern_not_supported",
+            "field": "stories",
+            "message": "No current layout family matches all of these choices."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-052",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "2 Stories",
+        "bedrooms": "2 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 2,
+        "valid": true,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-053",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "2 Stories",
+        "bedrooms": "2 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 3,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-054",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "2 Stories",
+        "bedrooms": "2 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-055",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "2 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 2,
+        "valid": true,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-056",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "2 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 3,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-057",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "2 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 3,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-058",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "2 Stories",
+        "bedrooms": "2 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-059",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "2 Stories",
+        "bedrooms": "2 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-060",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "2 Stories",
+        "bedrooms": "2 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-061",
+      "survey": {
+        "totalArea": "1200",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "two_story_compact_three_bed_requires_min_1800_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 1,800 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "two_story_compact_three_bed_requires_min_1800_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 1,800 sq ft in the generator."
+          },
+          {
+            "code": "house_pattern_not_supported",
+            "field": "stories",
+            "message": "No current layout family matches all of these choices."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-062",
+      "survey": {
+        "totalArea": "1200",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "two_story_garage_requires_min_1800_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 1,800 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "two_story_garage_requires_min_1800_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 1,800 sq ft in the generator."
+          },
+          {
+            "code": "house_pattern_not_supported",
+            "field": "stories",
+            "message": "No current layout family matches all of these choices."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-063",
+      "survey": {
+        "totalArea": "1200",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "two_story_garage_requires_min_1800_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 1,800 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "two_story_garage_requires_min_1800_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 1,800 sq ft in the generator."
+          },
+          {
+            "code": "house_pattern_not_supported",
+            "field": "stories",
+            "message": "No current layout family matches all of these choices."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-064",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 2,
+        "valid": true,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-065",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 3,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-066",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-067",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-068",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 3,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-069",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 3,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-070",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-071",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-072",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-073",
+      "survey": {
+        "totalArea": "1200",
+        "stories": "2 Stories",
+        "bedrooms": "4 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "two_story_compact_three_bed_requires_min_1800_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 1,800 sq ft in the generator."
+            },
+            {
+              "code": "two_story_four_bed_requires_min_2400_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 2,400 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "two_story_compact_three_bed_requires_min_1800_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 1,800 sq ft in the generator."
+          },
+          {
+            "code": "two_story_four_bed_requires_min_2400_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 2,400 sq ft in the generator."
+          },
+          {
+            "code": "house_pattern_not_supported",
+            "field": "stories",
+            "message": "No current layout family matches all of these choices."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-074",
+      "survey": {
+        "totalArea": "1200",
+        "stories": "2 Stories",
+        "bedrooms": "4 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "two_story_garage_requires_min_1800_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 1,800 sq ft in the generator."
+            },
+            {
+              "code": "two_story_four_bed_requires_min_2400_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 2,400 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "two_story_garage_requires_min_1800_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 1,800 sq ft in the generator."
+          },
+          {
+            "code": "two_story_four_bed_requires_min_2400_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 2,400 sq ft in the generator."
+          },
+          {
+            "code": "house_pattern_not_supported",
+            "field": "stories",
+            "message": "No current layout family matches all of these choices."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-075",
+      "survey": {
+        "totalArea": "1200",
+        "stories": "2 Stories",
+        "bedrooms": "4 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "two_story_garage_requires_min_1800_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 1,800 sq ft in the generator."
+            },
+            {
+              "code": "two_story_four_bed_requires_min_2400_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 2,400 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "two_story_garage_requires_min_1800_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 1,800 sq ft in the generator."
+          },
+          {
+            "code": "two_story_four_bed_requires_min_2400_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 2,400 sq ft in the generator."
+          },
+          {
+            "code": "house_pattern_not_supported",
+            "field": "stories",
+            "message": "No current layout family matches all of these choices."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-076",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "2 Stories",
+        "bedrooms": "4 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "two_story_four_bed_requires_min_2400_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 2,400 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "two_story_four_bed_requires_min_2400_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 2,400 sq ft in the generator."
+          },
+          {
+            "code": "house_pattern_not_supported",
+            "field": "stories",
+            "message": "No current layout family matches all of these choices."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-077",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "2 Stories",
+        "bedrooms": "4 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "two_story_four_bed_requires_min_2400_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 2,400 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "two_story_four_bed_requires_min_2400_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 2,400 sq ft in the generator."
+          },
+          {
+            "code": "house_pattern_not_supported",
+            "field": "stories",
+            "message": "No current layout family matches all of these choices."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-078",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "2 Stories",
+        "bedrooms": "4 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "two_story_four_bed_requires_min_2400_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 2,400 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "two_story_four_bed_requires_min_2400_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 2,400 sq ft in the generator."
+          },
+          {
+            "code": "house_pattern_not_supported",
+            "field": "stories",
+            "message": "No current layout family matches all of these choices."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-079",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "4 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 3,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-080",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "4 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 3,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-081",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "4 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 3,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-082",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "2 Stories",
+        "bedrooms": "4 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-083",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "2 Stories",
+        "bedrooms": "4 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-084",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "2 Stories",
+        "bedrooms": "4 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-085",
+      "survey": {
+        "totalArea": "1200",
+        "stories": "2 Stories",
+        "bedrooms": "5 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "two_story_compact_three_bed_requires_min_1800_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 1,800 sq ft in the generator."
+            },
+            {
+              "code": "two_story_five_bed_requires_min_3000_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 3,000 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "two_story_compact_three_bed_requires_min_1800_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 1,800 sq ft in the generator."
+          },
+          {
+            "code": "two_story_five_bed_requires_min_3000_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 3,000 sq ft in the generator."
+          },
+          {
+            "code": "house_pattern_not_supported",
+            "field": "stories",
+            "message": "No current layout family matches all of these choices."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-086",
+      "survey": {
+        "totalArea": "1200",
+        "stories": "2 Stories",
+        "bedrooms": "5 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "two_story_garage_requires_min_1800_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 1,800 sq ft in the generator."
+            },
+            {
+              "code": "two_story_five_bed_requires_min_3000_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 3,000 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "two_story_garage_requires_min_1800_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 1,800 sq ft in the generator."
+          },
+          {
+            "code": "two_story_five_bed_requires_min_3000_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 3,000 sq ft in the generator."
+          },
+          {
+            "code": "house_pattern_not_supported",
+            "field": "stories",
+            "message": "No current layout family matches all of these choices."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-087",
+      "survey": {
+        "totalArea": "1200",
+        "stories": "2 Stories",
+        "bedrooms": "5 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "two_story_garage_requires_min_1800_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 1,800 sq ft in the generator."
+            },
+            {
+              "code": "two_story_five_bed_requires_min_3000_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 3,000 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "two_story_garage_requires_min_1800_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 1,800 sq ft in the generator."
+          },
+          {
+            "code": "two_story_five_bed_requires_min_3000_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 3,000 sq ft in the generator."
+          },
+          {
+            "code": "house_pattern_not_supported",
+            "field": "stories",
+            "message": "No current layout family matches all of these choices."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-088",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "2 Stories",
+        "bedrooms": "5 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "two_story_five_bed_requires_min_3000_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 3,000 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "two_story_five_bed_requires_min_3000_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 3,000 sq ft in the generator."
+          },
+          {
+            "code": "house_pattern_not_supported",
+            "field": "stories",
+            "message": "No current layout family matches all of these choices."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-089",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "2 Stories",
+        "bedrooms": "5 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "two_story_five_bed_requires_min_3000_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 3,000 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "two_story_five_bed_requires_min_3000_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 3,000 sq ft in the generator."
+          },
+          {
+            "code": "house_pattern_not_supported",
+            "field": "stories",
+            "message": "No current layout family matches all of these choices."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-090",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "2 Stories",
+        "bedrooms": "5 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "two_story_five_bed_requires_min_3000_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 3,000 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "two_story_five_bed_requires_min_3000_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 3,000 sq ft in the generator."
+          },
+          {
+            "code": "house_pattern_not_supported",
+            "field": "stories",
+            "message": "No current layout family matches all of these choices."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-091",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "5 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "two_story_five_bed_requires_min_3000_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 3,000 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "two_story_five_bed_requires_min_3000_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 3,000 sq ft in the generator."
+          },
+          {
+            "code": "house_pattern_not_supported",
+            "field": "stories",
+            "message": "No current layout family matches all of these choices."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-092",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "5 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "two_story_five_bed_requires_min_3000_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 3,000 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "two_story_five_bed_requires_min_3000_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 3,000 sq ft in the generator."
+          },
+          {
+            "code": "house_pattern_not_supported",
+            "field": "stories",
+            "message": "No current layout family matches all of these choices."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-093",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "5 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": {
+          "supported": false,
+          "matrixEligible": false,
+          "legacyFallbackEnabled": true,
+          "blockers": [
+            {
+              "code": "two_story_five_bed_requires_min_3000_sqft",
+              "field": "totalArea",
+              "message": "This room and garage combination currently needs at least 3,000 sq ft in the generator."
+            }
+          ]
+        },
+        "blockers": [
+          {
+            "code": "two_story_five_bed_requires_min_3000_sqft",
+            "field": "totalArea",
+            "message": "This room and garage combination currently needs at least 3,000 sq ft in the generator."
+          },
+          {
+            "code": "house_pattern_not_supported",
+            "field": "stories",
+            "message": "No current layout family matches all of these choices."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-094",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "2 Stories",
+        "bedrooms": "5 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-095",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "2 Stories",
+        "bedrooms": "5 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 3,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "structure-096",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "2 Stories",
+        "bedrooms": "5 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "2 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 3,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": {
+          "supported": true,
+          "matrixEligible": true,
+          "legacyFallbackEnabled": true,
+          "blockers": []
+        },
+        "blockers": [],
+        "errors": []
+      }
+    }
+  ],
+  "survey": [
+    {
+      "id": "default",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 3,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": null,
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "front-kitchen",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Front of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 1,
+        "valid": true,
+        "threeDistinct": false,
+        "preflight": null,
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "closed-rooms",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Traditional (Separate Rooms)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 3,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": null,
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "large-outdoor-doors",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Maximum (open to outdoors)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 3,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": null,
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "wide-doors",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "Wide doorways",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 3,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": null,
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "maximum-glazing-west",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "West",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Maximum (open to outdoors)",
+        "naturalLight": "Maximum glazing",
+        "accessibilityNeeds": "Wide doorways",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": null,
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "privacy",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Privacy first (fewer windows)",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 3,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": null,
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "tall-ceilings",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Tall (10 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 3,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": null,
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "front-north",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "North",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": null,
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "front-east",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "East",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": null,
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "laundry-upstairs",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 2 (near bedrooms)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 3,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": null,
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "primary-downstairs",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 1 (Main)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": null,
+        "blockers": [
+          {
+            "code": "two_story_primary_level_not_supported",
+            "field": "masterLocation",
+            "message": "A main-floor primary suite in a two-storey home is not yet supported."
+          },
+          {
+            "code": "house_pattern_not_supported",
+            "field": "stories",
+            "message": "No current layout family matches all of these choices."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "one-storey-two-bed",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "1 Story",
+        "bedrooms": "2 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": null,
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "one-storey-three-bed",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "1 Story",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": null,
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "one-storey-garage",
+      "survey": {
+        "totalArea": "1800",
+        "stories": "1 Story",
+        "bedrooms": "2 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": null,
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "one-storey-four-bed",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "1 Story",
+        "bedrooms": "4 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 3,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": null,
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "one-storey-five-bed",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "1 Story",
+        "bedrooms": "5 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "None",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": null,
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "two-storey-five-bed",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "2 Stories",
+        "bedrooms": "5 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 3,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": null,
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "study",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "1 Study",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 3,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": null,
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "study-and-gym",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "1 Study, 1 Gym",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": null,
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "study-and-library",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "1 Study, 1 Library",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 4,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": null,
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "l-shape",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "L-Shaped",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 2,
+        "valid": true,
+        "threeDistinct": false,
+        "preflight": null,
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "t-shape",
+      "survey": {
+        "totalArea": "3200",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "T-Shaped",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 200,
+        "options": 1,
+        "valid": true,
+        "threeDistinct": false,
+        "preflight": null,
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "square",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Square",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": null,
+        "blockers": [
+          {
+            "code": "shape_not_supported",
+            "field": "shape",
+            "message": "This footprint shape does not yet have a supported layout family."
+          },
+          {
+            "code": "house_pattern_not_supported",
+            "field": "stories",
+            "message": "No current layout family matches all of these choices."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "deck",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)",
+        "outdoorLiving": "Open Deck",
+        "outdoorArea": "160"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": null,
+        "blockers": [
+          {
+            "code": "outdoor_structure_not_supported",
+            "field": "outdoorLiving",
+            "message": "Decks, patios, and porches do not yet have validated placement in this generator. Outdoor door connections are supported; the separate outdoor structure is not yet supported."
+          },
+          {
+            "code": "house_pattern_not_supported",
+            "field": "stories",
+            "message": "No current layout family matches all of these choices."
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "small-lot",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)",
+        "lotWidth": "20",
+        "lotDepth": "20"
+      },
+      "observed": {
+        "status": 422,
+        "options": 0,
+        "valid": false,
+        "threeDistinct": false,
+        "preflight": null,
+        "blockers": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "finish-overrides",
+      "survey": {
+        "totalArea": "2400",
+        "stories": "2 Stories",
+        "bedrooms": "3 Bed",
+        "bathrooms": "3 Bath",
+        "privateBaths": "1",
+        "garage": "1 Car Garage",
+        "features": "None",
+        "shape": "Rectangular",
+        "frontFacing": "South",
+        "lotContext": "Suburban standard lot",
+        "openConcept": "Open Concept (Combined)",
+        "masterLocation": "Level 2 (Upper)",
+        "kitchenPlacement": "Rear of House",
+        "laundryLocation": "Level 1 (near garage/mud)",
+        "materials": "Craftsman (Wood & Stone)",
+        "ceilingHeight": "Standard (9 ft)",
+        "indoorOutdoor": "Moderate (some connection)",
+        "naturalLight": "Balanced windows",
+        "accessibilityNeeds": "None",
+        "budgetTier": "Mid ($200-300/sqft)",
+        "finishOverrides": {
+          "exteriorSiding": "Brick",
+          "roofMaterial": "Clay tile"
+        }
+      },
+      "observed": {
+        "status": 200,
+        "options": 3,
+        "valid": true,
+        "threeDistinct": true,
+        "preflight": null,
+        "blockers": [],
+        "errors": []
+      }
+    }
+  ]
+}

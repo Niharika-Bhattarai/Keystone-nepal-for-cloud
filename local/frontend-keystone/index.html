@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Keystone AI - Say it. See it. Build it.</title>
+    <meta name="description" content="Describe your home in plain words. Keystone AI lays out every room, raises it in 3D and prices it, often in under a minute. Floor plans are free.">
+    <meta name="theme-color" content="#0F1420">
+    <!-- %VITE_SITE_ORIGIN% is substituted by Vite at build time. Set it in
+         the Vercel project env so scrapers that do not run JS resolve these
+         absolute URLs. The SPA also rewrites all of this per route at
+         runtime (see useRouteMeta), which covers crawlers that do. -->
+    <link rel="canonical" href="%VITE_SITE_ORIGIN%/">
+    <!-- Open Graph / Social sharing -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Keystone AI">
+    <meta property="og:url" content="%VITE_SITE_ORIGIN%/">
+    <meta property="og:title" content="Keystone AI - Say it. See it. Build it.">
+    <meta property="og:description" content="Describe your home in plain words. Keystone AI lays out every room, raises it in 3D and prices it, often in under a minute. Floor plans are free.">
+    <meta property="og:image" content="%VITE_SITE_ORIGIN%/images/og-preview.png">
+    <meta property="og:image:width" content="1440">
+    <meta property="og:image:height" content="756">
+    <meta property="og:image:alt" content="Keystone AI: a real two-level floor plan drawn by the engine, over a view of the house.">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Keystone AI - Say it. See it. Build it.">
+    <meta name="twitter:description" content="Describe your home in plain words. Keystone AI lays out every room, raises it in 3D and prices it, often in under a minute. Floor plans are free.">
+    <meta name="twitter:image" content="%VITE_SITE_ORIGIN%/images/og-preview.png">
+    <link rel="apple-touch-icon" href="/images/keystone-mark.svg">
+    <link rel="icon" href="/images/keystone-mark.svg" type="image/svg+xml">
+    <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<!-- #generator is not an element. On the homepage the hash happened to
+     open the studio modal; on the seven subpages the link did nothing at
+     all. A skip link's job is to bypass the nav and land on content. -->
+<a href="#main" class="skip-link">Skip to content</a>
+<!-- The page-load veil was removed here. It painted the whole viewport in
+     --ink and faded out over 0.8s on every route. The hero opens on black
+     by design and earns it; on the eight paper-white pages it was a black
+     flash in front of content that had already painted, and it competed
+     with the one piece of signature motion the site has. -->
+<div class="scroll-progress-bar" id="scroll-progress" aria-hidden="true"></div>
+<div id="root"></div>
+<script src="/boot.js"></script>
+<script type="module" src="/src/main.jsx"></script>
+</body>
+</html>

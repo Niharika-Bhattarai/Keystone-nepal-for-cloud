@@ -1,0 +1,12 @@
+{
+  "name": "keystone-nepal-local",
+  "private": true,
+  "scripts": {
+    "dev": "node tools/run.cjs dev",
+    "backend": "node tools/run.cjs backend",
+    "frontend": "node tools/run.cjs frontend",
+    "build": "node tools/run.cjs build",
+    "test:backend": "node tools/run.cjs test",
+    "test:isolation": "node --test tools/isolation.test.cjs"
+  }
+}

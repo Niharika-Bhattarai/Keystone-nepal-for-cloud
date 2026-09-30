@@ -1,0 +1,122 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; scroll-padding-top: var(--nav-offset); }
+body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+    text-rendering: optimizeLegibility;
+}
+.cg  { font-family: var(--font-display); font-weight: 700; }
+.serif { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.03em; }
+.mono{ font-family: var(--font-mono); }
+.brand-wordmark { font-family: var(--font-display); font-weight: 700; text-transform: uppercase; }
+#hero, #proof, #generator, #gallery, #work, #services, #pricing, #studio, #research { scroll-margin-top: var(--nav-offset); }
+.site-shell {
+    width: min(calc(100vw - 2rem), var(--shell-max));
+    margin-inline: auto;
+}
+.skip-link {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    padding: 0.8rem 1rem;
+    border-radius: 999px;
+    background: rgba(var(--ink-rgb),0.94);
+    color: white;
+    font-family: var(--font-mono);
+    font-size: var(--t-meta);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transform: translateY(-140%);
+    transition: transform 0.2s ease;
+    z-index: 120;
+}
+.skip-link:focus-visible { transform: translateY(0); }
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+    /* A real outline, so the ring survives forced-colors / Windows
+       High Contrast, where box-shadow is dropped. outline-offset plus
+       a soft halo keeps it legible on both paper and glass.
+       No border-radius here: the ring follows each element's own
+       shape instead of forcing 14px onto 999px pills. */
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+@media (forced-colors: active) {
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible,
+    summary:focus-visible {
+        outline: 3px solid Highlight;
+        box-shadow: none;
+    }
+}
+
+/* Grain texture */
+/* ---- Ground ------------------------------------------------------
+   There is no wash. The previous version had four drifting radial
+   fields; they existed to give the glass something to refract, and with
+   the glass gone they are decoration competing with the drawing. A white
+   ground also means the floor plan - black line on white paper - is the
+   same material as the page it sits on, which is the whole argument. */
+body::before { content: none; }
+
+body::after {
+    content: '';
+    position: fixed; inset: 0; z-index: 9999; pointer-events: none;
+    opacity: 0.022;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+/* ---- Glass surfaces ---------------------------------------------
+   Real glass, not just backdrop-blur: blur + saturate for the
+   refraction, a bright 1px top edge where light catches the lip, a
+   faint rim, and a wide soft shadow. The top edge is what stops a
+   glass panel reading as flat translucent plastic.
+
+   .glass      - primary panels, 0.82 alpha, body text safe on top
+   .glass-quiet- secondary chrome, 0.62 alpha, NOT for body copy
+   .glass-dark - studio panels on the ink base
+   Backdrop-filter support is assumed; the fallback fill is opaque
+   enough that text stays readable without it. */
+.glass {
+    position: relative;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-card);
+}
+
+/* Control boundaries are held to 3:1 (WCAG 1.4.11); decorative panel
+   rims are not. Two tokens, deliberately. */
+
+/* The light -> dark handoff into the studio. One signature moment,
+   and it is a cross-fade of two opacity layers, nothing that costs a
+   frame once settled. */
+
+/* 10px, not 3px: a 3px thumb cannot be grabbed with a pointer. */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+    background: rgba(20,22,26,0.22);
+    border-radius: var(--r-pill);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(20,22,26,0.34); background-clip: padding-box; }
+* { scrollbar-width: thin; scrollbar-color: rgba(20,22,26,0.22) transparent; }
+
+/* Accessibility helpers. */
+.sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+main[tabindex="-1"]:focus { outline: none; }

@@ -1,0 +1,402 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="rendered-plan" width="1280" height="1072" viewBox="0 0 1280 1072">
+      <rect width="100%" height="100%" fill="#FFFFFF"></rect>
+      <defs>
+      <style>
+        .rl { font-family: 'Arial Narrow', 'Arial', sans-serif; }
+        .dl { font-family: 'Arial', sans-serif; }
+      </style>
+      
+    <!-- Wood / Parquet: horizontal plank lines, alternating light/dark seam -->
+    <pattern id="ksPat_wood" patternUnits="userSpaceOnUse" width="18" height="9">
+      <line x1="0" y1="3" x2="18" y2="3" stroke="rgba(110,65,0,0.10)" stroke-width="0.9"></line>
+      <line x1="0" y1="6" x2="18" y2="6" stroke="rgba(110,65,0,0.06)" stroke-width="0.6"></line>
+      <line x1="0" y1="9" x2="18" y2="9" stroke="rgba(110,65,0,0.10)" stroke-width="0.9"></line>
+      <line x1="9" y1="0" x2="9" y2="3" stroke="rgba(110,65,0,0.07)" stroke-width="0.6"></line>
+    </pattern>
+    <!-- Tile: square grid lines -->
+    <pattern id="ksPat_tile" patternUnits="userSpaceOnUse" width="12" height="12">
+      <path d="M12 0L0 0 0 12" fill="none" stroke="rgba(0,0,0,0.11)" stroke-width="0.7"></path>
+    </pattern>
+    <!-- Concrete: faint diagonal hatch -->
+    <pattern id="ksPat_concrete" patternUnits="userSpaceOnUse" width="18" height="18" patternTransform="rotate(45)">
+      <line x1="0" y1="9" x2="18" y2="9" stroke="rgba(0,0,0,0.07)" stroke-width="0.7"></line>
+    </pattern>
+    <!-- Stone / Entry: offset rectangular block grid -->
+    <pattern id="ksPat_stone" patternUnits="userSpaceOnUse" width="20" height="12">
+      <line x1="10" y1="0" x2="10" y2="6" stroke="rgba(0,0,0,0.10)" stroke-width="0.7"></line>
+      <line x1="0" y1="6" x2="20" y2="6" stroke="rgba(0,0,0,0.10)" stroke-width="0.7"></line>
+      <line x1="5" y1="6" x2="5" y2="12" stroke="rgba(0,0,0,0.08)" stroke-width="0.6"></line>
+      <line x1="15" y1="6" x2="15" y2="12" stroke="rgba(0,0,0,0.08)" stroke-width="0.6"></line>
+    </pattern>
+    <!-- Neutral / Circulation: very faint horizontal stripe -->
+    <pattern id="ksPat_neutral" patternUnits="userSpaceOnUse" width="12" height="10">
+      <line x1="0" y1="5" x2="12" y2="5" stroke="rgba(0,0,0,0.04)" stroke-width="0.5"></line>
+    </pattern>
+  
+      
+  <linearGradient id="ksRender_linen" x2="0.8" y2="1"><stop stop-color="#faf8f0"></stop><stop offset=".55" stop-color="#d4cec0"></stop><stop offset="1" stop-color="#a9a396"></stop></linearGradient>
+  <linearGradient id="ksRender_ceramic" x2="1" y2="1"><stop stop-color="#ffffff"></stop><stop offset=".7" stop-color="#e5e8e4"></stop><stop offset="1" stop-color="#aab6b5"></stop></linearGradient>
+  <linearGradient id="ksRender_timber" x2="0" y2="1"><stop stop-color="#a48765"></stop><stop offset="1" stop-color="#72573f"></stop></linearGradient>
+  <pattern id="ksRender_wood" patternUnits="userSpaceOnUse" width="96" height="24">
+    <rect width="96" height="24" fill="#c7b59b"></rect>
+    <path d="M0 0H96V8H0Z M32 16H96V24H32Z" fill="#d2c2a9"></path>
+    <path d="M0 8H96V16H0Z" fill="#bbab95"></path>
+    <path d="M0 8H96M0 16H96M0 24H96M32 0V8M70 8V16M20 16V24" stroke="#897860" stroke-opacity=".36" stroke-width=".6"></path>
+    <path d="M2 3Q28 1 54 4T94 3M2 12Q30 9 57 12T94 11M2 20Q26 23 61 20T94 21" fill="none" stroke="#7f6c53" stroke-opacity=".18" stroke-width=".45"></path>
+  </pattern>
+  <pattern id="ksRender_tile" patternUnits="userSpaceOnUse" width="24" height="24"><rect width="24" height="24" fill="#c1c6c2"></rect><path d="M0 24V0H24" fill="none" stroke="#f0f0e8" stroke-width="1"></path><path d="M3 6L18 17M6 3L22 19" stroke="#89948f" stroke-opacity=".12"></path></pattern>
+  <pattern id="ksRender_concrete" patternUnits="userSpaceOnUse" width="36" height="36"><rect width="36" height="36" fill="#bdc0ba"></rect><path d="M0 36V0H36" fill="none" stroke="#8f958e" stroke-opacity=".35"></path><circle cx="9" cy="11" r=".8" fill="#989f97"></circle><circle cx="28" cy="26" r=".5" fill="#e1e2d9"></circle></pattern>
+  <pattern id="ksRender_carpet" patternUnits="userSpaceOnUse" width="4" height="4"><rect width="4" height="4" fill="#cec6b8"></rect><path d="M0 1H4M1 0V4" stroke="#eee9de" stroke-opacity=".35" stroke-width=".6"></path></pattern>
+  <filter id="ksRender_wallShadow" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB"><feDropShadow dx="3" dy="5" stdDeviation="3" flood-color="#252b2b" flood-opacity=".42"></feDropShadow><feDropShadow dx=".7" dy="1" stdDeviation=".6" flood-color="#34342c" flood-opacity=".4"></feDropShadow></filter>
+  <filter id="ksRender_furnitureShadow" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB"><feDropShadow dx="1.4" dy="2" stdDeviation="1.2" flood-color="#302a22" flood-opacity=".3"></feDropShadow></filter>
+  <style>.rendered-labels text { paint-order:stroke; stroke:#f6f2e8; stroke-width:2.5px; stroke-linejoin:round; fill:#343c3d; } .rendered-plan .dl { fill:#e7e8e2; } .rendered-plan .opening-profile-annotation { display:none; }</style>
+    </defs>
+      
+    <g class="opening-profile-annotation">
+      <text x="100" y="1007" class="dl" font-size="12" fill="#7C6A2F" font-weight="700" letter-spacing="0.06em">OPENINGS: BALANCED</text>
+      <text x="100" y="1025" class="dl" font-size="11" fill="#8E8159" font-weight="600" letter-spacing="0.05em">DOORWAYS: STANDARD · IN/OUT: MODERATE</text>
+      <text x="100" y="1041" class="dl" font-size="10" fill="#9B8F6A" font-weight="500" letter-spacing="0.03em">WINDOWS 7 · EXTERIOR DOORS 2 · WIDE DOORS 0</text>
+    </g>
+  
+      <g>
+        
+        <text x="100" y="40" class="dl" font-size="20" font-weight="700" fill="#111" letter-spacing="0.04em">LEVEL 1</text>
+        <text x="100" y="60" class="dl" font-size="14" font-weight="500" fill="#777" letter-spacing="0.02em">2,640 SQ. FT.</text>
+        
+        <line x1="100" y1="62" x2="1180" y2="62" stroke="#5B7C99" stroke-width="1.2"></line>
+        <line x1="100" y1="58" x2="100" y2="66" stroke="#5B7C99" stroke-width="1.2"></line>
+        <line x1="1180" y1="58" x2="1180" y2="66" stroke="#5B7C99" stroke-width="1.2"></line>
+        <text x="640" y="52" class="dl" font-size="13" fill="#5B7C99" text-anchor="middle" font-weight="600">60'</text>
+        <line x1="62" y1="100" x2="62" y2="892" stroke="#5B7C99" stroke-width="1.2"></line>
+        <line x1="58" y1="100" x2="66" y2="100" stroke="#5B7C99" stroke-width="1.2"></line>
+        <line x1="58" y1="892" x2="66" y2="892" stroke="#5B7C99" stroke-width="1.2"></line>
+        <text x="52" y="496" class="dl" font-size="13" fill="#5B7C99" text-anchor="end" dominant-baseline="middle" font-weight="600">44'</text>
+      
+        <rect x="100" y="532" width="396" height="360" fill="url(#ksRender_concrete)" stroke="none"></rect>
+<rect x="100" y="316" width="396" height="216" fill="url(#ksRender_tile)" stroke="none"></rect>
+<rect x="100" y="100" width="396" height="216" fill="url(#ksRender_tile)" stroke="none"></rect>
+<rect x="496" y="100" width="72" height="792" fill="url(#ksRender_wood)" stroke="none"></rect>
+<rect x="568" y="748" width="468" height="144" fill="url(#ksRender_carpet)" stroke="none"></rect>
+<rect x="1036" y="748" width="144" height="144" fill="url(#ksRender_tile)" stroke="none"></rect>
+<rect x="568" y="568" width="180" height="180" fill="url(#ksRender_carpet)" stroke="none"></rect>
+<rect x="748" y="568" width="216" height="180" fill="url(#ksRender_carpet)" stroke="none"></rect>
+<rect x="964" y="568" width="216" height="180" fill="url(#ksRender_carpet)" stroke="none"></rect>
+<rect x="568" y="352" width="144" height="216" fill="url(#ksRender_wood)" stroke="none"></rect>
+<rect x="568" y="100" width="144" height="252" fill="url(#ksRender_tile)" stroke="none"></rect>
+<rect x="712" y="100" width="252" height="468" fill="url(#ksRender_wood)" stroke="none"></rect>
+<rect x="964" y="100" width="216" height="216" fill="url(#ksRender_wood)" stroke="none"></rect>
+<rect x="964" y="316" width="216" height="252" fill="url(#ksRender_wood)" stroke="none"></rect>
+        
+        <g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="common"><rect x="113.5" y="491.5" width="90" height="27" rx="3" fill="url(#ksRender_timber)" stroke="#79766d" stroke-width="1.2"></rect></g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="common">
+      <rect x="113.5" y="113.5" width="54" height="54" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="1.1"></rect>
+      <circle cx="140.5" cy="140.5" r="12.959999999999999" fill="none" stroke="#79766d" stroke-width="0.9"></circle>
+      
+    </g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="common">
+      <rect x="172" y="113.5" width="54" height="54" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="1.1"></rect>
+      <circle cx="199" cy="140.5" r="12.959999999999999" fill="none" stroke="#79766d" stroke-width="0.9"></circle>
+      
+    </g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="common"><rect x="113.5" y="271" width="108" height="27" rx="3" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="1.2"></rect></g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="bed">
+      <rect x="757" y="761.5" width="90" height="126" rx="4" fill="url(#ksRender_linen)" stroke="#79766d" stroke-width="1.3"></rect>
+      <line x1="757" y1="771.5" x2="847" y2="771.5" stroke="#79766d" stroke-width="1"></line>
+      <rect x="761" y="764.5" width="40" height="7" rx="2" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="0.9"></rect>
+      <rect x="803" y="764.5" width="40" height="7" rx="2" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="0.9"></rect>
+      <rect x="759" y="842.14" width="86" height="31.5" rx="1" fill="#81908c"></rect>
+      <path d="M760 844.66H844M760 869.86H844" stroke="#bcc6bf" stroke-width="1"></path>
+      <path d="M763 776.5Q784 811.9 764 839.62M841 776.5Q820 811.9 840 839.62" fill="none" stroke="#faf8ee" stroke-width="1.5"></path>
+    </g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="bed"><rect x="723.6999999999999" y="770.5" width="27" height="27" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="1.1"></rect></g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="bed"><rect x="853.3000000000001" y="770.5" width="27" height="27" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="1.1"></rect></g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="bed"><rect x="626.5" y="766" width="90" height="36" rx="3" fill="url(#ksRender_timber)" stroke="#79766d" stroke-width="1.2"></rect></g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="bath">
+      <rect x="1117" y="757" width="54" height="54" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="1.2"></rect>
+      <line x1="1117" y1="757" x2="1171" y2="811" stroke="#79766d" stroke-width="0.9"></line>
+      <line x1="1171" y1="757" x2="1117" y2="811" stroke="#79766d" stroke-width="0.9"></line>
+    </g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="bath"><rect x="1135" y="838" width="36" height="13.5" rx="2" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="1.2"></rect>
+      <ellipse cx="1153" cy="866.8" rx="13.68" ry="15.3" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="1.2"></ellipse></g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="bath"><rect x="1045" y="824.5" width="36" height="31.5" rx="3" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="1.2"></rect></g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="bed">
+      <rect x="626.5" y="581.5" width="81" height="112.5" rx="4" fill="url(#ksRender_linen)" stroke="#79766d" stroke-width="1.3"></rect>
+      <line x1="626.5" y1="591.5" x2="707.5" y2="591.5" stroke="#79766d" stroke-width="1"></line>
+      <rect x="630.5" y="584.5" width="35.5" height="7" rx="2" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="0.9"></rect>
+      <rect x="668" y="584.5" width="35.5" height="7" rx="2" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="0.9"></rect>
+      <rect x="628.5" y="653.5" width="77" height="28.125" rx="1" fill="#81908c"></rect>
+      <path d="M629.5 655.75H704.5M629.5 678.25H704.5" stroke="#bcc6bf" stroke-width="1"></path>
+      <path d="M632.5 596.5Q650.8 626.5 633.5 651.25M701.5 596.5Q683.2 626.5 700.5 651.25" fill="none" stroke="#faf8ee" stroke-width="1.5"></path>
+    </g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="bed"><rect x="584.2" y="644.5" width="27" height="27" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="1.1"></rect></g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="bed"><rect x="712" y="590.5" width="27" height="27" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="1.1"></rect></g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="bed">
+      <rect x="815.5" y="622" width="81" height="112.5" rx="4" fill="url(#ksRender_linen)" stroke="#79766d" stroke-width="1.3"></rect>
+      <line x1="815.5" y1="632" x2="896.5" y2="632" stroke="#79766d" stroke-width="1"></line>
+      <rect x="819.5" y="625" width="35.5" height="7" rx="2" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="0.9"></rect>
+      <rect x="857" y="625" width="35.5" height="7" rx="2" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="0.9"></rect>
+      <rect x="817.5" y="694" width="77" height="28.125" rx="1" fill="#81908c"></rect>
+      <path d="M818.5 696.25H893.5M818.5 718.75H893.5" stroke="#bcc6bf" stroke-width="1"></path>
+      <path d="M821.5 637Q839.8 667 822.5 691.75M890.5 637Q872.2 667 889.5 691.75" fill="none" stroke="#faf8ee" stroke-width="1.5"></path>
+    </g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="bed"><rect x="782.1999999999999" y="631" width="27" height="27" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="1.1"></rect></g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="bed"><rect x="902.8000000000001" y="631" width="27" height="27" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="1.1"></rect></g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="bed"><rect x="824.5" y="581.5" width="90" height="36" rx="3" fill="url(#ksRender_timber)" stroke="#79766d" stroke-width="1.2"></rect></g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="bed">
+      <rect x="1031.5" y="622" width="81" height="112.5" rx="4" fill="url(#ksRender_linen)" stroke="#79766d" stroke-width="1.3"></rect>
+      <line x1="1031.5" y1="632" x2="1112.5" y2="632" stroke="#79766d" stroke-width="1"></line>
+      <rect x="1035.5" y="625" width="35.5" height="7" rx="2" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="0.9"></rect>
+      <rect x="1073" y="625" width="35.5" height="7" rx="2" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="0.9"></rect>
+      <rect x="1033.5" y="694" width="77" height="28.125" rx="1" fill="#81908c"></rect>
+      <path d="M1034.5 696.25H1109.5M1034.5 718.75H1109.5" stroke="#bcc6bf" stroke-width="1"></path>
+      <path d="M1037.5 637Q1055.8 667 1038.5 691.75M1106.5 637Q1088.2 667 1105.5 691.75" fill="none" stroke="#faf8ee" stroke-width="1.5"></path>
+    </g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="bed"><rect x="998.1999999999999" y="631" width="27" height="27" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="1.1"></rect></g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="bed"><rect x="1118.8000000000002" y="631" width="27" height="27" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="1.1"></rect></g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="bed"><rect x="1040.5" y="581.5" width="90" height="36" rx="3" fill="url(#ksRender_timber)" stroke="#79766d" stroke-width="1.2"></rect></g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="common"><rect x="586" y="428.5" width="108" height="27" rx="3" fill="url(#ksRender_timber)" stroke="#79766d" stroke-width="1.2"></rect></g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="bath">
+      <rect x="649" y="109" width="54" height="54" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="1.2"></rect>
+      <line x1="649" y1="109" x2="703" y2="163" stroke="#79766d" stroke-width="0.9"></line>
+      <line x1="703" y1="109" x2="649" y2="163" stroke="#79766d" stroke-width="0.9"></line>
+    </g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="bath"><rect x="667" y="298" width="36" height="13.5" rx="2" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="1.2"></rect>
+      <ellipse cx="685" cy="326.8" rx="13.68" ry="15.3" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="1.2"></ellipse></g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="bath"><rect x="577" y="176.5" width="36" height="31.5" rx="3" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="1.2"></rect></g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="common">
+      <rect x="887.5" y="262" width="54" height="144" rx="6" fill="url(#ksRender_linen)" stroke="#79766d" stroke-width="1.4"></rect>
+      <line x1="893.5" y1="334" x2="935.5" y2="334" stroke="#79766d" stroke-width="1"></line>
+      <line x1="893.5" y1="267" x2="893.5" y2="401" stroke="#79766d" stroke-width="1"></line>
+      <line x1="935.5" y1="267" x2="935.5" y2="401" stroke="#79766d" stroke-width="1"></line>
+    </g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="common"><rect x="811" y="298" width="54" height="72" rx="3" fill="url(#ksRender_timber)" stroke="#79766d" stroke-width="1.2"></rect></g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="common"><rect x="730" y="280" width="27" height="108" rx="3" fill="url(#ksRender_timber)" stroke="#79766d" stroke-width="1.2"></rect></g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="common"><rect x="977.5" y="113.5" width="144" height="36" rx="3" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="1.2"></rect></g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="common">
+      <rect x="1076.5" y="113.5" width="45" height="45" rx="2" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="1.2"></rect>
+      <line x1="1078.5" y1="138.25" x2="1119.5" y2="138.25" stroke="#79766d" stroke-width="0.8"></line>
+      <text x="1099" y="126.1" font-family="Arial,sans-serif" font-size="9.9" fill="#79766d" text-anchor="middle" dominant-baseline="middle">REF</text>
+    </g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="common">
+      <rect x="1004.5" y="113.5" width="45" height="45" rx="2" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="1.2"></rect>
+      <circle cx="1017.1" cy="126.1" r="5.8500000000000005" fill="none" stroke="#79766d" stroke-width="0.9"></circle>
+      <circle cx="1036.9" cy="126.1" r="5.8500000000000005" fill="none" stroke="#79766d" stroke-width="0.9"></circle>
+      <circle cx="1017.1" cy="145.9" r="5.8500000000000005" fill="none" stroke="#79766d" stroke-width="0.9"></circle>
+      <circle cx="1036.9" cy="145.9" r="5.8500000000000005" fill="none" stroke="#79766d" stroke-width="0.9"></circle>
+    </g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="common"><rect x="1018" y="181" width="108" height="54" rx="3" fill="url(#ksRender_ceramic)" stroke="#79766d" stroke-width="1.2"></rect></g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="common"><rect x="1031.5" y="401.5" width="81" height="81" rx="3" fill="url(#ksRender_timber)" stroke="#79766d" stroke-width="1.2"></rect></g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="common"><rect x="1037.8000000000002" y="368.2" width="27" height="27" fill="url(#ksRender_linen)" stroke="#79766d" stroke-width="1.1"></rect></g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="common"><rect x="1079.1999999999998" y="368.2" width="27" height="27" fill="url(#ksRender_linen)" stroke="#79766d" stroke-width="1.1"></rect></g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="common"><rect x="1037.8000000000002" y="488.8" width="27" height="27" fill="url(#ksRender_linen)" stroke="#79766d" stroke-width="1.1"></rect></g>
+<g class="rendered-furniture" filter="url(#ksRender_furnitureShadow)" data-zone="common"><rect x="1079.1999999999998" y="488.8" width="27" height="27" fill="url(#ksRender_linen)" stroke="#79766d" stroke-width="1.1"></rect></g>
+        <g class="rendered-walls" filter="url(#ksRender_wallShadow)"><line x1="100" y1="532" x2="496" y2="532" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="496" y1="532" x2="496" y2="892" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="496" y1="892" x2="100" y2="892" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="100" y1="892" x2="100" y2="532" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="100" y1="316" x2="496" y2="316" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="496" y1="316" x2="496" y2="532" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="496" y1="532" x2="100" y2="532" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="100" y1="532" x2="100" y2="316" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="100" y1="100" x2="496" y2="100" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="496" y1="100" x2="496" y2="316" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="496" y1="316" x2="100" y2="316" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="100" y1="316" x2="100" y2="100" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="496" y1="100" x2="568" y2="100" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="568" y1="100" x2="568" y2="892" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="568" y1="892" x2="496" y2="892" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="496" y1="892" x2="496" y2="100" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="568" y1="748" x2="1036" y2="748" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="1036" y1="748" x2="1036" y2="892" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="1036" y1="892" x2="568" y2="892" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="568" y1="892" x2="568" y2="748" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="1036" y1="748" x2="1180" y2="748" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="1180" y1="748" x2="1180" y2="892" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="1180" y1="892" x2="1036" y2="892" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="1036" y1="892" x2="1036" y2="748" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="568" y1="568" x2="748" y2="568" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="748" y1="568" x2="748" y2="748" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="748" y1="748" x2="568" y2="748" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="568" y1="748" x2="568" y2="568" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="748" y1="568" x2="964" y2="568" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="964" y1="568" x2="964" y2="748" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="964" y1="748" x2="748" y2="748" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="748" y1="748" x2="748" y2="568" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="964" y1="568" x2="1180" y2="568" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="1180" y1="568" x2="1180" y2="748" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="1180" y1="748" x2="964" y2="748" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="964" y1="748" x2="964" y2="568" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="568" y1="352" x2="712" y2="352" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="712" y1="352" x2="712" y2="568" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="712" y1="568" x2="568" y2="568" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="568" y1="568" x2="568" y2="352" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="568" y1="100" x2="712" y2="100" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="712" y1="100" x2="712" y2="352" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="712" y1="352" x2="568" y2="352" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="568" y1="352" x2="568" y2="100" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="712" y1="100" x2="964" y2="100" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="964" y1="568" x2="712" y2="568" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="712" y1="568" x2="712" y2="100" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="964" y1="100" x2="1180" y2="100" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="1180" y1="100" x2="1180" y2="316" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="1180" y1="316" x2="1180" y2="568" stroke="#fffaf0" stroke-width="4"></line>
+<line x1="1180" y1="568" x2="964" y2="568" stroke="#fffaf0" stroke-width="4"></line>
+        <line class="exterior-outline" x1="100" y1="100" x2="1180" y2="100" stroke="#fffaf0" stroke-width="7" stroke-linecap="square" stroke-linejoin="miter"></line>
+
+        <line class="exterior-outline" x1="100" y1="892" x2="1180" y2="892" stroke="#fffaf0" stroke-width="7" stroke-linecap="square" stroke-linejoin="miter"></line>
+
+        <line class="exterior-outline" x1="100" y1="100" x2="100" y2="892" stroke="#fffaf0" stroke-width="7" stroke-linecap="square" stroke-linejoin="miter"></line>
+
+        <line class="exterior-outline" x1="1180" y1="100" x2="1180" y2="892" stroke="#fffaf0" stroke-width="7" stroke-linecap="square" stroke-linejoin="miter"></line></g>
+        <rect x="558" y="766" width="20" height="54" fill="url(#ksRender_wood)" stroke="none"></rect>
+<line x1="568" y1="766" x2="568" y2="766" stroke="none"></line>
+<line x1="568" y1="766" x2="622" y2="766" stroke="#333" stroke-width="1.8" stroke-linecap="round"></line>
+<path d="M 622 766 A 54 54 0 0 0 568 820" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="4,3"></path>
+<line x1="558" y1="766" x2="568" y2="766" stroke="#333" stroke-width="1.5"></line>
+<line x1="558" y1="820" x2="568" y2="820" stroke="#333" stroke-width="1.5"></line>
+<rect x="558" y="586" width="20" height="54" fill="url(#ksRender_wood)" stroke="none"></rect>
+<line x1="568" y1="586" x2="568" y2="586" stroke="none"></line>
+<line x1="568" y1="586" x2="622" y2="586" stroke="#333" stroke-width="1.8" stroke-linecap="round"></line>
+<path d="M 622 586 A 54 54 0 0 0 568 640" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="4,3"></path>
+<line x1="558" y1="586" x2="568" y2="586" stroke="#333" stroke-width="1.5"></line>
+<line x1="558" y1="640" x2="568" y2="640" stroke="#333" stroke-width="1.5"></line>
+<rect x="558" y="370" width="20" height="54" fill="url(#ksRender_wood)" stroke="none"></rect>
+<line x1="568" y1="370" x2="568" y2="370" stroke="none"></line>
+<line x1="568" y1="370" x2="622" y2="370" stroke="#333" stroke-width="1.8" stroke-linecap="round"></line>
+<path d="M 622 370 A 54 54 0 0 0 568 424" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="4,3"></path>
+<line x1="558" y1="370" x2="568" y2="370" stroke="#333" stroke-width="1.5"></line>
+<line x1="558" y1="424" x2="568" y2="424" stroke="#333" stroke-width="1.5"></line>
+<rect x="558" y="118" width="20" height="54" fill="url(#ksRender_wood)" stroke="none"></rect>
+<line x1="568" y1="118" x2="568" y2="118" stroke="none"></line>
+<line x1="568" y1="118" x2="622" y2="118" stroke="#333" stroke-width="1.8" stroke-linecap="round"></line>
+<path d="M 622 118 A 54 54 0 0 0 568 172" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="4,3"></path>
+<line x1="558" y1="118" x2="568" y2="118" stroke="#333" stroke-width="1.5"></line>
+<line x1="558" y1="172" x2="568" y2="172" stroke="#333" stroke-width="1.5"></line>
+<rect x="1026" y="766" width="20" height="54" fill="url(#ksRender_carpet)" stroke="none"></rect>
+<line x1="1036" y1="766" x2="1036" y2="766" stroke="none"></line>
+<line x1="1036" y1="766" x2="1090" y2="766" stroke="#333" stroke-width="1.8" stroke-linecap="round"></line>
+<path d="M 1090 766 A 54 54 0 0 0 1036 820" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="4,3"></path>
+<line x1="1026" y1="766" x2="1036" y2="766" stroke="#333" stroke-width="1.5"></line>
+<line x1="1026" y1="820" x2="1036" y2="820" stroke="#333" stroke-width="1.5"></line>
+<rect x="702" y="370" width="20" height="54" fill="url(#ksRender_wood)" stroke="none"></rect>
+<line x1="712" y1="370" x2="712" y2="370" stroke="none"></line>
+<line x1="712" y1="370" x2="766" y2="370" stroke="#333" stroke-width="1.8" stroke-linecap="round"></line>
+<path d="M 766 370 A 54 54 0 0 0 712 424" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="4,3"></path>
+<line x1="702" y1="370" x2="712" y2="370" stroke="#333" stroke-width="1.5"></line>
+<line x1="702" y1="424" x2="712" y2="424" stroke="#333" stroke-width="1.5"></line>
+<rect x="486" y="550" width="20" height="54" fill="url(#ksRender_concrete)" stroke="none"></rect>
+<line x1="496" y1="550" x2="496" y2="550" stroke="none"></line>
+<line x1="496" y1="550" x2="442" y2="550" stroke="#333" stroke-width="1.8" stroke-linecap="round"></line>
+<path d="M 442 550 A 54 54 0 0 1 496 604" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="4,3"></path>
+<line x1="486" y1="550" x2="496" y2="550" stroke="#333" stroke-width="1.5"></line>
+<line x1="486" y1="604" x2="496" y2="604" stroke="#333" stroke-width="1.5"></line>
+<rect x="486" y="334" width="20" height="54" fill="url(#ksRender_tile)" stroke="none"></rect>
+<line x1="496" y1="334" x2="496" y2="334" stroke="none"></line>
+<line x1="496" y1="334" x2="550" y2="334" stroke="#333" stroke-width="1.8" stroke-linecap="round"></line>
+<path d="M 550 334 A 54 54 0 0 0 496 388" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="4,3"></path>
+<line x1="486" y1="334" x2="496" y2="334" stroke="#333" stroke-width="1.5"></line>
+<line x1="486" y1="388" x2="496" y2="388" stroke="#333" stroke-width="1.5"></line>
+<rect x="486" y="118" width="20" height="54" fill="url(#ksRender_tile)" stroke="none"></rect>
+<line x1="496" y1="118" x2="496" y2="118" stroke="none"></line>
+<line x1="496" y1="118" x2="550" y2="118" stroke="#333" stroke-width="1.8" stroke-linecap="round"></line>
+<path d="M 550 118 A 54 54 0 0 0 496 172" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="4,3"></path>
+<line x1="486" y1="118" x2="496" y2="118" stroke="#333" stroke-width="1.5"></line>
+<line x1="486" y1="172" x2="496" y2="172" stroke="#333" stroke-width="1.5"></line>
+<rect x="766" y="558" width="54" height="20" fill="url(#ksRender_carpet)" stroke="none"></rect>
+<line x1="766" y1="568" x2="766" y2="622" stroke="#333" stroke-width="1.8" stroke-linecap="round"></line>
+<path d="M 766 622 A 54 54 0 0 1 820 568" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="4,3"></path>
+<line x1="766" y1="558" x2="766" y2="568" stroke="#333" stroke-width="1.5"></line>
+<line x1="820" y1="558" x2="820" y2="568" stroke="#333" stroke-width="1.5"></line>
+<rect x="982" y="558" width="54" height="20" fill="url(#ksRender_carpet)" stroke="none"></rect>
+<line x1="982" y1="568" x2="982" y2="622" stroke="#333" stroke-width="1.8" stroke-linecap="round"></line>
+<path d="M 982 622 A 54 54 0 0 1 1036 568" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="4,3"></path>
+<line x1="982" y1="558" x2="982" y2="568" stroke="#333" stroke-width="1.5"></line>
+<line x1="1036" y1="558" x2="1036" y2="568" stroke="#333" stroke-width="1.5"></line>
+<rect x="505" y="882" width="54" height="20" fill="url(#ksRender_wood)" stroke="none"></rect>
+<line x1="505" y1="892" x2="505" y2="838" stroke="#333" stroke-width="1.8" stroke-linecap="round"></line>
+<path d="M 505 838 A 54 54 0 0 0 559 892" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="4,3"></path>
+<line x1="505" y1="882" x2="505" y2="892" stroke="#333" stroke-width="1.5"></line>
+<line x1="559" y1="882" x2="559" y2="892" stroke="#333" stroke-width="1.5"></line>
+<rect x="154" y="878" width="288" height="28" fill="url(#ksRender_concrete)" stroke="none"></rect>
+<rect x="154" y="880" width="288" height="12" fill="none" stroke="#333" stroke-width="2.2"></rect>
+<line x1="154" y1="886" x2="442" y2="886" stroke="#666" stroke-width="1"></line>
+<line x1="154" y1="892" x2="442" y2="892" stroke="#333" stroke-width="1.2"></line>
+<line x1="226" y1="880" x2="226" y2="892" stroke="#777" stroke-width="0.9"></line>
+<line x1="298" y1="880" x2="298" y2="892" stroke="#777" stroke-width="0.9"></line>
+<line x1="370" y1="880" x2="370" y2="892" stroke="#777" stroke-width="0.9"></line>
+<line x1="154" y1="892" x2="164" y2="904" stroke="#888" stroke-width="1.1"></line>
+<line x1="442" y1="892" x2="432" y2="904" stroke="#888" stroke-width="1.1"></line>
+<line x1="154" y1="878" x2="154" y2="906" stroke="#333" stroke-width="2.2"></line>
+<line x1="442" y1="878" x2="442" y2="906" stroke="#333" stroke-width="2.2"></line>
+        <rect x="91" y="388" width="18" height="72" fill="#F9F8F4" stroke="none"></rect>
+<line x1="96" y1="388" x2="96" y2="460" stroke="#5B9CB3" stroke-width="1.5"></line>
+<line x1="104" y1="388" x2="104" y2="460" stroke="#5B9CB3" stroke-width="1.5"></line>
+<rect x="96" y="388" width="8" height="72" fill="rgba(168,223,245,0.45)" stroke="none"></rect>
+<rect x="262" y="91" width="72" height="18" fill="#F9F8F4" stroke="none"></rect>
+<line x1="262" y1="96" x2="334" y2="96" stroke="#5B9CB3" stroke-width="1.5"></line>
+<line x1="262" y1="104" x2="334" y2="104" stroke="#5B9CB3" stroke-width="1.5"></line>
+<rect x="262" y="96" width="72" height="8" fill="rgba(168,223,245,0.45)" stroke="none"></rect>
+<rect x="766" y="883" width="72" height="18" fill="#F9F8F4" stroke="none"></rect>
+<line x1="766" y1="888" x2="838" y2="888" stroke="#5B9CB3" stroke-width="1.5"></line>
+<line x1="766" y1="896" x2="838" y2="896" stroke="#5B9CB3" stroke-width="1.5"></line>
+<rect x="766" y="888" width="72" height="8" fill="rgba(168,223,245,0.45)" stroke="none"></rect>
+<rect x="1171" y="622" width="18" height="72" fill="#F9F8F4" stroke="none"></rect>
+<line x1="1176" y1="622" x2="1176" y2="694" stroke="#5B9CB3" stroke-width="1.5"></line>
+<line x1="1184" y1="622" x2="1184" y2="694" stroke="#5B9CB3" stroke-width="1.5"></line>
+<rect x="1176" y="622" width="8" height="72" fill="rgba(168,223,245,0.45)" stroke="none"></rect>
+<rect x="802" y="91" width="72" height="18" fill="#F9F8F4" stroke="none"></rect>
+<line x1="802" y1="96" x2="874" y2="96" stroke="#5B9CB3" stroke-width="1.5"></line>
+<line x1="802" y1="104" x2="874" y2="104" stroke="#5B9CB3" stroke-width="1.5"></line>
+<rect x="802" y="96" width="72" height="8" fill="rgba(168,223,245,0.45)" stroke="none"></rect>
+<rect x="1171" y="172" width="18" height="72" fill="#F9F8F4" stroke="none"></rect>
+<line x1="1176" y1="172" x2="1176" y2="244" stroke="#5B9CB3" stroke-width="1.5"></line>
+<line x1="1184" y1="172" x2="1184" y2="244" stroke="#5B9CB3" stroke-width="1.5"></line>
+<rect x="1176" y="172" width="8" height="72" fill="rgba(168,223,245,0.45)" stroke="none"></rect>
+<rect x="1171" y="406" width="18" height="72" fill="#F9F8F4" stroke="none"></rect>
+<line x1="1176" y1="406" x2="1176" y2="478" stroke="#5B9CB3" stroke-width="1.5"></line>
+<line x1="1184" y1="406" x2="1184" y2="478" stroke="#5B9CB3" stroke-width="1.5"></line>
+<rect x="1176" y="406" width="8" height="72" fill="rgba(168,223,245,0.45)" stroke="none"></rect>
+        <g class="rendered-labels"><text x="298" y="701.0" class="rl" font-size="10" fill="#111" font-weight="700" text-anchor="middle" letter-spacing="0.06em">GARAGE</text>
+<text x="298" y="715.0" class="rl" font-size="8.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">22' × 20'</text>
+<text x="298" y="729.0" class="rl" font-size="8.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">440 sq ft</text>
+<text x="298" y="413.0" class="rl" font-size="10" fill="#111" font-weight="700" text-anchor="middle" letter-spacing="0.06em">MUDROOM</text>
+<text x="298" y="427.0" class="rl" font-size="8.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">22' × 12'</text>
+<text x="298" y="441.0" class="rl" font-size="8.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">264 sq ft</text>
+<text x="298" y="197.0" class="rl" font-size="10" fill="#111" font-weight="700" text-anchor="middle" letter-spacing="0.06em">LAUNDRY</text>
+<text x="298" y="211.0" class="rl" font-size="8.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">22' × 12'</text>
+<text x="298" y="225.0" class="rl" font-size="8.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">264 sq ft</text>
+<text x="532" y="485.5" class="rl" font-size="9" fill="#111" font-weight="700" text-anchor="middle" letter-spacing="0.06em">HALLWAY</text>
+<text x="532" y="498.5" class="rl" font-size="7.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">4' × 44'</text>
+<text x="532" y="511.5" class="rl" font-size="7.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">176 sq ft</text>
+<text x="802" y="809.0" class="rl" font-size="10" fill="#111" font-weight="700" text-anchor="middle" letter-spacing="0.06em">PRIMARY BEDROOM</text>
+<text x="802" y="823.0" class="rl" font-size="8.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">26' × 8'</text>
+<text x="802" y="837.0" class="rl" font-size="8.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">208 sq ft</text>
+<text x="1108" y="809.0" class="rl" font-size="10" fill="#111" font-weight="700" text-anchor="middle" letter-spacing="0.06em">PRIMARY BATHROOM</text>
+<text x="1108" y="823.0" class="rl" font-size="8.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">8' × 8'</text>
+<text x="1108" y="837.0" class="rl" font-size="8.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">64 sq ft</text>
+<text x="658" y="647.0" class="rl" font-size="10" fill="#111" font-weight="700" text-anchor="middle" letter-spacing="0.06em">BEDROOM 1</text>
+<text x="658" y="661.0" class="rl" font-size="8.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">10' × 10'</text>
+<text x="658" y="675.0" class="rl" font-size="8.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">100 sq ft</text>
+<text x="856" y="647.0" class="rl" font-size="10" fill="#111" font-weight="700" text-anchor="middle" letter-spacing="0.06em">BEDROOM 2</text>
+<text x="856" y="661.0" class="rl" font-size="8.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">12' × 10'</text>
+<text x="856" y="675.0" class="rl" font-size="8.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">120 sq ft</text>
+<text x="1072" y="647.0" class="rl" font-size="10" fill="#111" font-weight="700" text-anchor="middle" letter-spacing="0.06em">BEDROOM 3</text>
+<text x="1072" y="661.0" class="rl" font-size="8.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">12' × 10'</text>
+<text x="1072" y="675.0" class="rl" font-size="8.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">120 sq ft</text>
+<text x="640" y="449.0" class="rl" font-size="10" fill="#111" font-weight="700" text-anchor="middle" letter-spacing="0.06em">ENTRY</text>
+<text x="640" y="463.0" class="rl" font-size="8.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">8' × 12'</text>
+<text x="640" y="477.0" class="rl" font-size="8.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">96 sq ft</text>
+<text x="640" y="215.0" class="rl" font-size="10" fill="#111" font-weight="700" text-anchor="middle" letter-spacing="0.06em">BATHROOM</text>
+<text x="640" y="229.0" class="rl" font-size="8.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">8' × 14'</text>
+<text x="640" y="243.0" class="rl" font-size="8.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">112 sq ft</text>
+<text x="838" y="323.0" class="rl" font-size="10" fill="#111" font-weight="700" text-anchor="middle" letter-spacing="0.06em">LIVING ROOM</text>
+<text x="838" y="337.0" class="rl" font-size="8.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">14' × 26'</text>
+<text x="838" y="351.0" class="rl" font-size="8.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">364 sq ft</text>
+<text x="1072" y="197.0" class="rl" font-size="10" fill="#111" font-weight="700" text-anchor="middle" letter-spacing="0.06em">KITCHEN</text>
+<text x="1072" y="211.0" class="rl" font-size="8.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">12' × 12'</text>
+<text x="1072" y="225.0" class="rl" font-size="8.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">144 sq ft</text>
+<text x="1072" y="431.0" class="rl" font-size="10" fill="#111" font-weight="700" text-anchor="middle" letter-spacing="0.06em">DINING ROOM</text>
+<text x="1072" y="445.0" class="rl" font-size="8.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">12' × 14'</text>
+<text x="1072" y="459.0" class="rl" font-size="8.5" fill="#777" font-weight="400" text-anchor="middle" letter-spacing="0">168 sq ft</text></g>
+      </g>
+    </svg>

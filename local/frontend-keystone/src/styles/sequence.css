@@ -1,0 +1,57 @@
+/* ===================================================================
+   THE DRAW SEQUENCE
+   -------------------------------------------------------------------
+   Shared by the landing hero and the studio. src/lib/planSequence.js
+   owns the timing and sets the final values inline; this file only
+   declares the resting state and how each property travels.
+
+   Visibility is not driven by a ladder of .s1...sN classes because the
+   beat list is built per plan - a bungalow has no stairs and no second
+   storey - so its length is not known in advance.
+   =================================================================== */
+
+/* Layers that fade. */
+[data-bucket]:not([data-draw]) {
+    transition: opacity var(--seq-fade, 700ms) var(--ease);
+}
+
+/* Layers that draw. The engine strokes walls in #fffaf0, near-white,
+   because in the rendered style they are light poche against coloured
+   floors. During the build there are no floors and the ground is black,
+   so they draw in ink and only resolve to their own colour at the
+   reveal. Inverted, ink reads as white. */
+[data-draw] {
+    stroke: var(--ink);
+    transition: stroke-dashoffset var(--seq-draw, 1200ms) var(--ease),
+                stroke 900ms var(--ease);
+}
+
+/* ---- the dark build ------------------------------------------------
+   One filter does the whole thing: grayscale strips the renderer's
+   colour, invert turns the white sheet black and the ink line-work
+   white. Because `filter` interpolates, dropping it IS the reveal - the
+   colour blooms back from a single property, with no second copy of the
+   drawing to keep in sync. */
+.seq-dark {
+    background: #000000 !important;
+    transition: background-color 1100ms var(--ease);
+}
+.seq-dark .seq-surface {
+    filter: grayscale(1) invert(1) contrast(1.06);
+    transition: filter 1100ms var(--ease);
+}
+.seq-surface {
+    filter: none;
+    transition: filter 1100ms var(--ease);
+}
+.seq-dark [data-draw] { stroke: var(--ink); }
+[data-draw] { stroke: var(--final-stroke, var(--ink)); }
+.seq-dark [data-draw] { stroke: var(--ink); }
+
+@media (prefers-reduced-motion: reduce) {
+    [data-bucket] { opacity: 1 !important; }
+    [data-draw] { stroke-dashoffset: 0 !important; }
+    [data-bucket], [data-draw], .seq-dark, .seq-surface { transition: none !important; }
+    .seq-dark { background: inherit !important; }
+    .seq-dark .seq-surface { filter: none !important; }
+}

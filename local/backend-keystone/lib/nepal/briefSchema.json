@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Keystone Nepal survey contract v1",
+  "description": "Input contract and field names. Runtime geometry and cross-field checks are in normalizeBrief.js and preflight.js.",
+  "$defs": {
+    "length": { "type": "object", "required": ["value", "unit"], "properties": {
+      "value": { "type": "number" }, "unit": { "enum": ["mm", "cm", "m", "ft"] } } },
+    "area": { "type": "object", "required": ["value", "unit"], "properties": {
+      "value": { "type": "number" }, "unit": { "enum": ["sq_m", "sq_ft", "ropani", "aana", "paisa", "daam"] } } },
+    "specialRoom": { "enum": ["puja", "guestBedroom", "study", "store", "laundry"] },
+    "level": { "type": "object",
+      "required": ["id", "kind", "elevation", "use", "occupancy", "bedrooms", "bathrooms", "kitchens", "livingRooms", "attachedBathrooms", "specialRooms"],
+      "properties": {
+        "id": { "type": "string" }, "kind": { "enum": ["full", "partial"] },
+        "elevation": { "$ref": "#/$defs/length" }, "targetArea": { "$ref": "#/$defs/area" },
+        "use": { "type": "string" }, "occupancy": { "enum": ["owner", "rental"] },
+        "bedrooms": { "type": "integer", "minimum": 0 }, "bathrooms": { "type": "integer", "minimum": 0 },
+        "kitchens": { "type": "integer", "minimum": 0 }, "livingRooms": { "type": "integer", "minimum": 0 },
+        "attachedBathrooms": { "type": "integer", "minimum": 0 },
+        "separateDiningRoom": { "type": "boolean", "default": false },
+        "specialRooms": { "type": "array", "items": { "$ref": "#/$defs/specialRoom" } }
+      }
+    }
+  },
+  "type": "object",
+  "required": ["jurisdiction", "site", "buildingProgram"],
+  "properties": {
+    "jurisdiction": { "type": "object", "required": ["country", "municipality", "ward"], "properties": { "country": { "const": "NP" }, "municipality": { "type": "string" }, "ward": { "type": ["string", "integer"] } } },
+    "site": { "type": "object", "required": ["shape", "north", "frontageEdges"],
+      "properties": {
+        "shape": { "enum": ["rectangle", "surveyedPolygon"] },
+        "rectangle": { "type": "object", "required": ["width", "depth"], "properties": {
+          "width": { "$ref": "#/$defs/length" }, "depth": { "$ref": "#/$defs/length" } } },
+        "vertices": { "type": "array", "minItems": 3, "maxItems": 16, "items": {
+          "type": "object", "required": ["x", "y", "unit"], "properties": {
+            "x": { "type": "number" }, "y": { "type": "number" }, "unit": { "enum": ["mm", "cm", "m", "ft"] } } } },
+        "sideLengths": { "type": "array", "items": { "$ref": "#/$defs/length" } },
+        "declaredArea": { "$ref": "#/$defs/area" },
+        "north": { "type": "object", "required": ["bearingDegrees", "evidence"], "properties": {
+          "bearingDegrees": { "type": "number" }, "evidence": { "type": "string" } } },
+        "frontageEdges": { "type": "array", "minItems": 1, "items": { "type": "object",
+          "required": ["edgeIndex", "roadWidth"], "properties": {
+            "edgeIndex": { "type": "integer" }, "roadWidth": { "$ref": "#/$defs/length" } } } },
+        "boundaries": { "type": "array", "items": { "type": "object", "properties": {
+          "neighbor": { "enum": ["unknown", "open", "building", "road"] },
+          "neighborHeight": { "$ref": "#/$defs/length" }, "proposedSetback": { "$ref": "#/$defs/length" },
+          "neighborHasWindows": { "type": ["boolean", "null"] } } } },
+        "surveyRevision": { "type": "string" }, "terrain": { "type": "string" },
+        "plinth": { "type": "string" }, "floodContext": { "type": "string" }, "roadAccess": { "type": "string" }
+      }
+    },
+    "buildingProgram": { "type": "object",
+      "required": ["storeys", "levels", "households", "bedrooms", "bathrooms", "kitchens", "livingRooms", "puja", "rental", "ownerProgram", "parking", "stair"],
+      "properties": {
+        "storeys": { "enum": [1, 2, 2.5, 3, 3.5] },
+        "levels": { "type": "array", "minItems": 1, "maxItems": 4, "items": { "$ref": "#/$defs/level" } },
+        "households": { "type": "integer" }, "bedrooms": { "type": "integer" },
+        "bathrooms": { "type": "integer" }, "kitchens": { "type": "integer" },
+        "livingRooms": { "type": "integer" }, "puja": { "type": "boolean" },
+        "rental": { "type": "object", "required": ["intended", "floorCount"], "properties": {
+          "intended": { "type": "boolean" }, "floorCount": { "type": "integer", "minimum": 0 },
+          "access": { "type": "object", "properties": {
+            "type": { "const": "continuousSharedStairOutsideUnits" },
+            "sidePreference": { "enum": ["auto", "north", "south", "east", "west"] } } } } },
+        "ownerProgram": { "type": "object",
+          "required": ["bedrooms", "bathrooms", "attachedBathrooms", "kitchens", "livingRooms", "specialRooms"],
+          "properties": {
+            "bedrooms": { "type": "integer" }, "bathrooms": { "type": "integer" },
+            "attachedBathrooms": { "type": "integer" }, "kitchens": { "type": "integer" },
+            "livingRooms": { "type": "integer" },
+            "specialRooms": { "type": "array", "items": { "$ref": "#/$defs/specialRoom" } },
+            "primaryWardrobe": { "enum": ["none", "standard", "walkIn"] },
+            "otherBedroomWardrobes": { "type": "boolean" }
+          } },
+        "parking": { "type": "object", "required": ["bikes", "cars"], "properties": {
+          "bikes": { "type": "integer", "minimum": 0 }, "cars": { "type": "integer", "minimum": 0 } } },
+        "services": { "type": "object", "properties": {
+          "groundReservoirLitres": { "type": "integer", "minimum": 5000 },
+          "groundReservoirPreference": { "const": "underStair" } } },
+        "stair": { "type": "object", "properties": {
+          "type": { "enum": ["halfTurnLanding", "straight", "quarterTurnLanding"] } } },
+        "balconies": { "type": "array", "items": { "type": "string" } },
+        "laundry": { "type": "string" }, "roofUse": { "type": "string" },
+        "accessibility": { "type": "string" }, "utilities": { "type": "string" }
+      }
+    },
+    "vastuProfile": { "type": "string" }
+  }
+}

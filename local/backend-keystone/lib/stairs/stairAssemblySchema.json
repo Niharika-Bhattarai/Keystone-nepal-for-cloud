@@ -1,0 +1,528 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://keystone.local/schemas/stair-assembly-v1.json",
+  "title": "Stair assembly migration contract",
+  "description": "S01 nominal geometry migration. Unknown construction groups stay null; this version cannot claim construction verification.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "schemaVersion",
+    "fromLevelId",
+    "toLevelId",
+    "codeProfileId",
+    "geometryHash",
+    "assemblyFamilyId",
+    "geometryBasis",
+    "elevations",
+    "core",
+    "flights",
+    "landings",
+    "guards",
+    "handrails",
+    "structure",
+    "validation",
+    "drawings"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "fromLevelId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "toLevelId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "codeProfileId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "geometryHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "assemblyFamilyId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "geometryBasis": {
+      "const": "legacy_nominal_recomputed"
+    },
+    "elevations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "coordinateFrame",
+        "lowerFinishedFloorZFt",
+        "upperFinishedFloorZFt",
+        "lowerSubfloorZFt",
+        "upperSubfloorZFt",
+        "totalRiseTicks",
+        "floorBuildUps",
+        "treadFinishThicknessFt",
+        "riserFinishThicknessFt",
+        "source"
+      ],
+      "properties": {
+        "coordinateFrame": {
+          "const": "building_feet"
+        },
+        "lowerFinishedFloorZFt": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "upperFinishedFloorZFt": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "lowerSubfloorZFt": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "upperSubfloorZFt": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "totalRiseTicks": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "floorBuildUps": {
+          "type": "null"
+        },
+        "treadFinishThicknessFt": {
+          "type": "null"
+        },
+        "riserFinishThicknessFt": {
+          "type": "null"
+        },
+        "source": {
+          "enum": [
+            "legacy_planning_assumption",
+            "project_finished_elevations",
+            "missing"
+          ]
+        }
+      }
+    },
+    "core": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "roughReservation",
+        "finishedEnclosure",
+        "floorOpening",
+        "floorOpeningStatus",
+        "obstructionVolumes",
+        "clearanceEnvelope"
+      ],
+      "properties": {
+        "roughReservation": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/polygon"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "finishedEnclosure": {
+          "type": "null"
+        },
+        "floorOpening": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/polygon"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "floorOpeningStatus": {
+          "enum": [
+            "assumed_full_core",
+            "missing"
+          ]
+        },
+        "obstructionVolumes": {
+          "type": "null"
+        },
+        "clearanceEnvelope": {
+          "type": "null"
+        }
+      }
+    },
+    "flights": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/flight"
+      }
+    },
+    "landings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/landing"
+      }
+    },
+    "guards": {
+      "type": "null"
+    },
+    "handrails": {
+      "type": "null"
+    },
+    "structure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "members",
+        "connections",
+        "materialInputs",
+        "loadInputs",
+        "status"
+      ],
+      "properties": {
+        "members": {
+          "type": "null"
+        },
+        "connections": {
+          "type": "null"
+        },
+        "materialInputs": {
+          "type": "null"
+        },
+        "loadInputs": {
+          "type": "null"
+        },
+        "status": {
+          "const": "unverified"
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "findings",
+        "unverifiedInputs"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "incomplete",
+            "invalid"
+          ]
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/finding"
+          }
+        },
+        "unverifiedInputs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "drawings": {
+      "type": "null"
+    }
+  },
+  "definitions": {
+    "point2": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y"
+      ],
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      }
+    },
+    "point3": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y",
+        "z"
+      ],
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "z": {
+          "type": "number"
+        }
+      }
+    },
+    "polygon": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "$ref": "#/definitions/point2"
+      }
+    },
+    "rational": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "numeratorTicks",
+        "denominator"
+      ],
+      "properties": {
+        "numeratorTicks": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "denominator": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        }
+      }
+    },
+    "flight": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "order",
+        "risers",
+        "riser",
+        "going",
+        "nominalWidthFt",
+        "widthAboveRailsFt",
+        "widthBetweenRailsFt",
+        "runTicks",
+        "from",
+        "to",
+        "reservation",
+        "nosingLine",
+        "treadSurfaces",
+        "riserSurfaces",
+        "slope"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "risers": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 10000
+        },
+        "riser": {
+          "$ref": "#/definitions/rational"
+        },
+        "going": {
+          "$ref": "#/definitions/rational"
+        },
+        "nominalWidthFt": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "widthAboveRailsFt": {
+          "type": "null"
+        },
+        "widthBetweenRailsFt": {
+          "type": "null"
+        },
+        "runTicks": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "from": {
+          "$ref": "#/definitions/point3"
+        },
+        "to": {
+          "$ref": "#/definitions/point3"
+        },
+        "reservation": {
+          "$ref": "#/definitions/polygon"
+        },
+        "nosingLine": {
+          "type": "null"
+        },
+        "treadSurfaces": {
+          "type": "null"
+        },
+        "riserSurfaces": {
+          "type": "null"
+        },
+        "slope": {
+          "type": "number"
+        }
+      }
+    },
+    "landing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "reservation",
+        "finishedZFt",
+        "clearPolygon",
+        "widthFt",
+        "depthFt",
+        "accessConnectionIds",
+        "supportedEdges"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "enum": [
+            "lower",
+            "turn",
+            "upper",
+            "connector"
+          ]
+        },
+        "reservation": {
+          "$ref": "#/definitions/polygon"
+        },
+        "finishedZFt": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "clearPolygon": {
+          "type": "null"
+        },
+        "widthFt": {
+          "type": "null"
+        },
+        "depthFt": {
+          "type": "null"
+        },
+        "accessConnectionIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "supportedEdges": {
+          "type": "null"
+        }
+      }
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "ruleId",
+        "severity",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ruleId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "severity": {
+          "enum": [
+            "error",
+            "unverified"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

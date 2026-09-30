@@ -1,0 +1,3293 @@
+{
+  "schema_version": 1,
+  "policy": {
+    "version": "np-vastu-first-0.1",
+    "priority_order": [
+      "0 mandatory legal/safety feasibility and confirmed engineering",
+      "1 Vaastu core spatial organization",
+      "2 Vaastu fixture/detail preferences",
+      "3 other architectural/presentation preferences"
+    ],
+    "selection": "Lexicographic preference ranking only after complete applicable critical checks. User-required program/essential preferences are hard constraints; conflicts require explicit resolution.",
+    "default_tradition": "Jain-led spatial profile with corroboration and explicit Pathi/Chakrabarti/Svoboda disagreements; not a consensus or professional approval.",
+    "unknown_policy": "Missing applicability, measurements, source interpretation or local adoption never pass.",
+    "claims": "Directional beliefs are treated as cultural preferences. No medical, financial, seismic or supernatural outcome is asserted.",
+    "scope": "Local retrieval and fact evaluation only; not connected to production plan generation."
+  },
+  "rules": [
+    {
+      "id": "G01",
+      "title": "Confirm local adoption and municipal overlay",
+      "tier": 0,
+      "tags": [
+        "jurisdiction",
+        "coverage",
+        "setback",
+        "code"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc206-2024",
+          "locator": "page-0001",
+          "sha256": "8a05ae932cf34394cf082dde0d16abd18044e030c94c89702a305f13fd2e7189"
+        },
+        {
+          "source_id": "nbc206-2024",
+          "locator": "page-0005",
+          "sha256": "8a05ae932cf34394cf082dde0d16abd18044e030c94c89702a305f13fd2e7189"
+        }
+      ],
+      "principle": "Use applicable national provisions plus municipal rules; shared valley geography does not prove identical bylaws.",
+      "measurement": "Record municipality, ward, rule versions and reviewer confirmation.",
+      "repair": "Resolve missing overlay before compliance claims.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "jurisdiction.reviewed",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "G02",
+      "title": "Do not use draft commentary as the current seismic code",
+      "tier": 0,
+      "tags": [
+        "seismic",
+        "earthquake",
+        "code"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc105-commentary-draft",
+          "locator": "page-0001",
+          "sha256": "88e035ad7b398d9d600848b176a2b35aa2e9d61a09f7f05943c88f0688009a8e"
+        },
+        {
+          "source_id": "nbc105-commentary-draft",
+          "locator": "page-0002",
+          "sha256": "88e035ad7b398d9d600848b176a2b35aa2e9d61a09f7f05943c88f0688009a8e"
+        }
+      ],
+      "principle": "The uploaded commentary labels itself a draft and discusses an older seismic code.",
+      "measurement": "Current project design basis independently confirmed; draft excluded from automatic code thresholds.",
+      "repair": "Obtain applicable NBC 105 and engineer-approved analysis basis.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "structure.design_basis_reviewed",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "G03",
+      "title": "Verify NBC 205 eligibility as a whole",
+      "tier": 0,
+      "tags": [
+        "structure",
+        "grid",
+        "partial",
+        "floor",
+        "earthquake"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc205-2024",
+          "locator": "page-0015",
+          "sha256": "5285079da891a8b1082540978ef115776ac1f300d1cf26a450e94158280ff8c0"
+        },
+        {
+          "source_id": "nbc205-2024",
+          "locator": "page-0016",
+          "sha256": "5285079da891a8b1082540978ef115776ac1f300d1cf26a450e94158280ff8c0"
+        },
+        {
+          "source_id": "nbc205-2024",
+          "locator": "page-0017",
+          "sha256": "5285079da891a8b1082540978ef115776ac1f300d1cf26a450e94158280ff8c0"
+        }
+      ],
+      "principle": "Ready-to-use details depend on all scope and layout restrictions, not a single column-spacing check.",
+      "measurement": "Review clauses 1.2, 4.1 and 4.2 including height, bays, projections, area and regularity.",
+      "repair": "Use individually engineered design when outside eligibility.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "structure.route_reviewed",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "G04",
+      "title": "Represent nonstructural masonry correctly",
+      "tier": 0,
+      "tags": [
+        "brick",
+        "infill",
+        "structure"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc205-2024",
+          "locator": "page-0015",
+          "sha256": "5285079da891a8b1082540978ef115776ac1f300d1cf26a450e94158280ff8c0"
+        },
+        {
+          "source_id": "nbc205-2024",
+          "locator": "page-0018",
+          "sha256": "5285079da891a8b1082540978ef115776ac1f300d1cf26a450e94158280ff8c0"
+        }
+      ],
+      "principle": "NBC 205 describes a frame without relying on masonry for vertical/seismic resistance; it also specifies brickwork. The title does not prohibit every brick wall.",
+      "measurement": "Engineer decides actual infill interaction and loading model.",
+      "repair": "Revise model and calculations; never remove infill loads by a label.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "structure.infill_model_reviewed",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "G05",
+      "title": "Preserve a verified structural load path",
+      "tier": 0,
+      "tags": [
+        "structure",
+        "columns",
+        "beams",
+        "grid"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc205-2024",
+          "locator": "page-0016",
+          "sha256": "5285079da891a8b1082540978ef115776ac1f300d1cf26a450e94158280ff8c0"
+        },
+        {
+          "source_id": "nbc205-2024",
+          "locator": "page-0017",
+          "sha256": "5285079da891a8b1082540978ef115776ac1f300d1cf26a450e94158280ff8c0"
+        }
+      ],
+      "principle": "The ready-to-use route requires vertical continuous lateral-load columns and restricts irregularity.",
+      "measurement": "Check every member across levels and approved foundation/transfer conditions.",
+      "repair": "Move room/core arrangement, not unilaterally remove a column.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "structure.load_path_reviewed",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "G06",
+      "title": "No Vaastu change may create unsafe geometry",
+      "tier": 0,
+      "tags": [
+        "safety",
+        "stairs",
+        "door",
+        "daylight"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc206-2024",
+          "locator": "page-0015",
+          "sha256": "8a05ae932cf34394cf082dde0d16abd18044e030c94c89702a305f13fd2e7189"
+        },
+        {
+          "source_id": "nbc206-2024",
+          "locator": "page-0016",
+          "sha256": "8a05ae932cf34394cf082dde0d16abd18044e030c94c89702a305f13fd2e7189"
+        },
+        {
+          "source_id": "nbc206-2024",
+          "locator": "page-0017",
+          "sha256": "8a05ae932cf34394cf082dde0d16abd18044e030c94c89702a305f13fd2e7189"
+        },
+        {
+          "source_id": "vastu-chakrabarti",
+          "locator": "page-0140",
+          "sha256": "1fed01b04ddcd621624e31891968c8712cdf812699fff2267761288af6522245"
+        }
+      ],
+      "principle": "Mandatory spatial and safety conditions remain gates before Vaastu ranking.",
+      "measurement": "Run adopted geometry/egress/structural/service checks after every preference repair.",
+      "repair": "Report conflicting requirements and propose a safe alternative.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "geometry.mandatory_checks_passed",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "C01",
+      "title": "Residential stair minimum tread",
+      "tier": 0,
+      "tags": [
+        "code",
+        "residential",
+        "stairs"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc206-2024",
+          "locator": "page-0015",
+          "sha256": "8a05ae932cf34394cf082dde0d16abd18044e030c94c89702a305f13fd2e7189"
+        }
+      ],
+      "principle": "Uploaded NBC 206:2024 2.4.1 Table 4: gte 250 mm; confirm adopted scope before enforcement.",
+      "measurement": "Use worst measured value across every applicable instance; stairs.minimum_tread_mm. Flat/pitched roof and room classification exceptions require separate treatment.",
+      "repair": "Revise geometry and rerun all dependent validations. Minimum size alone does not prove furniture fit.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "stairs.minimum_tread_mm",
+        "op": "gte",
+        "value": 250
+      },
+      "applies_when": {
+        "fact": "code.nbc206_2024_general_residential_confirmed",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "C02",
+      "title": "Residential stair maximum riser",
+      "tier": 0,
+      "tags": [
+        "code",
+        "residential",
+        "stairs"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc206-2024",
+          "locator": "page-0015",
+          "sha256": "8a05ae932cf34394cf082dde0d16abd18044e030c94c89702a305f13fd2e7189"
+        }
+      ],
+      "principle": "Uploaded NBC 206:2024 2.4.1 Table 4: lte 190 mm; confirm adopted scope before enforcement.",
+      "measurement": "Use worst measured value across every applicable instance; stairs.maximum_riser_mm. Flat/pitched roof and room classification exceptions require separate treatment.",
+      "repair": "Revise geometry and rerun all dependent validations. Minimum size alone does not prove furniture fit.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "stairs.maximum_riser_mm",
+        "op": "lte",
+        "value": 190
+      },
+      "applies_when": {
+        "fact": "code.nbc206_2024_general_residential_confirmed",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "C03",
+      "title": "Maximum risers in each flight",
+      "tier": 0,
+      "tags": [
+        "code",
+        "residential",
+        "stairs"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc206-2024",
+          "locator": "page-0015",
+          "sha256": "8a05ae932cf34394cf082dde0d16abd18044e030c94c89702a305f13fd2e7189"
+        }
+      ],
+      "principle": "Uploaded NBC 206:2024 2.4.1 Table 4: lte 15 risers; confirm adopted scope before enforcement.",
+      "measurement": "Use worst measured value across every applicable instance; stairs.maximum_flight_risers. Flat/pitched roof and room classification exceptions require separate treatment.",
+      "repair": "Revise geometry and rerun all dependent validations. Minimum size alone does not prove furniture fit.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "stairs.maximum_flight_risers",
+        "op": "lte",
+        "value": 15
+      },
+      "applies_when": {
+        "fact": "code.nbc206_2024_general_residential_confirmed",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "C04",
+      "title": "Stair clear headroom",
+      "tier": 0,
+      "tags": [
+        "code",
+        "residential",
+        "stairs"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc206-2024",
+          "locator": "page-0015",
+          "sha256": "8a05ae932cf34394cf082dde0d16abd18044e030c94c89702a305f13fd2e7189"
+        }
+      ],
+      "principle": "Uploaded NBC 206:2024 2.4.1 Table 4: gte 2000 mm; confirm adopted scope before enforcement.",
+      "measurement": "Use worst measured value across every applicable instance; stairs.minimum_headroom_mm. Flat/pitched roof and room classification exceptions require separate treatment.",
+      "repair": "Revise geometry and rerun all dependent validations. Minimum size alone does not prove furniture fit.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "stairs.minimum_headroom_mm",
+        "op": "gte",
+        "value": 2000
+      },
+      "applies_when": {
+        "fact": "code.nbc206_2024_general_residential_confirmed",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "C05",
+      "title": "Habitable room height",
+      "tier": 0,
+      "tags": [
+        "code",
+        "residential",
+        "room",
+        "dimensions"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc206-2024",
+          "locator": "page-0016",
+          "sha256": "8a05ae932cf34394cf082dde0d16abd18044e030c94c89702a305f13fd2e7189"
+        }
+      ],
+      "principle": "Uploaded NBC 206:2024 3.2.1: gte 2400 mm; confirm adopted scope before enforcement.",
+      "measurement": "Use worst measured value across every applicable instance; rooms.minimum_habitable_height_mm. Flat/pitched roof and room classification exceptions require separate treatment.",
+      "repair": "Revise geometry and rerun all dependent validations. Minimum size alone does not prove furniture fit.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "rooms.minimum_habitable_height_mm",
+        "op": "gte",
+        "value": 2400
+      },
+      "applies_when": {
+        "fact": "code.nbc206_2024_general_residential_confirmed",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "C06",
+      "title": "Clearance below beams or false ceilings",
+      "tier": 0,
+      "tags": [
+        "code",
+        "residential",
+        "room",
+        "dimensions"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc206-2024",
+          "locator": "page-0016",
+          "sha256": "8a05ae932cf34394cf082dde0d16abd18044e030c94c89702a305f13fd2e7189"
+        }
+      ],
+      "principle": "Uploaded NBC 206:2024 3.2.1: gte 2100 mm; confirm adopted scope before enforcement.",
+      "measurement": "Use worst measured value across every applicable instance; rooms.minimum_clear_height_below_obstruction_mm. Flat/pitched roof and room classification exceptions require separate treatment.",
+      "repair": "Revise geometry and rerun all dependent validations. Minimum size alone does not prove furniture fit.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "rooms.minimum_clear_height_below_obstruction_mm",
+        "op": "gte",
+        "value": 2100
+      },
+      "applies_when": {
+        "fact": "code.nbc206_2024_general_residential_confirmed",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "C07",
+      "title": "Bathroom or WC height",
+      "tier": 0,
+      "tags": [
+        "code",
+        "residential",
+        "room",
+        "dimensions"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc206-2024",
+          "locator": "page-0016",
+          "sha256": "8a05ae932cf34394cf082dde0d16abd18044e030c94c89702a305f13fd2e7189"
+        }
+      ],
+      "principle": "Uploaded NBC 206:2024 3.2.1: gte 2000 mm; confirm adopted scope before enforcement.",
+      "measurement": "Use worst measured value across every applicable instance; bathrooms.minimum_height_mm. Flat/pitched roof and room classification exceptions require separate treatment.",
+      "repair": "Revise geometry and rerun all dependent validations. Minimum size alone does not prove furniture fit.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "bathrooms.minimum_height_mm",
+        "op": "gte",
+        "value": 2000
+      },
+      "applies_when": {
+        "fact": "code.nbc206_2024_general_residential_confirmed",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "C08",
+      "title": "Habitable room minimum dimension",
+      "tier": 0,
+      "tags": [
+        "code",
+        "residential",
+        "room",
+        "dimensions"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc206-2024",
+          "locator": "page-0016",
+          "sha256": "8a05ae932cf34394cf082dde0d16abd18044e030c94c89702a305f13fd2e7189"
+        }
+      ],
+      "principle": "Uploaded NBC 206:2024 3.2.2 A: gte 2000 mm; confirm adopted scope before enforcement.",
+      "measurement": "Use worst measured value across every applicable instance; rooms.minimum_habitable_dimension_mm. Flat/pitched roof and room classification exceptions require separate treatment.",
+      "repair": "Revise geometry and rerun all dependent validations. Minimum size alone does not prove furniture fit.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "rooms.minimum_habitable_dimension_mm",
+        "op": "gte",
+        "value": 2000
+      },
+      "applies_when": {
+        "fact": "code.nbc206_2024_general_residential_confirmed",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "C09",
+      "title": "Habitable room minimum area",
+      "tier": 0,
+      "tags": [
+        "code",
+        "residential",
+        "room",
+        "dimensions"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc206-2024",
+          "locator": "page-0016",
+          "sha256": "8a05ae932cf34394cf082dde0d16abd18044e030c94c89702a305f13fd2e7189"
+        }
+      ],
+      "principle": "Uploaded NBC 206:2024 3.2.2 A: gte 6 m2; confirm adopted scope before enforcement.",
+      "measurement": "Use worst measured value across every applicable instance; rooms.minimum_habitable_area_m2. Flat/pitched roof and room classification exceptions require separate treatment.",
+      "repair": "Revise geometry and rerun all dependent validations. Minimum size alone does not prove furniture fit.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "rooms.minimum_habitable_area_m2",
+        "op": "gte",
+        "value": 6
+      },
+      "applies_when": {
+        "fact": "code.nbc206_2024_general_residential_confirmed",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "C10",
+      "title": "Kitchen minimum dimension",
+      "tier": 0,
+      "tags": [
+        "code",
+        "residential",
+        "room",
+        "dimensions"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc206-2024",
+          "locator": "page-0016",
+          "sha256": "8a05ae932cf34394cf082dde0d16abd18044e030c94c89702a305f13fd2e7189"
+        }
+      ],
+      "principle": "Uploaded NBC 206:2024 3.2.2 B: gte 1800 mm; confirm adopted scope before enforcement.",
+      "measurement": "Use worst measured value across every applicable instance; kitchens.minimum_dimension_mm. Flat/pitched roof and room classification exceptions require separate treatment.",
+      "repair": "Revise geometry and rerun all dependent validations. Minimum size alone does not prove furniture fit.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "kitchens.minimum_dimension_mm",
+        "op": "gte",
+        "value": 1800
+      },
+      "applies_when": {
+        "fact": "code.nbc206_2024_general_residential_confirmed",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "C11",
+      "title": "Kitchen minimum area",
+      "tier": 0,
+      "tags": [
+        "code",
+        "residential",
+        "room",
+        "dimensions"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc206-2024",
+          "locator": "page-0016",
+          "sha256": "8a05ae932cf34394cf082dde0d16abd18044e030c94c89702a305f13fd2e7189"
+        }
+      ],
+      "principle": "Uploaded NBC 206:2024 3.2.2 B: gte 5 m2; confirm adopted scope before enforcement.",
+      "measurement": "Use worst measured value across every applicable instance; kitchens.minimum_area_m2. Flat/pitched roof and room classification exceptions require separate treatment.",
+      "repair": "Revise geometry and rerun all dependent validations. Minimum size alone does not prove furniture fit.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "kitchens.minimum_area_m2",
+        "op": "gte",
+        "value": 5
+      },
+      "applies_when": {
+        "fact": "code.nbc206_2024_general_residential_confirmed",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "C12",
+      "title": "Exit width is occupancy-dependent",
+      "tier": 0,
+      "tags": [
+        "stairs",
+        "circulation",
+        "code"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc206-2024",
+          "locator": "page-0013",
+          "sha256": "8a05ae932cf34394cf082dde0d16abd18044e030c94c89702a305f13fd2e7189"
+        },
+        {
+          "source_id": "nbc206-2024",
+          "locator": "page-0014",
+          "sha256": "8a05ae932cf34394cf082dde0d16abd18044e030c94c89702a305f13fd2e7189"
+        }
+      ],
+      "principle": "General residence minimum in Table 3 is 0.9m, but capacity, classification and effective occupant load also govern.",
+      "measurement": "Implement full reviewed clause 2.4/Table 3 route; do not treat 900mm as universally sufficient.",
+      "repair": "Increase width or revise egress design; engineer/architect check.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "C13",
+      "title": "Light and ventilation are separate tests",
+      "tier": 0,
+      "tags": [
+        "daylight",
+        "windows",
+        "ventilation",
+        "kitchen"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc206-2024",
+          "locator": "page-0017",
+          "sha256": "8a05ae932cf34394cf082dde0d16abd18044e030c94c89702a305f13fd2e7189"
+        }
+      ],
+      "principle": "Section 3.3 distinguishes daylight opening area, ventilation area, kitchens and climate region.",
+      "measurement": "Check legal exposed openings, openable area and every room; inspect reference-example arithmetic before use.",
+      "repair": "Reposition rooms/openings or introduce a compliant court; no credit for blocked windows.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "C14",
+      "title": "Internal daylight court is not a pipe shaft",
+      "tier": 0,
+      "tags": [
+        "courtyard",
+        "daylight",
+        "shaft"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc206-2024",
+          "locator": "page-0017",
+          "sha256": "8a05ae932cf34394cf082dde0d16abd18044e030c94c89702a305f13fd2e7189"
+        }
+      ],
+      "principle": "Section 3.3 gives a 3m by 3m minimum internal court for natural light to habitable rooms in normal-rise buildings.",
+      "measurement": "Verify normal-rise applicability, every court dimension and its open geometry; taller-building provisions require review.",
+      "repair": "Reserve a compliant court early or find another compliant daylight solution.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "C15",
+      "title": "Limit naturally lit room depth",
+      "tier": 0,
+      "tags": [
+        "daylight",
+        "room",
+        "depth"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc206-2024",
+          "locator": "page-0017",
+          "sha256": "8a05ae932cf34394cf082dde0d16abd18044e030c94c89702a305f13fd2e7189"
+        }
+      ],
+      "principle": "Section 3.3 excludes portions more than 7.5m from the relevant opening from being considered naturally lighted.",
+      "measurement": "Evaluate the room polygon, not merely centroid distance.",
+      "repair": "Adjust room depth/openings; professional daylight review.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "C16",
+      "title": "Confirm toilet type before applying dimensions",
+      "tier": 0,
+      "tags": [
+        "toilet",
+        "bathroom",
+        "dimensions"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc206-2024",
+          "locator": "page-0016",
+          "sha256": "8a05ae932cf34394cf082dde0d16abd18044e030c94c89702a305f13fd2e7189"
+        }
+      ],
+      "principle": "Separate WC, bathroom and combined WC/bathroom have different minima in section 3.2.2.",
+      "measurement": "Use source table: WC 0.9m/1.2m2; bath 1.2m/1.8m2; combined 1.2m/2.8m2, plus actual fixture clearances.",
+      "repair": "Resize or reclassify honestly; do not use WC-only area for a shower room.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "C17",
+      "title": "Coordinate water and waste with maintenance access",
+      "tier": 0,
+      "tags": [
+        "mep",
+        "water",
+        "drainage"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc208-2003",
+          "locator": "page-0001",
+          "sha256": "d39a683b615e6d5dbf497e9fd1671770bae14992b10b00d9c21abfbc2b16a946"
+        }
+      ],
+      "principle": "Use the sanitary/plumbing source for project-specific provisions after adoption review, not a directional preference as engineering design.",
+      "measurement": "Resolve pipe slopes, capacities, outfalls, hygiene/separation and service access with cited clauses.",
+      "repair": "Move routing or tank/core positions without violating engineering constraints.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "B01",
+      "title": "Separate FAR, coverage and usable area",
+      "tier": 0,
+      "tags": [
+        "area",
+        "far",
+        "coverage",
+        "bylaw",
+        "permit",
+        "separate",
+        "far,",
+        "coverage",
+        "and",
+        "usable",
+        "area"
+      ],
+      "sources": [
+        {
+          "source_id": "bylaws-resource-2023",
+          "locator": "page-0015",
+          "sha256": "728222ff85d0b560215f749698b69250cd5394c6f24f02b8a55b64f659e61a97"
+        },
+        {
+          "source_id": "bylaws-resource-2023",
+          "locator": "page-0051",
+          "sha256": "728222ff85d0b560215f749698b69250cd5394c6f24f02b8a55b64f659e61a97"
+        },
+        {
+          "source_id": "bylaws-resource-2023",
+          "locator": "page-0054",
+          "sha256": "728222ff85d0b560215f749698b69250cd5394c6f24f02b8a55b64f659e61a97"
+        }
+      ],
+      "principle": "FAR is counted floor area divided by plot area; coverage is counted ground footprint divided by plot area times 100. These are different accounts.",
+      "measurement": "Maintain separate source-linked ledgers and explicit denominator; do not use carpet area as gross counted area.",
+      "repair": "Recompute each metric independently.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "B02",
+      "title": "Make floor-area inclusions explicit",
+      "tier": 0,
+      "tags": [
+        "area",
+        "far",
+        "coverage",
+        "bylaw",
+        "permit",
+        "make",
+        "floor-area",
+        "inclusions",
+        "explicit"
+      ],
+      "sources": [
+        {
+          "source_id": "bylaws-resource-2023",
+          "locator": "page-0015",
+          "sha256": "728222ff85d0b560215f749698b69250cd5394c6f24f02b8a55b64f659e61a97"
+        },
+        {
+          "source_id": "bylaws-resource-2023",
+          "locator": "page-0052",
+          "sha256": "728222ff85d0b560215f749698b69250cd5394c6f24f02b8a55b64f659e61a97"
+        }
+      ],
+      "principle": "The glossary and FAR examples disagree on basements and balconies. Stair and parking exclusions also need applicable local confirmation.",
+      "measurement": "Every spatial component has independent FAR and coverage inclusion decisions and source/reviewer evidence. Unknown decisions block a final total.",
+      "repair": "Resolve the local adopted definition; retain both conflicting references.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "B03",
+      "title": "Coverage depends on plot size and occupancy",
+      "tier": 0,
+      "tags": [
+        "area",
+        "far",
+        "coverage",
+        "bylaw",
+        "permit",
+        "coverage",
+        "depends",
+        "on",
+        "plot",
+        "size",
+        "and",
+        "occupancy"
+      ],
+      "sources": [
+        {
+          "source_id": "bylaws-resource-2023",
+          "locator": "page-0054",
+          "sha256": "728222ff85d0b560215f749698b69250cd5394c6f24f02b8a55b64f659e61a97"
+        },
+        {
+          "source_id": "bylaws-resource-2023",
+          "locator": "page-0055",
+          "sha256": "728222ff85d0b560215f749698b69250cd5394c6f24f02b8a55b64f659e61a97"
+        }
+      ],
+      "principle": "Resource section 1.2.4 lists residential/mixed residential coverage at 70% up to 250m2 and 60% above; this is a sourced candidate rule, not confirmed adoption for every municipality.",
+      "measurement": "Test boundary 250m2 and occupancy; distinguish the separate model-bylaw table on next page.",
+      "repair": "Select reviewed local rule and all other constraints before generation.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "B04",
+      "title": "Do not hardcode a valley-wide FAR",
+      "tier": 0,
+      "tags": [
+        "area",
+        "far",
+        "coverage",
+        "bylaw",
+        "permit",
+        "do",
+        "not",
+        "hardcode",
+        "a",
+        "valley-wide",
+        "far"
+      ],
+      "sources": [
+        {
+          "source_id": "bylaws-resource-2023",
+          "locator": "page-0051",
+          "sha256": "728222ff85d0b560215f749698b69250cd5394c6f24f02b8a55b64f659e61a97"
+        },
+        {
+          "source_id": "bylaws-resource-2023",
+          "locator": "page-0052",
+          "sha256": "728222ff85d0b560215f749698b69250cd5394c6f24f02b8a55b64f659e61a97"
+        }
+      ],
+      "principle": "The resource illustrates KMC residential FAR 2.5 but also reproduces a model-bylaw residential value 1.75.",
+      "measurement": "Track instrument, locality, use, road conditions and edition instead of selecting the more generous value.",
+      "repair": "Obtain the current applicable local FAR.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "B05",
+      "title": "Parking exemption is metric-specific",
+      "tier": 0,
+      "tags": [
+        "area",
+        "far",
+        "coverage",
+        "bylaw",
+        "permit",
+        "parking",
+        "exemption",
+        "is",
+        "metric-specific"
+      ],
+      "sources": [
+        {
+          "source_id": "bylaws-resource-2023",
+          "locator": "page-0015",
+          "sha256": "728222ff85d0b560215f749698b69250cd5394c6f24f02b8a55b64f659e61a97"
+        },
+        {
+          "source_id": "bylaws-resource-2023",
+          "locator": "page-0054",
+          "sha256": "728222ff85d0b560215f749698b69250cd5394c6f24f02b8a55b64f659e61a97"
+        }
+      ],
+      "principle": "The glossary excludes vehicle-parking/loading use from floor area. That does not establish a ground-coverage exemption for every roofed garage.",
+      "measurement": "Classify open, roofed, enclosed, stilt and basement parking separately with FAR/coverage decisions.",
+      "repair": "Preserve actual plot use and access regardless of counting exemption.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "B06",
+      "title": "Count actual partial-level geometry",
+      "tier": 0,
+      "tags": [
+        "area",
+        "far",
+        "coverage",
+        "bylaw",
+        "permit",
+        "count",
+        "actual",
+        "partial-level",
+        "geometry"
+      ],
+      "sources": [
+        {
+          "source_id": "bylaws-resource-2023",
+          "locator": "page-0015",
+          "sha256": "728222ff85d0b560215f749698b69250cd5394c6f24f02b8a55b64f659e61a97"
+        },
+        {
+          "source_id": "bylaws-resource-2023",
+          "locator": "page-0051",
+          "sha256": "728222ff85d0b560215f749698b69250cd5394c6f24f02b8a55b64f659e61a97"
+        }
+      ],
+      "principle": "Total floor area is accumulated over actual floors; a colloquial half-storey is not a fixed scalar.",
+      "measurement": "Use each level polygon and use-specific exclusions, avoiding double-counted stairs/voids.",
+      "repair": "Recompute from versioned spatial components.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "B07",
+      "title": "Apply setbacks and ROW independently of coverage",
+      "tier": 0,
+      "tags": [
+        "area",
+        "far",
+        "coverage",
+        "bylaw",
+        "permit",
+        "apply",
+        "setbacks",
+        "and",
+        "row",
+        "independently",
+        "of",
+        "coverage"
+      ],
+      "sources": [
+        {
+          "source_id": "bylaws-resource-2023",
+          "locator": "page-0016",
+          "sha256": "728222ff85d0b560215f749698b69250cd5394c6f24f02b8a55b64f659e61a97"
+        },
+        {
+          "source_id": "bylaws-resource-2023",
+          "locator": "page-0056",
+          "sha256": "728222ff85d0b560215f749698b69250cd5394c6f24f02b8a55b64f659e61a97"
+        },
+        {
+          "source_id": "bylaws-resource-2023",
+          "locator": "page-0057",
+          "sha256": "728222ff85d0b560215f749698b69250cd5394c6f24f02b8a55b64f659e61a97"
+        }
+      ],
+      "principle": "Coverage permission alone does not define a legal footprint. Resource distinguishes opening-side, blank-wall, road and height-related conditions.",
+      "measurement": "Intersect actual site with applicable constraints and check projections; zero blank-wall setback is not a universal separation waiver.",
+      "repair": "Resolve adopted local conditions and engineered separation.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "B08",
+      "title": "Treat height, FAR and light plane as simultaneous limits",
+      "tier": 0,
+      "tags": [
+        "area",
+        "far",
+        "coverage",
+        "bylaw",
+        "permit",
+        "treat",
+        "height,",
+        "far",
+        "and",
+        "light",
+        "plane",
+        "as",
+        "simultaneous",
+        "limits"
+      ],
+      "sources": [
+        {
+          "source_id": "bylaws-resource-2023",
+          "locator": "page-0060",
+          "sha256": "728222ff85d0b560215f749698b69250cd5394c6f24f02b8a55b64f659e61a97"
+        }
+      ],
+      "principle": "Resource describes height controlled alongside FAR and light-plane provisions.",
+      "measurement": "Evaluate actual levels/roof and local height definition; do not infer allowed storeys from FAR alone.",
+      "repair": "Revise program or level geometry.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "B09",
+      "title": "Classify soil/engineering requirements before design route",
+      "tier": 0,
+      "tags": [
+        "area",
+        "far",
+        "coverage",
+        "bylaw",
+        "permit",
+        "classify",
+        "soil/engineering",
+        "requirements",
+        "before",
+        "design",
+        "route"
+      ],
+      "sources": [
+        {
+          "source_id": "bylaws-resource-2023",
+          "locator": "page-0071",
+          "sha256": "728222ff85d0b560215f749698b69250cd5394c6f24f02b8a55b64f659e61a97"
+        },
+        {
+          "source_id": "bylaws-resource-2023",
+          "locator": "page-0111",
+          "sha256": "728222ff85d0b560215f749698b69250cd5394c6f24f02b8a55b64f659e61a97"
+        },
+        {
+          "source_id": "bylaws-resource-2023",
+          "locator": "page-0112",
+          "sha256": "728222ff85d0b560215f749698b69250cd5394c6f24f02b8a55b64f659e61a97"
+        },
+        {
+          "source_id": "bylaws-resource-2023",
+          "locator": "page-0197",
+          "sha256": "728222ff85d0b560215f749698b69250cd5394c6f24f02b8a55b64f659e61a97"
+        }
+      ],
+      "principle": "Resource discusses building categories and investigation requirements; historical thresholds must be reconciled with current instruments.",
+      "measurement": "Store project classification and professional interpretation; do not copy an inconsistent translated category into automatic eligibility.",
+      "repair": "Use reviewed current engineering route.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "B10",
+      "title": "Permit workflow has staged technical and site checks",
+      "tier": 0,
+      "tags": [
+        "area",
+        "far",
+        "coverage",
+        "bylaw",
+        "permit",
+        "permit",
+        "workflow",
+        "has",
+        "staged",
+        "technical",
+        "and",
+        "site",
+        "checks"
+      ],
+      "sources": [
+        {
+          "source_id": "bylaws-resource-2023",
+          "locator": "page-0125",
+          "sha256": "728222ff85d0b560215f749698b69250cd5394c6f24f02b8a55b64f659e61a97"
+        },
+        {
+          "source_id": "bylaws-resource-2023",
+          "locator": "page-0126",
+          "sha256": "728222ff85d0b560215f749698b69250cd5394c6f24f02b8a55b64f659e61a97"
+        },
+        {
+          "source_id": "bylaws-resource-2023",
+          "locator": "page-0127",
+          "sha256": "728222ff85d0b560215f749698b69250cd5394c6f24f02b8a55b64f659e61a97"
+        }
+      ],
+      "principle": "Resource separates designer submission, bylaw/code checks, field verification and staged permits.",
+      "measurement": "Keep submitted, reviewed, approved and built/inspected states separate; use the municipality current procedure.",
+      "repair": "Do not call generated files a permit or assume a 30-day authority decision.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "S01",
+      "title": "Use the supplied 2025 seismic edition as the current reference",
+      "tier": 0,
+      "tags": [
+        "seismic",
+        "code",
+        "earthquake"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc105-2025",
+          "locator": "page-0001",
+          "sha256": "2ecc22003a3a295ac86e313dc024d8c5d8a92aff679eb7a921504b4c5d1d0550"
+        },
+        {
+          "source_id": "nbc105-2025",
+          "locator": "page-0002",
+          "sha256": "2ecc22003a3a295ac86e313dc024d8c5d8a92aff679eb7a921504b4c5d1d0550"
+        },
+        {
+          "source_id": "nbc105-2025",
+          "locator": "page-0021",
+          "sha256": "2ecc22003a3a295ac86e313dc024d8c5d8a92aff679eb7a921504b4c5d1d0550"
+        }
+      ],
+      "principle": "The new upload identifies NBC 105:2025, second revision. Keep older commentary separate and confirm project adoption.",
+      "measurement": "Attach current source hash, engineer design basis and applicable revision; preserve older material for background only.",
+      "repair": "Replace obsolete code assumptions and re-review dependent engineering.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "S02",
+      "title": "Resolve soil classification with site evidence and ward lookup",
+      "tier": 0,
+      "tags": [
+        "soil",
+        "municipality",
+        "ward",
+        "kathmandu",
+        "seismic"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc105-2025",
+          "locator": "page-0044",
+          "sha256": "2ecc22003a3a295ac86e313dc024d8c5d8a92aff679eb7a921504b4c5d1d0550"
+        },
+        {
+          "source_id": "nbc105-2025",
+          "locator": "page-0045",
+          "sha256": "2ecc22003a3a295ac86e313dc024d8c5d8a92aff679eb7a921504b4c5d1d0550"
+        },
+        {
+          "source_id": "nbc105-2025",
+          "locator": "page-0046",
+          "sha256": "2ecc22003a3a295ac86e313dc024d8c5d8a92aff679eb7a921504b4c5d1d0550"
+        }
+      ],
+      "principle": "Section 4.1.3 and Table 4-3 distinguish listed Kathmandu Valley wards and test-based soil classification.",
+      "measurement": "Store municipality/ward plus site evidence. Nil in the table does not prove rock or low hazard.",
+      "repair": "Engineer confirms soil profile and table applicability; do not use one valley-wide soil constant.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "S03",
+      "title": "Select seismic zoning from the applicable code route",
+      "tier": 0,
+      "tags": [
+        "seismic",
+        "zoning",
+        "municipality",
+        "earthquake"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc105-2025",
+          "locator": "page-0046",
+          "sha256": "2ecc22003a3a295ac86e313dc024d8c5d8a92aff679eb7a921504b4c5d1d0550"
+        }
+      ],
+      "principle": "Section 4.1.4 refers to municipality values in Annex C and map interpolation.",
+      "measurement": "Keep municipality identifiers and code provenance; source cross-reference numbering needs review before automating map lookup.",
+      "repair": "Use reviewed municipality/table value or reviewed location method; do not guess a national coefficient.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "S04",
+      "title": "Check weak and soft storeys before accepting open parking",
+      "tier": 0,
+      "tags": [
+        "parking",
+        "soft",
+        "storey",
+        "structure",
+        "seismic"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc105-2025",
+          "locator": "page-0055",
+          "sha256": "2ecc22003a3a295ac86e313dc024d8c5d8a92aff679eb7a921504b4c5d1d0550"
+        }
+      ],
+      "principle": "Section 5.4.1 distinguishes strength and stiffness irregularities.",
+      "measurement": "Store engineer-calculated strength/stiffness comparisons; geometry alone cannot prove either.",
+      "repair": "Revise lateral system and engineering when open ground floor conflicts with upper infill.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "S05",
+      "title": "Review partial upper floors and offsets for irregularity",
+      "tier": 0,
+      "tags": [
+        "partial",
+        "floor",
+        "setbacks",
+        "structure",
+        "seismic"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc105-2025",
+          "locator": "page-0055",
+          "sha256": "2ecc22003a3a295ac86e313dc024d8c5d8a92aff679eb7a921504b4c5d1d0550"
+        },
+        {
+          "source_id": "nbc105-2025",
+          "locator": "page-0056",
+          "sha256": "2ecc22003a3a295ac86e313dc024d8c5d8a92aff679eb7a921504b4c5d1d0550"
+        },
+        {
+          "source_id": "nbc105-2025",
+          "locator": "page-0057",
+          "sha256": "2ecc22003a3a295ac86e313dc024d8c5d8a92aff679eb7a921504b4c5d1d0550"
+        }
+      ],
+      "principle": "Vertical geometry, mass, diaphragm and offset irregularities are separate checks.",
+      "measurement": "Evaluate every full/partial level and stair/court void with engineering results.",
+      "repair": "Revise frame/layout; do not treat 3.5 as multiplication of a typical floor.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "S06",
+      "title": "Do not confuse rectangular appearance with torsional adequacy",
+      "tier": 0,
+      "tags": [
+        "torsion",
+        "grid",
+        "structure",
+        "seismic"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc105-2025",
+          "locator": "page-0056",
+          "sha256": "2ecc22003a3a295ac86e313dc024d8c5d8a92aff679eb7a921504b4c5d1d0550"
+        }
+      ],
+      "principle": "Section 5.4.2 evaluates displacement-based torsion and disallows extreme torsional irregularity.",
+      "measurement": "Use structural analysis results, not only perimeter shape or Vaastu balance.",
+      "repair": "Engineer revises lateral configuration before architectural issue.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "S07",
+      "title": "Design building separation from displacement requirements",
+      "tier": 0,
+      "tags": [
+        "boundary",
+        "separation",
+        "seismic",
+        "neighbor"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc105-2025",
+          "locator": "page-0058",
+          "sha256": "2ecc22003a3a295ac86e313dc024d8c5d8a92aff679eb7a921504b4c5d1d0550"
+        },
+        {
+          "source_id": "nbc105-2025",
+          "locator": "page-0059",
+          "sha256": "2ecc22003a3a295ac86e313dc024d8c5d8a92aff679eb7a921504b4c5d1d0550"
+        }
+      ],
+      "principle": "Section 5.5.2 addresses separation of independent units and clear gaps.",
+      "measurement": "Engineer calculates relevant displacement/gap and evaluates adjoining site conditions; retain construction tolerances.",
+      "repair": "Reserve the required clear separation; observed flush neighbors do not justify ignoring the check.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "S08",
+      "title": "Carry tanks, parapets and MEP into seismic coordination",
+      "tier": 0,
+      "tags": [
+        "tank",
+        "parapet",
+        "mep",
+        "anchorage",
+        "seismic"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc105-2025",
+          "locator": "page-0071",
+          "sha256": "2ecc22003a3a295ac86e313dc024d8c5d8a92aff679eb7a921504b4c5d1d0550"
+        },
+        {
+          "source_id": "nbc105-2025",
+          "locator": "page-0072",
+          "sha256": "2ecc22003a3a295ac86e313dc024d8c5d8a92aff679eb7a921504b4c5d1d0550"
+        },
+        {
+          "source_id": "nbc105-2025",
+          "locator": "page-0074",
+          "sha256": "2ecc22003a3a295ac86e313dc024d8c5d8a92aff679eb7a921504b4c5d1d0550"
+        }
+      ],
+      "principle": "Chapter 10 addresses nonstructural components, supports and connections.",
+      "measurement": "Model weights, attachments and supported services; engineer determines applicable demands and anchorage.",
+      "repair": "Move/support/anchor components through reviewed engineering, even if a preferred direction changes.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "S09",
+      "title": "Coordinate RC and masonry infill under the current design route",
+      "tier": 0,
+      "tags": [
+        "rc",
+        "masonry",
+        "infill",
+        "seismic"
+      ],
+      "sources": [
+        {
+          "source_id": "nbc105-2025",
+          "locator": "page-0075",
+          "sha256": "2ecc22003a3a295ac86e313dc024d8c5d8a92aff679eb7a921504b4c5d1d0550"
+        }
+      ],
+      "principle": "Annex A includes RC moment frames with unreinforced masonry infill among its covered systems.",
+      "measurement": "Do not treat infill as architecturally invisible to seismic design; engineer selects provisions and detailing.",
+      "repair": "Resolve openings, frame interaction and member details before finalizing floor plans.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "V01",
+      "title": "Fix north and the scope of every directional test",
+      "tier": 1,
+      "tags": [
+        "north",
+        "orientation",
+        "geometry",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-svoboda",
+          "locator": "section-0014",
+          "sha256": "6006db52aa223bb54ca9641522bc8bbcf8b257bfa4f6cd2bece5336310ff64eb"
+        },
+        {
+          "source_id": "vastu-chakrabarti",
+          "locator": "page-0132",
+          "sha256": "1fed01b04ddcd621624e31891968c8712cdf812699fff2267761288af6522245"
+        }
+      ],
+      "principle": "Directional interpretation requires an explicit orientation and reference space.",
+      "measurement": "Store north bearing and whether a rule refers to plot, building, floor, room or fixture; missing/uncertain north is unknown.",
+      "repair": "Ask for north confirmation before claiming Vaastu compliance.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "vastu.orientation_confirmed",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V02",
+      "title": "Prefer a coherent rectangular building domain",
+      "tier": 1,
+      "tags": [
+        "plot",
+        "shape",
+        "rectangle",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-svoboda",
+          "locator": "section-0013",
+          "sha256": "6006db52aa223bb54ca9641522bc8bbcf8b257bfa4f6cd2bece5336310ff64eb"
+        },
+        {
+          "source_id": "vastu-svoboda",
+          "locator": "section-0019",
+          "sha256": "6006db52aa223bb54ca9641522bc8bbcf8b257bfa4f6cd2bece5336310ff64eb"
+        },
+        {
+          "source_id": "vastu-chakrabarti",
+          "locator": "page-0149",
+          "sha256": "1fed01b04ddcd621624e31891968c8712cdf812699fff2267761288af6522245"
+        }
+      ],
+      "principle": "Square/rectangular spatial organization is preferred in these traditions.",
+      "measurement": "Compare buildable polygon with candidate regular domains; never alter the actual surveyed parcel.",
+      "repair": "Fit a regular occupied volume inside lawful envelope; disclose losses/irregular exceptions.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "building.regular_domain",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V03",
+      "title": "Reserve a clear central Brahmasthana",
+      "tier": 1,
+      "tags": [
+        "center",
+        "courtyard",
+        "brahmasthana",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0007",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-svoboda",
+          "locator": "section-0013",
+          "sha256": "6006db52aa223bb54ca9641522bc8bbcf8b257bfa4f6cd2bece5336310ff64eb"
+        },
+        {
+          "source_id": "vastu-chakrabarti",
+          "locator": "page-0136",
+          "sha256": "1fed01b04ddcd621624e31891968c8712cdf812699fff2267761288af6522245"
+        },
+        {
+          "source_id": "vastu-chakrabarti",
+          "locator": "page-0137",
+          "sha256": "1fed01b04ddcd621624e31891968c8712cdf812699fff2267761288af6522245"
+        }
+      ],
+      "principle": "Keep the identified center spatially clear; traditions differ on exact size and open-to-sky treatment.",
+      "measurement": "Explicit center polygon from selected grid; intersect with stairs, toilets and bulky obstructions. Courtyard versus usable open hall is a profile decision.",
+      "repair": "Shift core/wet rooms; do not remove load-bearing members or assume a tiny void passes daylight rules.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "vastu.center_clear",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V04",
+      "title": "Keep northeast light and uncluttered",
+      "tier": 1,
+      "tags": [
+        "northeast",
+        "daylight",
+        "massing",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0009",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        },
+        {
+          "source_id": "vastu-chakrabarti",
+          "locator": "page-0139",
+          "sha256": "1fed01b04ddcd621624e31891968c8712cdf812699fff2267761288af6522245"
+        }
+      ],
+      "principle": "Prioritize openness and light in the northeast within legal site constraints.",
+      "measurement": "Measure NE usable/open area and actual obstruction; separate visual openness from legal setbacks.",
+      "repair": "Move heavy storage and optional services away; retain required boundary protection.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "vastu.northeast_uncluttered",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V05",
+      "title": "Locate the puja space toward northeast",
+      "tier": 1,
+      "tags": [
+        "puja",
+        "prayer",
+        "northeast",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0014",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        },
+        {
+          "source_id": "vastu-chakrabarti",
+          "locator": "page-0140",
+          "sha256": "1fed01b04ddcd621624e31891968c8712cdf812699fff2267761288af6522245"
+        }
+      ],
+      "principle": "NE is the selected first preference; Jain also allows N/E. Pathi allows different alternatives.",
+      "measurement": "Classify puja polygon in the selected floor domain; record preferred versus fallback outcome.",
+      "repair": "Try NE first, then explicit profile alternatives.",
+      "conflict": "Pathi allows W/S/NE; Jain prefers NE then N/E. Default uses NE; fallback requires recorded profile.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "puja.zone",
+        "op": "eq",
+        "value": "NE"
+      },
+      "applies_when": {
+        "fact": "puja.requested",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "V06",
+      "title": "Separate puja from toilets in plan and section",
+      "tier": 1,
+      "tags": [
+        "puja",
+        "toilet",
+        "adjacency",
+        "stack",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0014",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0019",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        }
+      ],
+      "principle": "Avoid puja next to, above/below or directly facing a toilet.",
+      "measurement": "Check shared boundaries, door sightlines and vertical footprint overlaps; define adjacency tolerance in geometry adapter.",
+      "repair": "Move puja/toilet or insert a genuine separation; report unsatisfied conditions.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "puja.toilet_conflict",
+        "op": "eq",
+        "value": false
+      },
+      "applies_when": {
+        "fact": "puja.requested",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "V07",
+      "title": "No puja beneath or above a stair",
+      "tier": 1,
+      "tags": [
+        "puja",
+        "stairs",
+        "stack",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0014",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        }
+      ],
+      "principle": "Jain discourages puja under or over stairs.",
+      "measurement": "Intersect puja zone with full stair/landing envelope above and below.",
+      "repair": "Reposition puja as a dedicated suitable zone.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "puja.stair_overlap",
+        "op": "eq",
+        "value": false
+      },
+      "applies_when": {
+        "fact": "puja.requested",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "V08",
+      "title": "Place the kitchen in southeast first",
+      "tier": 1,
+      "tags": [
+        "kitchen",
+        "southeast",
+        "northwest",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0016",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        },
+        {
+          "source_id": "vastu-svoboda",
+          "locator": "section-0014",
+          "sha256": "6006db52aa223bb54ca9641522bc8bbcf8b257bfa4f6cd2bece5336310ff64eb"
+        },
+        {
+          "source_id": "vastu-chakrabarti",
+          "locator": "page-0140",
+          "sha256": "1fed01b04ddcd621624e31891968c8712cdf812699fff2267761288af6522245"
+        }
+      ],
+      "principle": "SE is a recurring kitchen preference; NW is an explicit alternative in Jain and Pathi.",
+      "measurement": "Measure kitchen in building/floor domain separately from stove within kitchen.",
+      "repair": "Reserve SE during program allocation; use NW only as a reported alternative.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "kitchen.zone",
+        "op": "eq",
+        "value": "SE"
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V09",
+      "title": "Avoid kitchen in northeast or southwest",
+      "tier": 1,
+      "tags": [
+        "kitchen",
+        "northeast",
+        "southwest",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0016",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        }
+      ],
+      "principle": "Protect NE from kitchen placement; these sources also discourage SW kitchen.",
+      "measurement": "Evaluate every kitchen in multi-unit homes, not just ground floor.",
+      "repair": "Move wet/service cluster while preserving drainage and usable circulation.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "kitchens.all_avoid_ne_sw",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V10",
+      "title": "Place the primary bedroom southwest first",
+      "tier": 1,
+      "tags": [
+        "bedroom",
+        "primary",
+        "southwest",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0018",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        },
+        {
+          "source_id": "vastu-chakrabarti",
+          "locator": "page-0140",
+          "sha256": "1fed01b04ddcd621624e31891968c8712cdf812699fff2267761288af6522245"
+        }
+      ],
+      "principle": "SW is the selected primary bedroom preference; Jain permits S/W alternatives.",
+      "measurement": "Map requested primary suite and its actual floor; do not assign importance by gender/caste.",
+      "repair": "Try SW; explicitly report S/W fallback and any requested accessible-ground-floor conflict.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "primary_bedroom.zone",
+        "op": "eq",
+        "value": "SW"
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V11",
+      "title": "Avoid primary bedroom in northeast or southeast",
+      "tier": 1,
+      "tags": [
+        "bedroom",
+        "primary",
+        "northeast",
+        "southeast",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0018",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        }
+      ],
+      "principle": "Jain discourages NE/SE primary sleeping spaces.",
+      "measurement": "Check primary room zone independently of bed orientation.",
+      "repair": "Reallocate sleeping/private realm; do not fabricate medical consequences.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "primary_bedroom.zone",
+        "op": "not_in",
+        "value": [
+          "NE",
+          "SE"
+        ]
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V12",
+      "title": "Prefer northwest or west toilets/bathrooms",
+      "tier": 1,
+      "tags": [
+        "toilet",
+        "bathroom",
+        "northwest",
+        "west",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0019",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        }
+      ],
+      "principle": "Selected practical profile favors NW/W for wet toilet rooms.",
+      "measurement": "Check each bathroom/WC room as a separate instance.",
+      "repair": "Group suitable wet rooms with legal light, vent and service routes.",
+      "conflict": "Chakrabarti page 140 distinguishes bathroom E from toilet S. Do not merge that tradition silently with Jain.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "bathrooms.all_in_nw_w",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V13",
+      "title": "Avoid toilets in northeast and center",
+      "tier": 1,
+      "tags": [
+        "toilet",
+        "center",
+        "northeast",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0019",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        }
+      ],
+      "principle": "NE and center are excluded toilet zones in the selected profile.",
+      "measurement": "Intersect full WC/wet room polygons with protected regions; a favorable centroid cannot excuse major overlap.",
+      "repair": "Move toilet core before furniture/finish optimization.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "bathrooms.avoid_ne_center",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V14",
+      "title": "Keep kitchen, puja and bathrooms out from under stairs",
+      "tier": 1,
+      "tags": [
+        "stairs",
+        "undercroft",
+        "kitchen",
+        "toilet",
+        "puja",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0024",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0019",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        }
+      ],
+      "principle": "Storage is an allowed under-stair use in Jain; kitchen/bath/puja are discouraged.",
+      "measurement": "Check room/stair envelopes in section and plan.",
+      "repair": "Use accessible storage only after headroom and safety checks.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "stairs.prohibited_undercroft_use",
+        "op": "eq",
+        "value": false
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V15",
+      "title": "Choose a documented stair-location tradition",
+      "tier": 1,
+      "tags": [
+        "stairs",
+        "south",
+        "west",
+        "northwest",
+        "southeast",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0024",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        }
+      ],
+      "principle": "Jain prefers S/W; Pathi prefers NW/SE. Both discourage NE.",
+      "measurement": "Default profile selects Jain S/W family; save alternative consultant-approved profile rather than enforcing contradictory locations.",
+      "repair": "Reserve stair early with grid and daylight space.",
+      "conflict": "Direct source conflict: S/W versus NW/SE. Default is an explicit Keystone selection, not consensus.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "stairs.selected_profile_location_satisfied",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V16",
+      "title": "Keep stair out of northeast and center",
+      "tier": 1,
+      "tags": [
+        "stairs",
+        "northeast",
+        "center",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0024",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        }
+      ],
+      "principle": "NE avoidance overlaps across Jain/Pathi; center avoidance is explicit in Jain.",
+      "measurement": "Check full stair and landing footprints at each level.",
+      "repair": "Move core within legal, structurally viable zones.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "stairs.avoid_ne_center",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V17",
+      "title": "Prefer clockwise ascent",
+      "tier": 1,
+      "tags": [
+        "stairs",
+        "clockwise",
+        "landing",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0024",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        }
+      ],
+      "principle": "Jain prefers clockwise ascent.",
+      "measurement": "Follow ascending path viewed from above in a right-handed plan; use signed turns, not arrow artwork.",
+      "repair": "Choose alternate U-stair handedness while preserving landing and structural support.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "stairs.clockwise_ascent",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V18",
+      "title": "Protect entry from direct toilet or stair views",
+      "tier": 1,
+      "tags": [
+        "entrance",
+        "privacy",
+        "stairs",
+        "toilet",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0013",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0024",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        },
+        {
+          "source_id": "vastu-svoboda",
+          "locator": "section-0015",
+          "sha256": "6006db52aa223bb54ca9641522bc8bbcf8b257bfa4f6cd2bece5336310ff64eb"
+        }
+      ],
+      "principle": "Avoid entry sightlines directly to toilets or a dominant stair run.",
+      "measurement": "Ray/sightline checks from actual entry aperture into relevant doors and stair; no imaginary partition.",
+      "repair": "Introduce an accessible foyer/screen or rotate door/core without reducing egress.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "entry.toilet_stair_direct_view",
+        "op": "eq",
+        "value": false
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V19",
+      "title": "Resolve entry pada rules rather than banning south roads",
+      "tier": 1,
+      "tags": [
+        "entrance",
+        "door",
+        "pada",
+        "frontage",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0013",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        }
+      ],
+      "principle": "Jain supplies side-specific entry divisions, then contradicts itself about S/W residential entries.",
+      "measurement": "Selected frontage, measurement direction and applicable division interval require consultant review. Road frontage is not itself an automatic failure.",
+      "repair": "Propose alternatives consistent with access; expose disputed interpretation.",
+      "conflict": "Jain section 13 both permits advantageous S/W positions and later disallows them; no unconditional code predicate.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "V20",
+      "title": "Ground and overhead tanks have different preferences",
+      "tier": 1,
+      "tags": [
+        "tank",
+        "water",
+        "underground",
+        "overhead",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0026",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        },
+        {
+          "source_id": "vastu-chakrabarti",
+          "locator": "page-0140",
+          "sha256": "1fed01b04ddcd621624e31891968c8712cdf812699fff2267761288af6522245"
+        }
+      ],
+      "principle": "Selected profile: underground water NE; overhead water SW, subject to engineered support.",
+      "measurement": "Separate tank types, foundation clearance, maintenance and water hygiene; review top-floor mass/eccentricity.",
+      "repair": "Offer structurally viable options; do not place a heavy tank only to win direction score.",
+      "conflict": "Pathi names E for underground water in one passage; preserve that as alternative.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "V21",
+      "title": "Prefer northwest septic location only when feasible",
+      "tier": 1,
+      "tags": [
+        "septic",
+        "drainage",
+        "northwest",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0026",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        }
+      ],
+      "principle": "NW is a directional preference; disposal engineering determines feasibility.",
+      "measurement": "Only if onsite disposal requested/permitted; check size, clearances, outfall, groundwater and access.",
+      "repair": "Use approved disposal strategy; never reduce sanitary separation to satisfy direction.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "septic.zone",
+        "op": "eq",
+        "value": "NW"
+      },
+      "applies_when": {
+        "fact": "septic.requested",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "V22",
+      "title": "Orient cook toward east",
+      "tier": 2,
+      "tags": [
+        "kitchen",
+        "stove",
+        "facing",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0016",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        }
+      ],
+      "principle": "Prefer east-facing cooking; stove location and cook direction are distinct.",
+      "measurement": "Use standing position and cooktop working face in true-north coordinates.",
+      "repair": "Rotate counter/stove while maintaining working clearances.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "stove.cook_facing",
+        "op": "eq",
+        "value": "E"
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V23",
+      "title": "Prefer southeast stove within kitchen",
+      "tier": 2,
+      "tags": [
+        "kitchen",
+        "stove",
+        "southeast",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0016",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        }
+      ],
+      "principle": "Apply SE at room scale, not just house scale.",
+      "measurement": "Room-domain stove footprint; gas/electrical/exhaust safety still governs.",
+      "repair": "Rearrange appliances without sacrificing ventilation.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "stove.room_zone",
+        "op": "eq",
+        "value": "SE"
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V24",
+      "title": "Separate sink and stove; prefer northeast water fixture",
+      "tier": 2,
+      "tags": [
+        "kitchen",
+        "sink",
+        "water",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0016",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        }
+      ],
+      "principle": "Jain separates fire/water fixtures and places sink NE; Pathi places purifier NE.",
+      "measurement": "Check separate footprints, workable preparation surface and selected fixture location. No unsupported numeric separation added.",
+      "repair": "Adjust kitchen working layout, keeping source of water distinct from heat.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "kitchen.fire_water_layout_satisfied",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V25",
+      "title": "Prefer south or east head direction",
+      "tier": 2,
+      "tags": [
+        "bed",
+        "bedroom",
+        "sleep",
+        "direction",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0018",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        }
+      ],
+      "principle": "Head S/E is preferred; N is discouraged in these books.",
+      "measurement": "Vector from foot end to head end in world/north coordinates; evaluate each requested bed.",
+      "repair": "Rotate/reposition beds without blocking doors or reducing clearances.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "beds.all_head_s_or_e",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V26",
+      "title": "Avoid beams directly over beds or work positions",
+      "tier": 2,
+      "tags": [
+        "bed",
+        "beam",
+        "kitchen",
+        "dining",
+        "structure",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0018",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0016",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0017",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        }
+      ],
+      "principle": "Prefer occupied resting/work zones without direct overhead beams.",
+      "measurement": "Intersect head/bed/cooking/dining occupied zones with actual beam projections.",
+      "repair": "Move furniture or coordinate frame; never delete/flatten a structural beam.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "furniture.beam_conflicts",
+        "op": "eq",
+        "value": false
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V27",
+      "title": "Prefer a solid headboard wall",
+      "tier": 2,
+      "tags": [
+        "bed",
+        "window",
+        "bathroom",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0018",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        }
+      ],
+      "principle": "Prefer solid backing; avoid placing bed against bathroom wall or directly before bedroom door.",
+      "measurement": "Model headboard wall, openings, wet-wall adjacency and door sightline separately.",
+      "repair": "Move bed or bathroom access while keeping furniture fit.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "beds.backing_and_privacy_satisfied",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V28",
+      "title": "Prefer northwest guest bedroom",
+      "tier": 2,
+      "tags": [
+        "guest",
+        "bedroom",
+        "northwest",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0021",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        },
+        {
+          "source_id": "vastu-chakrabarti",
+          "locator": "page-0140",
+          "sha256": "1fed01b04ddcd621624e31891968c8712cdf812699fff2267761288af6522245"
+        }
+      ],
+      "principle": "NW is a recurring guest-room preference.",
+      "measurement": "Apply only to actual guest room, not automatically every secondary bedroom.",
+      "repair": "Try NW after essential cores; document competing wet-room demand.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "guest.zone",
+        "op": "eq",
+        "value": "NW"
+      },
+      "applies_when": {
+        "fact": "guest.requested",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "V29",
+      "title": "Select children bedroom tradition explicitly",
+      "tier": 2,
+      "tags": [
+        "children",
+        "bedroom",
+        "study",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0020",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        }
+      ],
+      "principle": "Jain favors W then N/E; Pathi recommends NE for children/older people.",
+      "measurement": "Use household needs and explicit profile; prioritize accessibility for any resident.",
+      "repair": "Record chosen room rule; do not infer age/gender hierarchy.",
+      "conflict": "Different sources assign different directions; no blanket NE-bedroom ban for every room.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "V30",
+      "title": "Orient study work toward east or north",
+      "tier": 2,
+      "tags": [
+        "study",
+        "desk",
+        "children",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        }
+      ],
+      "principle": "Prefer E/N-facing study activity.",
+      "measurement": "Use chair/desk working-face vector rather than room label.",
+      "repair": "Rotate desk with daylight/glare and clearance checks.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "study.facing",
+        "op": "in",
+        "value": [
+          "E",
+          "N"
+        ]
+      },
+      "applies_when": {
+        "fact": "study.requested",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "V31",
+      "title": "Keep dining linked to kitchen on the same floor",
+      "tier": 2,
+      "tags": [
+        "dining",
+        "kitchen",
+        "adjacency",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0017",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        }
+      ],
+      "principle": "Jain specifies same floor; Pathi emphasizes proximity.",
+      "measurement": "Shortest usable route and floor IDs; no access through private bedrooms.",
+      "repair": "Relocate dining within public realm.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "dining.kitchen_same_floor_accessible",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V32",
+      "title": "Treat dining direction as a profile choice",
+      "tier": 2,
+      "tags": [
+        "dining",
+        "west",
+        "east",
+        "south",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0017",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        }
+      ],
+      "principle": "Jain favors W then N/E; Pathi suggests S/E near kitchen.",
+      "measurement": "Prefer practical adjacency and selected tradition; do not require incompatible locations.",
+      "repair": "Show ranked alternatives with source conflict.",
+      "conflict": "Dining compass preferences differ; adjacency is the reliable shared design relation.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "V33",
+      "title": "Prefer open north/east-facing living spaces where lawful",
+      "tier": 2,
+      "tags": [
+        "living",
+        "windows",
+        "north",
+        "east",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0015",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        }
+      ],
+      "principle": "Jain favors E/N/NW; Pathi favors NE/NW and sometimes center.",
+      "measurement": "Score room exposure and habitable light, not a compass label alone.",
+      "repair": "Choose usable daylight and legal opening placement.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "living.selected_profile_location_satisfied",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V34",
+      "title": "Keep prayer orientation distinct from room location",
+      "tier": 2,
+      "tags": [
+        "puja",
+        "idol",
+        "facing",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0014",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        }
+      ],
+      "principle": "Jain recommends worshipper facing E, idol facing W.",
+      "measurement": "Model idol front, worshipper location and actual access in the room.",
+      "repair": "Rotate arrangement without relocating room unnecessarily.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "puja.worshipper_facing",
+        "op": "eq",
+        "value": "E"
+      },
+      "applies_when": {
+        "fact": "puja.requested",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "V35",
+      "title": "Orient WC user north or south in selected profile",
+      "tier": 2,
+      "tags": [
+        "wc",
+        "toilet",
+        "orientation",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0019",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        }
+      ],
+      "principle": "Jain discourages E/W-facing WC use.",
+      "measurement": "Use seated-person direction, not cistern/front-wall label; preserve usable bathroom fit.",
+      "repair": "Rotate fixture and recheck soil connection/clearances.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "wc.all_user_facing_n_s",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V36",
+      "title": "Prefer south/west heavy storage",
+      "tier": 2,
+      "tags": [
+        "closet",
+        "storage",
+        "furniture",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0018",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0015",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        }
+      ],
+      "principle": "Locate substantial wardrobes/storage toward S/W/SW in the relevant room.",
+      "measurement": "Test actual closet footprint, usable access, door swing and room-scale orientation.",
+      "repair": "Reposition built-in storage without sacrificing structure/egress.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "storage.selected_profile_location_satisfied",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V37",
+      "title": "Keep legal daylight openings toward north/east when possible",
+      "tier": 2,
+      "tags": [
+        "windows",
+        "opening",
+        "daylight",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0012",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        }
+      ],
+      "principle": "N/E openings are favored by these books.",
+      "measurement": "Compare usable/exposed openings by orientation; statutory light/ventilation and boundary permission remain gates.",
+      "repair": "Shift rooms or court arrangement; do not draw illegal boundary windows.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "openings.north_east_preference_satisfied",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V38",
+      "title": "Prefer a legible larger main entrance",
+      "tier": 2,
+      "tags": [
+        "door",
+        "entrance",
+        "width",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0013",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0012",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        }
+      ],
+      "principle": "Main entry is emphasized as larger than other domestic doors.",
+      "measurement": "Compare actual clear openings; do not reduce other required opening widths.",
+      "repair": "Increase entry where feasible and desired.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "entry.emphasis_satisfied",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V39",
+      "title": "Door swing preferences cannot override exit/access requirements",
+      "tier": 2,
+      "tags": [
+        "door",
+        "swing",
+        "threshold",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0013",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        },
+        {
+          "source_id": "nbc206-2024",
+          "locator": "page-0012",
+          "sha256": "8a05ae932cf34394cf082dde0d16abd18044e030c94c89702a305f13fd2e7189"
+        }
+      ],
+      "principle": "Books favor inward/clockwise entry; thresholds are also mentioned.",
+      "measurement": "Separate preference from required egress swing/accessibility and landing clearance; coordinate sign convention.",
+      "repair": "Use safe compliant swing; record departure rather than adding a hazardous threshold.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "V40",
+      "title": "Odd stair count is an optional secondary detail",
+      "tier": 2,
+      "tags": [
+        "stairs",
+        "riser",
+        "count",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0024",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        }
+      ],
+      "principle": "Books prefer odd steps but do not establish an engineering riser-count convention.",
+      "measurement": "Before enabling, define whether count is risers per flight or total rise; keep risers uniform and within legal limits.",
+      "repair": "Choose a different valid count only if safe; never add a tiny step.",
+      "conflict": "Counting convention unspecified. Default is manual advisory, not executable.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "V41",
+      "title": "Prefer orthogonal landing stairs",
+      "tier": 2,
+      "tags": [
+        "stairs",
+        "half",
+        "turn",
+        "landing",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0024",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        }
+      ],
+      "principle": "Jain favors square/rectangular right-angle arrangements over circular/spiral. Owner separately selects half-turn with landing as Nepal default.",
+      "measurement": "Check actual stair type; straight/quarter-turn alternatives can be compliant and user-selected.",
+      "repair": "Start with U-stair and landing; preserve legal geometry and structure.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "stairs.orthogonal_landing_type",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "V42",
+      "title": "Parking location is not a vehicle-access calculation",
+      "tier": 2,
+      "tags": [
+        "parking",
+        "bike",
+        "car",
+        "garage",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0023",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        }
+      ],
+      "principle": "Jain favors SE/NW garage and discourages NE.",
+      "measurement": "Only score after maneuvering, gates, walking paths and area accounting pass.",
+      "repair": "Choose feasible parking first, then best directional fit.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "parking.selected_profile_location_satisfied",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": {
+        "fact": "parking.requested",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "V43",
+      "title": "Landscape and drainage preferences need site engineering",
+      "tier": 2,
+      "tags": [
+        "slope",
+        "drainage",
+        "landscape",
+        "northeast",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0025",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        },
+        {
+          "source_id": "vastu-chakrabarti",
+          "locator": "page-0149",
+          "sha256": "1fed01b04ddcd621624e31891968c8712cdf812699fff2267761288af6522245"
+        }
+      ],
+      "principle": "Sources favor lower/open N/E/NE; this is a preference, not authorization to direct water there.",
+      "measurement": "Check actual lawful outfall, falls, neighboring plots and accessibility.",
+      "repair": "Keep engineered drainage; acknowledge directional mismatch rather than flood another site.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "V44",
+      "title": "Keep worship space dedicated and calm",
+      "tier": 2,
+      "tags": [
+        "puja",
+        "privacy",
+        "clutter",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0014",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-svoboda",
+          "locator": "section-0018",
+          "sha256": "6006db52aa223bb54ca9641522bc8bbcf8b257bfa4f6cd2bece5336310ff64eb"
+        }
+      ],
+      "principle": "Prefer a distinct, uncluttered prayer zone separate from bedroom/kitchen functions.",
+      "measurement": "Check use and furniture conflicts; dedicated alcove only by explicit household choice.",
+      "repair": "Reserve appropriate floor area early.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "puja.dedicated_uncluttered",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": {
+        "fact": "puja.requested",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "V45",
+      "title": "Use color as a reversible preference",
+      "tier": 2,
+      "tags": [
+        "color",
+        "facade",
+        "interior",
+        "vastu"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0014",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0015",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0016",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0018",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0024",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        }
+      ],
+      "principle": "Room-specific light/warm palettes are discussed; retain owner choice and local multicolor facade preference.",
+      "measurement": "Apply colors to actual surfaces after geometry; do not claim health or wealth effects.",
+      "repair": "Offer palette variants without disguising structural/window changes.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "V46",
+      "title": "Do not use symbolic remedies as geometric repairs",
+      "tier": 1,
+      "tags": [
+        "remedy",
+        "mirror",
+        "vastu",
+        "safety"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0024",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        },
+        {
+          "source_id": "vastu-jain",
+          "locator": "section-0038",
+          "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7"
+        }
+      ],
+      "principle": "Jain describes symbolic mirror/remedy practices. These do not change stairs, structure or plan geometry.",
+      "measurement": "Keep any user-requested ritual item separate from geometry compliance.",
+      "repair": "Report original geometric preference failure; never erase it with a remedy.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "vastu.no_symbolic_compliance_override",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "A01",
+      "title": "Design from household activity and usable furniture",
+      "tier": 3,
+      "tags": [
+        "furniture",
+        "activity",
+        "privacy",
+        "architecture"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-svoboda",
+          "locator": "section-0012",
+          "sha256": "6006db52aa223bb54ca9641522bc8bbcf8b257bfa4f6cd2bece5336310ff64eb"
+        },
+        {
+          "source_id": "vastu-svoboda",
+          "locator": "section-0018",
+          "sha256": "6006db52aa223bb54ca9641522bc8bbcf8b257bfa4f6cd2bece5336310ff64eb"
+        }
+      ],
+      "principle": "Svoboda emphasizes intention and practical use; apply the earlier Keystone activity-first design approach.",
+      "measurement": "Prove bed/work/seating/fixture clearances and useful paths.",
+      "repair": "Rework room geometry before decoration.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "architecture.activity_fit",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "A02",
+      "title": "Preserve a readable entrance-to-private-space sequence",
+      "tier": 3,
+      "tags": [
+        "privacy",
+        "circulation",
+        "entrance",
+        "architecture"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-svoboda",
+          "locator": "section-0015",
+          "sha256": "6006db52aa223bb54ca9641522bc8bbcf8b257bfa4f6cd2bece5336310ff64eb"
+        }
+      ],
+      "principle": "Entry experience and what is visible affect spatial organization.",
+      "measurement": "Guest routes to public spaces should not require crossing private bedrooms.",
+      "repair": "Recluster public/private rooms; minimize wasted corridors.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": {
+        "fact": "architecture.privacy_routes",
+        "op": "eq",
+        "value": true
+      },
+      "applies_when": null
+    },
+    {
+      "id": "A03",
+      "title": "Interpret the tradition as a whole, not disconnected compass slogans",
+      "tier": 3,
+      "tags": [
+        "tradition",
+        "mandala",
+        "architecture"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-chakrabarti",
+          "locator": "page-0018",
+          "sha256": "1fed01b04ddcd621624e31891968c8712cdf812699fff2267761288af6522245"
+        },
+        {
+          "source_id": "vastu-chakrabarti",
+          "locator": "page-0136",
+          "sha256": "1fed01b04ddcd621624e31891968c8712cdf812699fff2267761288af6522245"
+        },
+        {
+          "source_id": "vastu-chakrabarti",
+          "locator": "page-0137",
+          "sha256": "1fed01b04ddcd621624e31891968c8712cdf812699fff2267761288af6522245"
+        },
+        {
+          "source_id": "vastu-svoboda",
+          "locator": "section-0018",
+          "sha256": "6006db52aa223bb54ca9641522bc8bbcf8b257bfa4f6cd2bece5336310ff64eb"
+        }
+      ],
+      "principle": "Chakrabarti distinguishes integrated traditional systems from selective contemporary prescriptions.",
+      "measurement": "Record selected tradition, mandala interpretation, household intent and source conflicts.",
+      "repair": "Avoid mixing conflicting rules while calling them universal.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "A04",
+      "title": "Use practice profiles for spatial inspiration only",
+      "tier": 3,
+      "tags": [
+        "courtyard",
+        "light",
+        "architecture",
+        "case",
+        "study"
+      ],
+      "sources": [
+        {
+          "source_id": "architecture-kathpalia",
+          "locator": "page-0001",
+          "sha256": "93091fe60fb9efdddf7a4fc9bca87d927e6ac28c9cc4cc8c34bafeb13490b0f7"
+        }
+      ],
+      "principle": "The uploaded magazine PDF profiles architecture practices; its title is not proof of a Vaastu rule system.",
+      "measurement": "Extract case-specific spatial lessons only after inspecting relevant project pages.",
+      "repair": "Do not invent directional doctrine from an architectural firm name.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    },
+    {
+      "id": "A05",
+      "title": "Treat the illustrated plans as references, not Nepal-approved templates",
+      "tier": 3,
+      "tags": [
+        "plans",
+        "examples",
+        "dimensions",
+        "architecture"
+      ],
+      "sources": [
+        {
+          "source_id": "vastu-pathi",
+          "locator": "section-0008",
+          "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2"
+        }
+      ],
+      "principle": "Pathi supplies plan images and a general principles section, not Nepal permit or RC certification.",
+      "measurement": "Check each selected image scale, openings, stairs, structure and local applicability.",
+      "repair": "Rebuild and validate an adapted plan instead of tracing it as approved.",
+      "conflict": "No consensus claim; apply the selected household profile and mandatory safety constraints.",
+      "provenance": "source_paraphrase_with_keystone_operationalization",
+      "review_status": "curated_not_professionally_approved",
+      "predicate": null,
+      "applies_when": null
+    }
+  ]
+}

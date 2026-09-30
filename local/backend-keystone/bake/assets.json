@@ -1,0 +1,185 @@
+{
+  "source": "Poly Haven (https://polyhaven.com), CC0. Downloaded once by fetch_assets.js; nothing is fetched live.",
+  "resolution": "2k",
+  "textures": {
+    "wood_floor": {
+      "role": "floor-public (engineered hardwood)"
+    },
+    "herringbone_parquet": {
+      "role": "floor option"
+    },
+    "large_floor_tiles_02": {
+      "role": "floor-wet (porcelain)"
+    },
+    "marble_01": {
+      "role": "countertops, vanity tops"
+    },
+    "long_white_tiles": {
+      "role": "shower and bath walls"
+    },
+    "garage_floor": {
+      "role": "floor-garage"
+    },
+    "concrete_floor_01": {
+      "role": "driveway"
+    },
+    "concrete_pavers_02": {
+      "role": "walkway, stoop"
+    },
+    "brushed_concrete_03": {
+      "role": "foundation"
+    },
+    "grass_ground": {
+      "role": "lawn"
+    },
+    "brick_wall_001": {
+      "role": "cladding: brick"
+    },
+    "white_stucco": {
+      "role": "cladding: stucco"
+    },
+    "stacked_stone_wall": {
+      "role": "cladding: stone accent"
+    },
+    "weathered_plank_siding": {
+      "role": "cladding: lap siding (normal + roughness; colour from the finish)"
+    },
+    "white_planks_clean": {
+      "role": "cladding: board and batten"
+    },
+    "concrete_panels": {
+      "role": "cladding: concrete panel"
+    },
+    "grey_roof_01": {
+      "role": "roofing: asphalt shingles"
+    },
+    "clay_roof_tiles_02": {
+      "role": "roofing: clay tile"
+    },
+    "roof_slates_02": {
+      "role": "roofing: slate"
+    },
+    "oak_veneer_01": {
+      "role": "stair treads, light wood furniture"
+    },
+    "walnut_veneer": {
+      "role": "handrail, dark wood furniture"
+    },
+    "rough_linen": {
+      "role": "upholstery, bedding"
+    },
+    "velour_velvet": {
+      "role": "accent upholstery"
+    },
+    "wool_boucle": {
+      "role": "carpet, throws"
+    }
+  },
+  "hdris": {
+    "kloofendal_48d_partly_cloudy_puresky": {
+      "role": "day",
+      "res": "4k"
+    },
+    "belfast_sunset_puresky": {
+      "role": "golden hour",
+      "res": "4k"
+    },
+    "qwantani_dusk_2_puresky": {
+      "role": "dusk, lights on",
+      "res": "4k"
+    }
+  },
+  "models": {
+    "mid_century_lounge_chair": {
+      "kinds": [
+        "armchair"
+      ]
+    },
+    "modern_arm_chair_01": {
+      "kinds": [
+        "armchair"
+      ]
+    },
+    "modern_wooden_cabinet": {
+      "kinds": [
+        "console",
+        "media"
+      ]
+    },
+    "side_table_01": {
+      "kinds": [
+        "side_table"
+      ]
+    },
+    "Ottoman_01": {
+      "kinds": [
+        "ottoman"
+      ]
+    },
+    "modern_ceiling_lamp_01": {
+      "kinds": [
+        "pendant"
+      ]
+    },
+    "potted_plant_01": {
+      "kinds": [
+        "plant"
+      ]
+    },
+    "potted_plant_02": {
+      "kinds": [
+        "plant"
+      ]
+    },
+    "potted_plant_04": {
+      "kinds": [
+        "plant_small"
+      ]
+    },
+    "ceramic_vase_01": {
+      "kinds": [
+        "decor"
+      ]
+    },
+    "hanging_picture_frame_01": {
+      "kinds": [
+        "art"
+      ]
+    },
+    "wicker_basket_01": {
+      "kinds": [
+        "decor"
+      ]
+    },
+    "wooden_display_shelves_01": {
+      "kinds": [
+        "bookcase"
+      ]
+    },
+    "shrub_01": {
+      "kinds": [
+        "shrub"
+      ]
+    },
+    "shrub_04": {
+      "kinds": [
+        "shrub"
+      ]
+    },
+    "tree_small_02": {
+      "kinds": [
+        "tree"
+      ]
+    },
+    "island_tree_01": {
+      "kinds": [
+        "tree"
+      ]
+    },
+    "covered_car": {
+      "kinds": [
+        "car"
+      ]
+    }
+  }
+}

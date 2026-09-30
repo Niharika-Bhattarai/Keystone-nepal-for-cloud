@@ -1,0 +1,26 @@
+node_modules/
+tmp/
+coverage/
+!test/fixtures/coverage/
+!test/fixtures/coverage/*.json
+dist/
+.env
+.env.*
+deploy key.txt
+*.pem
+*.key
+*.p12
+*.pfx
+service-account*.json
+npm-debug.log*
+test/emulator/*-debug.log
+test/emulator/.firebase/
+data/training*
+data/size-band-benchmarks/
+
+# Python bytecode written when Blender imports the bake scripts
+__pycache__/
+*.pyc
+
+# Owner-filled preview settings (deploy/preview/RUNBOOK.md, step 1)
+deploy/preview/preview.env.ps1

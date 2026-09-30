@@ -1,0 +1,246 @@
+'use strict';
+
+const BASE_SURVEY = {
+  location: '',
+  bedroomConfigs: null,
+  shape: 'Rectangular',
+  materials: 'Craftsman (Wood & Stone)',
+  openConcept: 'Open Concept (Combined)',
+  kitchenPlacement: 'Rear of House',
+  frontFacing: 'South',
+  lotContext: 'Suburban standard lot',
+  laundryLocation: 'Level 1 (near garage/mud)',
+  ceilingHeight: 'Standard (9 ft)',
+  indoorOutdoor: 'Moderate (some connection)',
+  naturalLight: 'Balanced windows',
+  accessibilityNeeds: 'None',
+  budgetTier: 'Mid ($200-300/sqft)',
+  freeformWishes: '',
+};
+
+function makeScenario(id, label, overrides) {
+  return {
+    id,
+    label,
+    surveyData: {
+      ...BASE_SURVEY,
+      ...overrides,
+    },
+  };
+}
+
+const SIZE_BAND_MATRIX = [
+  {
+    areaSqFt: 1200,
+    family: 'starter_compact',
+    scenarios: [
+      makeScenario('base', '1200 sqft starter compact', {
+        totalArea: '1200',
+        stories: '1 Story',
+        bedrooms: '2 Bed',
+        bathrooms: '2 Bath',
+        privateBaths: '1',
+        garage: '1 Car Garage',
+        masterLocation: 'Level 1 (Main)',
+        features: '',
+      }),
+      makeScenario('office', '1200 sqft compact + home office', {
+        totalArea: '1200',
+        stories: '1 Story',
+        bedrooms: '2 Bed',
+        bathrooms: '2 Bath',
+        privateBaths: '1',
+        garage: '1 Car Garage',
+        masterLocation: 'Level 1 (Main)',
+        features: '1 Home Office',
+      }),
+    ],
+  },
+  {
+    areaSqFt: 1500,
+    family: 'starter_family',
+    scenarios: [
+      makeScenario('base', '1500 sqft starter family', {
+        totalArea: '1500',
+        stories: '1 Story',
+        bedrooms: '3 Bed',
+        bathrooms: '2 Bath',
+        privateBaths: '1',
+        garage: '1 Car Garage',
+        masterLocation: 'Level 1 (Main)',
+        features: '',
+      }),
+      makeScenario('study', '1500 sqft starter family + study', {
+        totalArea: '1500',
+        stories: '1 Story',
+        bedrooms: '3 Bed',
+        bathrooms: '2 Bath',
+        privateBaths: '1',
+        garage: '1 Car Garage',
+        masterLocation: 'Level 1 (Main)',
+        features: '1 Study',
+      }),
+    ],
+  },
+  {
+    areaSqFt: 1800,
+    family: 'family_single_story',
+    scenarios: [
+      makeScenario('base', '1800 sqft family single-story', {
+        totalArea: '1800',
+        stories: '1 Story',
+        bedrooms: '3 Bed',
+        bathrooms: '2 Bath',
+        privateBaths: '1',
+        garage: '2 Car Garage',
+        masterLocation: 'Level 1 (Main)',
+        features: '',
+      }),
+      makeScenario('office', '1800 sqft family single-story + home office', {
+        totalArea: '1800',
+        stories: '1 Story',
+        bedrooms: '3 Bed',
+        bathrooms: '2 Bath',
+        privateBaths: '1',
+        garage: '2 Car Garage',
+        masterLocation: 'Level 1 (Main)',
+        features: '1 Home Office',
+      }),
+    ],
+  },
+  {
+    areaSqFt: 2100,
+    family: 'family_upper_primary',
+    scenarios: [
+      makeScenario('base', '2100 sqft upper-primary family', {
+        totalArea: '2100',
+        stories: '2 Stories',
+        bedrooms: '3 Bed',
+        bathrooms: '3 Bath',
+        privateBaths: '1',
+        garage: '1 Car Garage',
+        masterLocation: 'Level 2 (Upper)',
+        features: '',
+      }),
+      makeScenario('study', '2100 sqft upper-primary family + study', {
+        totalArea: '2100',
+        stories: '2 Stories',
+        bedrooms: '3 Bed',
+        bathrooms: '3 Bath',
+        privateBaths: '1',
+        garage: '1 Car Garage',
+        masterLocation: 'Level 2 (Upper)',
+        features: '1 Study',
+      }),
+    ],
+  },
+  {
+    areaSqFt: 2400,
+    family: 'default_demo_family',
+    scenarios: [
+      makeScenario('base', '2400 sqft demo family baseline', {
+        totalArea: '2400',
+        stories: '2 Stories',
+        bedrooms: '3 Bed',
+        bathrooms: '3 Bath',
+        privateBaths: '1',
+        garage: '1 Car Garage',
+        masterLocation: 'Level 2 (Upper)',
+        features: '',
+      }),
+      makeScenario('study', '2400 sqft demo family + study', {
+        totalArea: '2400',
+        stories: '2 Stories',
+        bedrooms: '3 Bed',
+        bathrooms: '3 Bath',
+        privateBaths: '1',
+        garage: '1 Car Garage',
+        masterLocation: 'Level 2 (Upper)',
+        features: '1 Study',
+      }),
+    ],
+  },
+  {
+    areaSqFt: 2700,
+    family: 'growing_family',
+    scenarios: [
+      makeScenario('base', '2700 sqft growing family', {
+        totalArea: '2700',
+        stories: '2 Stories',
+        bedrooms: '4 Bed',
+        bathrooms: '3 Bath',
+        privateBaths: '1',
+        garage: '2 Car Garage',
+        masterLocation: 'Level 2 (Upper)',
+        features: '',
+      }),
+      makeScenario('study', '2700 sqft growing family + study', {
+        totalArea: '2700',
+        stories: '2 Stories',
+        bedrooms: '4 Bed',
+        bathrooms: '3 Bath',
+        privateBaths: '1',
+        garage: '2 Car Garage',
+        masterLocation: 'Level 2 (Upper)',
+        features: '1 Study',
+      }),
+    ],
+  },
+  {
+    areaSqFt: 3000,
+    family: 'large_family',
+    scenarios: [
+      makeScenario('base', '3000 sqft large family', {
+        totalArea: '3000',
+        stories: '2 Stories',
+        bedrooms: '4 Bed',
+        bathrooms: '4 Bath',
+        privateBaths: '2',
+        garage: '2 Car Garage',
+        masterLocation: 'Level 2 (Upper)',
+        features: '',
+      }),
+      makeScenario('study_guest', '3000 sqft large family + study', {
+        totalArea: '3000',
+        stories: '2 Stories',
+        bedrooms: '4 Bed',
+        bathrooms: '4 Bath',
+        privateBaths: '2',
+        garage: '2 Car Garage',
+        masterLocation: 'Level 2 (Upper)',
+        features: '1 Study',
+      }),
+    ],
+  },
+  {
+    areaSqFt: 3200,
+    family: 'executive_family',
+    scenarios: [
+      makeScenario('base', '3200 sqft executive family', {
+        totalArea: '3200',
+        stories: '2 Stories',
+        bedrooms: '4 Bed',
+        bathrooms: '4 Bath',
+        privateBaths: '2',
+        garage: '2 Car Garage',
+        masterLocation: 'Level 2 (Upper)',
+        features: '',
+      }),
+      makeScenario('study_gym', '3200 sqft executive family + study + gym', {
+        totalArea: '3200',
+        stories: '2 Stories',
+        bedrooms: '4 Bed',
+        bathrooms: '4 Bath',
+        privateBaths: '2',
+        garage: '2 Car Garage',
+        masterLocation: 'Level 2 (Upper)',
+        features: '1 Study, 1 Gym',
+      }),
+    ],
+  },
+];
+
+module.exports = {
+  BASE_SURVEY,
+  SIZE_BAND_MATRIX,
+};

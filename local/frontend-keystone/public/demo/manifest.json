@@ -1,0 +1,321 @@
+[
+  {
+    "id": 1,
+    "brief": "2 bed, 1 story, 1,100 sq ft",
+    "file": "plan-1.svg",
+    "ratio": 1.278,
+    "zones": {
+      "common": 10,
+      "bed": 6,
+      "bath": 3
+    },
+    "elevations": [
+      {
+        "side": "front",
+        "file": "plan-1-front.svg"
+      },
+      {
+        "side": "rear",
+        "file": "plan-1-rear.svg"
+      },
+      {
+        "side": "left",
+        "file": "plan-1-left.svg"
+      },
+      {
+        "side": "right",
+        "file": "plan-1-right.svg"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "brief": "3 bed, 2 story, 2,400 sq ft, 1-car garage",
+    "file": "plan-2.svg",
+    "ratio": 2.368,
+    "zones": {
+      "common": 21,
+      "bed": 9,
+      "bath": 10
+    },
+    "elevations": [
+      {
+        "side": "front",
+        "file": "plan-2-front.svg"
+      },
+      {
+        "side": "rear",
+        "file": "plan-2-rear.svg"
+      },
+      {
+        "side": "left",
+        "file": "plan-2-left.svg"
+      },
+      {
+        "side": "right",
+        "file": "plan-2-right.svg"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "brief": "4 bed, 1 story, 2,200 sq ft, 2-car garage",
+    "file": "plan-3.svg",
+    "ratio": 1.194,
+    "zones": {
+      "common": 17,
+      "bed": 15,
+      "bath": 6
+    },
+    "elevations": [
+      {
+        "side": "front",
+        "file": "plan-3-front.svg"
+      },
+      {
+        "side": "rear",
+        "file": "plan-3-rear.svg"
+      },
+      {
+        "side": "left",
+        "file": "plan-3-left.svg"
+      },
+      {
+        "side": "right",
+        "file": "plan-3-right.svg"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "brief": "4 bed, 2 story, 2,800 sq ft, 2-car garage",
+    "file": "plan-4.svg",
+    "ratio": 2.632,
+    "zones": {
+      "common": 16,
+      "bed": 14,
+      "bath": 11
+    },
+    "elevations": [
+      {
+        "side": "front",
+        "file": "plan-4-front.svg"
+      },
+      {
+        "side": "rear",
+        "file": "plan-4-rear.svg"
+      },
+      {
+        "side": "left",
+        "file": "plan-4-left.svg"
+      },
+      {
+        "side": "right",
+        "file": "plan-4-right.svg"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "brief": "3 bed and a study, 1 story, 1,700 sq ft",
+    "file": "plan-5.svg",
+    "ratio": 0.688,
+    "zones": {
+      "common": 16,
+      "bed": 10,
+      "bath": 6
+    },
+    "elevations": [
+      {
+        "side": "front",
+        "file": "plan-5-front.svg"
+      },
+      {
+        "side": "rear",
+        "file": "plan-5-rear.svg"
+      },
+      {
+        "side": "left",
+        "file": "plan-5-left.svg"
+      },
+      {
+        "side": "right",
+        "file": "plan-5-right.svg"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "brief": "2 bed, 1 story, 1,250 sq ft",
+    "file": "plan-6.svg",
+    "ratio": 1.075,
+    "zones": {
+      "common": 10,
+      "bed": 5,
+      "bath": 6
+    },
+    "elevations": [
+      {
+        "side": "front",
+        "file": "plan-6-front.svg"
+      },
+      {
+        "side": "rear",
+        "file": "plan-6-rear.svg"
+      },
+      {
+        "side": "left",
+        "file": "plan-6-left.svg"
+      },
+      {
+        "side": "right",
+        "file": "plan-6-right.svg"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "brief": "3 bed, 1 story, 1,500 sq ft, 1-car garage",
+    "file": "plan-7.svg",
+    "ratio": 1.185,
+    "zones": {
+      "common": 17,
+      "bed": 12,
+      "bath": 6
+    },
+    "elevations": [
+      {
+        "side": "front",
+        "file": "plan-7-front.svg"
+      },
+      {
+        "side": "rear",
+        "file": "plan-7-rear.svg"
+      },
+      {
+        "side": "left",
+        "file": "plan-7-left.svg"
+      },
+      {
+        "side": "right",
+        "file": "plan-7-right.svg"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "brief": "4 bed, 1 story, 1,900 sq ft",
+    "file": "plan-8.svg",
+    "ratio": 0.556,
+    "zones": {
+      "common": 15,
+      "bed": 12,
+      "bath": 10
+    },
+    "elevations": [
+      {
+        "side": "front",
+        "file": "plan-8-front.svg"
+      },
+      {
+        "side": "rear",
+        "file": "plan-8-rear.svg"
+      },
+      {
+        "side": "left",
+        "file": "plan-8-left.svg"
+      },
+      {
+        "side": "right",
+        "file": "plan-8-right.svg"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "brief": "3 bed, 1 story, 1,800 sq ft",
+    "file": "plan-10.svg",
+    "ratio": 0.602,
+    "zones": {
+      "common": 15,
+      "bed": 7,
+      "bath": 10
+    },
+    "elevations": [
+      {
+        "side": "front",
+        "file": "plan-10-front.svg"
+      },
+      {
+        "side": "rear",
+        "file": "plan-10-rear.svg"
+      },
+      {
+        "side": "left",
+        "file": "plan-10-left.svg"
+      },
+      {
+        "side": "right",
+        "file": "plan-10-right.svg"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "brief": "2 bed and a study, 1 story, 1,400 sq ft",
+    "file": "plan-12.svg",
+    "ratio": 1.072,
+    "zones": {
+      "common": 7,
+      "bed": 5,
+      "bath": 6
+    },
+    "elevations": [
+      {
+        "side": "front",
+        "file": "plan-12-front.svg"
+      },
+      {
+        "side": "rear",
+        "file": "plan-12-rear.svg"
+      },
+      {
+        "side": "left",
+        "file": "plan-12-left.svg"
+      },
+      {
+        "side": "right",
+        "file": "plan-12-right.svg"
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "brief": "5 bed, 1 story, 2,400 sq ft",
+    "file": "plan-13.svg",
+    "ratio": 0.602,
+    "zones": {
+      "common": 15,
+      "bed": 17,
+      "bath": 9
+    },
+    "elevations": [
+      {
+        "side": "front",
+        "file": "plan-13-front.svg"
+      },
+      {
+        "side": "rear",
+        "file": "plan-13-rear.svg"
+      },
+      {
+        "side": "left",
+        "file": "plan-13-left.svg"
+      },
+      {
+        "side": "right",
+        "file": "plan-13-right.svg"
+      }
+    ]
+  }
+]

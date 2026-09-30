@@ -1,0 +1,90 @@
+{
+  
+  "title": "PlanSpec",
+  "type": "object",
+  "required": ["stories", "levels"],
+  "additionalProperties": false,
+  "properties": {
+    "stories": { "type": "integer", "enum": [1, 2] },
+    "totalAreaSqFt": { "type": "number" },
+    "stairAssemblies": {
+      "type": "array",
+      "items": { "$ref": "https://keystone.local/schemas/stair-assembly-v1.json" }
+    },
+    "levels": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["level", "width", "height", "rooms", "doors", "windows"],
+        "properties": {
+          "level": { "type": "integer" },
+          "stairAssemblyIds": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+          "openingScheduleBook": { "$ref": "#/definitions/openingScheduleBook" },
+          "bedroomMeasurementBook": { "$ref": "https://keystone.local/schemas/bedroom-measurements-v1.json" },
+          "width": { "type": "number", "description": "Width of the level in FEET" },
+          "height": { "type": "number", "description": "Height of the level in FEET" },
+          "rooms": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "type", "x", "y", "w", "h"],
+              "properties": {
+                "id": { "type": "string" },
+                "type": { "type": "string" },
+                "label": { "type": "string" },
+                "x": { "type": "number", "description": "X coordinate in FEET" },
+                "y": { "type": "number", "description": "Y coordinate in FEET" },
+                "w": { "type": "number", "description": "Room width in FEET" },
+                "h": { "type": "number", "description": "Room height in FEET" }
+              }
+            }
+          },
+          "doors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": { "id": { "type": "string", "minLength": 1 }, "x": { "type": "number" }, "y": { "type": "number" }, "dir": { "type": "string" } }
+            }
+          },
+          "windows": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": { "x": { "type": "number" }, "y": { "type": "number" }, "dir": { "type": "string" } }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "openingScheduleBook": {
+      "type": "object", "additionalProperties": false, "required": ["version", "records"],
+      "properties": {
+        "version": { "const": 1 },
+        "records": { "type": "array", "items": {
+          "type": "object", "additionalProperties": false, "required": ["openingId", "binding", "dimensions"],
+          "properties": {
+            "openingId": { "type": "string", "minLength": 1 },
+            "binding": { "type": "object", "additionalProperties": false,
+              "required": ["a", "b", "kind", "x", "y", "dir", "width"],
+              "properties": {
+                "a": { "type": "string" }, "b": { "type": "string" }, "kind": { "enum": ["garage", "threshold", "sliding", "cased", "hinged"] },
+                "x": { "type": "number" }, "y": { "type": "number" }, "dir": { "enum": ["horizontal", "vertical"] }, "width": { "type": "number", "exclusiveMinimum": 0 }
+              }
+            },
+            "dimensions": { "type": "object", "additionalProperties": false,
+              "required": ["roughWidthFt", "frameStartFt", "frameEndFt", "leafProjectionFt", "leafSide", "basis"],
+              "properties": {
+                "roughWidthFt": { "type": "number", "exclusiveMinimum": 0 },
+                "frameStartFt": { "type": "number", "minimum": 0 }, "frameEndFt": { "type": "number", "minimum": 0 },
+                "leafProjectionFt": { "type": "number", "minimum": 0 }, "leafSide": { "enum": ["start", "end", "none"] },
+                "basis": { "type": "string", "minLength": 1 }
+              }
+            }
+          }
+        } }
+      }
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "$id": "https://keystone.local/schemas/bedroom-measurements-v1.json",
+  "type": "object", "additionalProperties": false, "required": ["version", "records"],
+  "properties": {
+    "version": { "const": 1 },
+    "records": { "type": "array", "maxItems": 256, "items": {
+      "type": "object", "additionalProperties": false,
+      "required": ["levelNumber", "bedroomId", "bedId", "source", "policy"],
+      "properties": {
+        "levelNumber": { "type": "integer" },
+        "bedroomId": { "type": "string", "minLength": 1 },
+        "bedId": { "type": "string", "minLength": 1 },
+        "source": { "type": "object", "additionalProperties": false, "required": ["kind", "reference"], "properties": {
+          "kind": { "enum": ["assumed", "project_specification", "site_measurement"] },
+          "reference": { "type": "string", "pattern": "\\S" }
+        } },
+        "policy": { "type": "object", "additionalProperties": false,
+          "required": ["basis", "headboardMaxGapFt", "furniture", "windows"], "properties": {
+            "basis": { "type": "string", "pattern": "\\S" },
+            "headboardMaxGapFt": { "type": "number", "minimum": 0, "maximum": 1 },
+            "furniture": { "type": "array", "minItems": 1, "items": {
+              "type": "object", "additionalProperties": false,
+              "required": ["furnitureId", "kind", "widthFt", "lengthFt", "heightFt"],
+              "properties": {
+                "furnitureId": { "type": "string", "minLength": 1 }, "kind": { "type": "string", "minLength": 1 },
+                "widthFt": { "type": "number", "exclusiveMinimum": 0 }, "lengthFt": { "type": "number", "exclusiveMinimum": 0 },
+                "heightFt": { "type": "number", "exclusiveMinimum": 0 }, "headboardHeightFt": { "type": "number", "exclusiveMinimum": 0 },
+                "headboardDepthFt": { "type": "number", "exclusiveMinimum": 0 }
+              }
+            } },
+            "windows": { "type": "array", "items": {
+              "type": "object", "additionalProperties": false,
+              "required": ["binding", "sillHeightFt", "headHeightFt", "clearanceDepthFt"],
+              "properties": {
+                "binding": { "type": "object", "additionalProperties": false, "required": ["roomId", "x", "y", "dir", "width"], "properties": {
+                  "roomId": { "type": "string", "minLength": 1 }, "x": { "type": "number" }, "y": { "type": "number" },
+                  "dir": { "enum": ["horizontal", "vertical"] }, "width": { "type": "number", "exclusiveMinimum": 0 }
+                } },
+                "sillHeightFt": { "type": "number", "minimum": 0 }, "headHeightFt": { "type": "number", "exclusiveMinimum": 0 },
+                "clearanceDepthFt": { "type": "number", "exclusiveMinimum": 0 }
+              }
+            } }
+          }
+        }
+      }
+    } }
+  }
+}

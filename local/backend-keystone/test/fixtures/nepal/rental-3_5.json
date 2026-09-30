@@ -1,0 +1,22 @@
+{
+  "jurisdiction": { "country": "NP", "municipality": "Kathmandu Metropolitan City", "ward": "10" },
+  "site": {
+    "shape": "rectangle",
+    "rectangle": { "width": { "value": 11.25, "unit": "m" }, "depth": { "value": 11.25, "unit": "m" } },
+    "north": { "bearingDegrees": 0, "evidence": "survey drawing" },
+    "frontageEdges": [{ "edgeIndex": 0, "roadWidth": { "value": 4, "unit": "m" } }]
+  },
+  "buildingProgram": {
+    "storeys": 3.5, "households": 3, "bedrooms": 6, "bathrooms": 4, "kitchens": 3, "livingRooms": 3, "puja": true,
+    "rental": { "intended": true, "floorCount": 2, "access": { "type": "continuousSharedStairOutsideUnits", "sidePreference": "auto" } },
+    "ownerProgram": { "bedrooms": 2, "bathrooms": 2, "attachedBathrooms": 1, "kitchens": 1, "livingRooms": 1, "specialRooms": ["puja", "guestBedroom"] },
+    "levels": [
+      { "id": "ground", "kind": "full", "elevation": { "value": 0, "unit": "m" }, "use": "rental flat 1", "occupancy": "rental", "bedrooms": 2, "bathrooms": 1, "kitchens": 1, "livingRooms": 1, "attachedBathrooms": 0, "specialRooms": [] },
+      { "id": "first", "kind": "full", "elevation": { "value": 3, "unit": "m" }, "use": "rental flat 2", "occupancy": "rental", "bedrooms": 2, "bathrooms": 1, "kitchens": 1, "livingRooms": 1, "attachedBathrooms": 0, "specialRooms": [] },
+      { "id": "second", "kind": "full", "elevation": { "value": 6, "unit": "m" }, "use": "owner home", "occupancy": "owner", "bedrooms": 2, "bathrooms": 2, "kitchens": 1, "livingRooms": 1, "attachedBathrooms": 1, "specialRooms": ["puja", "guestBedroom"] },
+      { "id": "partial-third", "kind": "partial", "elevation": { "value": 9, "unit": "m" }, "targetArea": { "value": 40, "unit": "sq_m" }, "use": "owner terrace", "occupancy": "owner", "bedrooms": 0, "bathrooms": 0, "kitchens": 0, "livingRooms": 0, "attachedBathrooms": 0, "specialRooms": [] }
+    ],
+    "parking": { "bikes": 2, "cars": 0 }, "stair": { "type": "halfTurnLanding" }
+  },
+  "vastuProfile": "Jain-led"
+}

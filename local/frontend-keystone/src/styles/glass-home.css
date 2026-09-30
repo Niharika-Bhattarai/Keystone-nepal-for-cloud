@@ -1,0 +1,159 @@
+/* Keystone AI home. Depends on glass.css (.pg scope and tokens). */
+
+/* ---------- hero: exactly one screen under the nav ---------- */
+.pg-hero {
+    height: calc(100dvh - var(--pg-nav) - env(safe-area-inset-top, 0px));
+    min-height: 520px;
+    display: grid;
+    padding-block: 12px 16px;
+}
+.pg-hero-grid { display: grid; gap: 12px; min-height: 0; grid-template-rows: auto minmax(0, 1fr); }
+@media (min-width: 860px) {
+    .pg-hero-grid { grid-template-columns: minmax(290px, 0.78fr) minmax(0, 1.6fr); grid-template-rows: minmax(0, 1fr); gap: 16px; }
+}
+.pg-hero-card { padding: 18px 18px 16px; display: grid; gap: 12px; border-radius: 28px; align-self: center; align-content: center; }
+@media (min-width: 860px) { .pg-hero-card { padding: 30px; gap: 16px; } }
+@media (max-width: 859px) { .pg-hero-card .lead { display: none; } }
+.pg-hero .ctas { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.pg-hero .fine { font-size: 13px; color: var(--ink-2); }
+
+.pg-live { padding: 12px; border-radius: 30px; display: grid; gap: 10px; min-height: 0; grid-template-rows: auto minmax(0, 1fr) auto auto; margin: 0; }
+.pg-live-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 2px 4px; min-width: 0; }
+.pg-live-brief { font: 500 14px var(--pg-mono); display: flex; gap: 10px; align-items: center; min-width: 0; }
+.pg-live-brief span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pg-live-brief b { font-weight: 500; padding: 4px 9px; border-radius: 8px; background: var(--ink); color: #fff; font-size: 11px; letter-spacing: 0.06em; flex: none; }
+.pg-sheetbox { min-height: 0; min-width: 0; display: grid; place-items: center; }
+.pg-live .sheet { box-shadow: 0 1px 0 rgba(255,255,255,0.6), 0 12px 30px rgba(15,20,32,0.12); }
+.pg-live-foot { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 12px; align-items: center; padding: 0 4px; }
+.pg-live-prog { grid-column: 1 / -1; height: 3px; border-radius: 3px; background: rgba(15,20,32,0.1); overflow: hidden; }
+.pg-live-prog i { display: block; height: 100%; background: var(--ink); transform-origin: left; transform: scaleX(var(--p, 0)); transition: transform 0.45s var(--pg-ease); }
+@media (max-width: 859px) {
+    .pg-live-top { flex-wrap: nowrap; }
+    .pg-live-brief { font-size: 12.5px; }
+    .pg-live-top .btn span { display: none; }
+    .pg-live-top .btn { padding: 0 11px; }
+}
+
+/* ---------- story: pinned, scroll-scrubbed ---------- */
+.pg-story { position: relative; height: 420vh; }
+.pg-story-stage {
+    position: sticky; top: 0; height: 100dvh; display: grid; gap: 12px;
+    padding: calc(var(--pg-nav) + 12px) 12px 14px;
+}
+@media (min-width: 900px) { .pg-story-stage { grid-template-columns: 360px 1fr; gap: 16px; padding: calc(var(--pg-nav) + 16px) 20px 20px; } }
+@media (max-width: 899px) { .pg-story-stage { grid-template-rows: auto 1fr; } }
+.pg-story-copy { padding: 22px; border-radius: 28px; display: grid; gap: 14px; align-content: start; align-self: start; }
+@media (max-width: 899px) { .pg-story-copy { padding: 16px; } .pg-story-copy p.body { display: none; } }
+.pg-story-copy .stepn { font: 500 12px var(--pg-mono); display: flex; justify-content: space-between; }
+.pg-story-copy h2 { font-size: clamp(24px, 2.4vw, 34px); letter-spacing: -0.03em; line-height: 1.1; }
+.pg-story-copy p.body { color: var(--ink-2); }
+.pg-story-bar { height: 3px; border-radius: 3px; background: rgba(15,20,32,0.1); overflow: hidden; }
+.pg-story-bar i { display: block; height: 100%; background: var(--ink); transform-origin: left; transform: scaleX(var(--p, 0)); }
+.pg-story-dots { display: flex; gap: 6px; }
+.pg-story-dots i { width: 22px; height: 4px; border-radius: 4px; background: rgba(15,20,32,0.14); transition: background-color 0.3s; }
+.pg-story-dots i.on { background: var(--ink); }
+.pg-story-view { position: relative; border-radius: 30px; overflow: hidden; min-height: 0; }
+.pg-sv {
+    position: absolute; inset: 12px; border-radius: 20px; overflow: hidden; display: grid; place-items: center;
+    opacity: 0; will-change: opacity, transform;
+}
+/* Opacity and transform are written per frame from the smoothed scroll
+   position (Story.jsx), so there is no CSS transition to fight it. */
+.pg-story-h { animation: pg-rise 0.5s var(--pg-ease) both; }
+.pg-sv-brief { background: radial-gradient(80% 70% at 50% 40%, #fff, #F1EFEA); padding: 24px; text-align: center; }
+.pg-sv-brief p { font-size: clamp(26px, 4vw, 56px); letter-spacing: -0.04em; font-weight: 700; line-height: 1.08; max-width: 18ch; }
+.pg-sv-brief .t { color: rgba(15,20,32,0.14); }
+.pg-sv-plan { background: #FFFFFF; padding: 14px; }
+.pg-sv-plan .sheet { width: 100%; height: 100%; background: #FFFFFF; }
+.pg-levels { position: absolute; left: 14px; bottom: 14px; display: none; padding: 3px; gap: 2px; border-radius: 999px; background: rgba(255,255,255,0.8); border: 1px solid var(--rule); }
+.pg-levels button { padding: 6px 12px; border: 0; border-radius: 999px; background: none; font-size: 12.5px; font-weight: 600; }
+.pg-levels button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+@media (max-width: 699px) { .pg-levels { display: inline-flex; } }
+.pg-sv-3d { background: radial-gradient(90% 70% at 50% 35%, #E8EDF1, #B9C7D4); }
+.pg-sv-3d canvas { width: 100%; height: 100%; display: block; }
+.pg-sv-cap { position: absolute; left: 14px; bottom: 14px; right: 14px; display: flex; gap: 8px; flex-wrap: wrap; }
+.pg-sv-est { background: var(--paper); padding: 24px; align-content: center; }
+.pg-sv-est > div { width: min(760px, 100%); }
+.pg-sv-est .total { font-size: clamp(40px, 8vw, 110px); letter-spacing: -0.045em; font-weight: 700; line-height: 1; }
+.pg-sv-est small { display: block; font-size: 14px; color: var(--ink-2); font-weight: 500; margin-top: 10px; }
+.pg-bars { display: grid; gap: 12px; margin-top: 28px; width: 100%; }
+.pg-bar { display: grid; grid-template-columns: 96px 1fr 76px; gap: 10px; align-items: center; font-size: 13.5px; }
+.pg-bar span:last-child { text-align: right; font-family: var(--pg-mono); font-size: 12.5px; }
+.pg-bar .track { height: 8px; border-radius: 99px; background: rgba(15,20,32,0.07); overflow: hidden; }
+.pg-bar .track i { display: block; height: 100%; border-radius: 99px; background: var(--ink); transform-origin: left; transform: scaleX(0); }
+
+
+/* ---------- what runs behind a sentence ---------- */
+.pg-ledger { border-radius: 30px; padding: 8px; }
+.pg-ledger li { display: grid; gap: 4px 24px; padding: 20px 18px; border-top: 1px solid var(--rule); }
+.pg-ledger li:first-child { border-top: 0; }
+@media (min-width: 800px) { .pg-ledger li { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr); align-items: baseline; } }
+.pg-ledger h3 { font-size: 17px; letter-spacing: -0.01em; }
+.pg-ledger p { color: var(--ink-2); max-width: 62ch; }
+.pg-books { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.pg-books span { font-size: 12.5px; padding: 5px 10px; border-radius: 8px; background: #fff; border: 1px solid var(--rule); font-style: italic; }
+
+/* ---------- six outputs: each shows a crop of the real thing ---------- */
+.pg-outputs { display: grid; gap: 12px; grid-template-columns: 1fr; }
+@media (min-width: 640px) { .pg-outputs { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1000px) { .pg-outputs { grid-template-columns: repeat(3, 1fr); } }
+.pg-output { padding: 10px 10px 16px; border-radius: 26px; display: grid; gap: 12px; align-content: start; }
+.pg-output .peek { height: 120px; border-radius: 16px; overflow: hidden; background: #fff; display: grid; place-items: center; }
+.pg-output .peek img { width: 100%; height: 100%; object-fit: cover; }
+.pg-output .peek.brief { background: var(--ink); color: #fff; font: 500 13px var(--pg-mono); padding: 16px; place-items: start; line-height: 1.6; }
+.pg-output .peek.cost { background: var(--paper); padding: 16px; place-items: stretch; align-content: center; gap: 4px; }
+.pg-output h3 { font-size: 17px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding-inline: 6px; }
+.pg-output p { color: var(--ink-2); font-size: 14.5px; padding-inline: 6px; }
+
+/* ---------- price anchor ---------- */
+.pg-anchor { display: grid; gap: 12px; }
+@media (min-width: 900px) { .pg-anchor { grid-template-columns: 1fr 1fr; } }
+.pg-anchor > div { padding: 28px; border-radius: 30px; display: grid; gap: 14px; align-content: start; }
+.pg-anchor .price { font-size: clamp(34px, 4.4vw, 56px); letter-spacing: -0.045em; font-weight: 700; line-height: 1; }
+.pg-anchor h3 { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+.pg-anchor .price small { display: block; font-size: 15px; font-weight: 500; letter-spacing: 0; margin-top: 10px; }
+.pg-anchor ul { display: grid; gap: 9px; }
+.pg-anchor li { display: flex; gap: 10px; align-items: center; }
+.pg-anchor .src { font-size: 12px; color: var(--ink-2); }
+.pg-anchor .gl.deep .src, .pg-anchor .gl.deep .src a { color: #E4E8EE; }
+.pg-anchor .src a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---- The hero house: one stage, one view at a time -------------------------
+   The plan draws, "Building the photoreal 3D model", then the model of the same
+   plan; the two views share one stage and crossfade (only opacity and transform move). */
+.pg-hero-house { grid-template-rows: auto minmax(0, 1fr) auto; --seq-draw: 720ms; --seq-fade: 420ms; }
+.pg-hero-stage { position: relative; display: grid; min-height: 0; border-radius: 18px; }
+.pg-hero-stage > .pg-hero-plan, .pg-hero-stage > .pg-hero-3d { grid-area: 1 / 1; min-height: 0; transition: opacity 0.7s var(--pg-ease), transform 0.9s var(--pg-ease); }
+.pg-hero-stage.is-3d > .pg-hero-plan { opacity: 0; transform: scale(0.97); pointer-events: none; visibility: hidden; transition: opacity 0.7s var(--pg-ease), transform 0.9s var(--pg-ease), visibility 0s 0.7s; }
+.pg-hero-stage.is-plan > .pg-hero-3d { opacity: 0; transform: translateY(12px) scale(0.985); pointer-events: none; }
+.pg-hero-stage.is-plan > .pg-hero-3d .pg-hero-3d-ctl { visibility: hidden; }
+.pg-hero-3d { position: relative; border-radius: 18px; overflow: hidden;
+    background: radial-gradient(120% 90% at 50% 38%, rgba(255,255,255,0.72), rgba(255,255,255,0.28) 70%, rgba(255,255,255,0.12)); }
+.pg-hero-model { position: absolute; inset: 0; width: 100%; height: 100%; display: block; border-radius: 18px; }
+.pg-hero-model:active { cursor: grabbing; }
+.pg-hero-model:focus-visible { outline: 2px solid var(--blue, #1C5A8C); outline-offset: -3px; }
+.pg-hero-3d-ctl { position: absolute; right: 10px; bottom: 10px; display: flex; gap: 6px; }
+.pg-hero-3d-tag { position: absolute; left: 10px; bottom: 12px; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 500;
+    background: rgba(255,255,255,0.72); color: var(--ink); box-shadow: inset 0 1px 0 rgba(255,255,255,0.8); pointer-events: none;
+    animation: pg-fade 0.6s var(--pg-ease) 0.9s both; max-width: calc(100% - 190px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pg-hero-building { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: grid; justify-items: center; gap: 10px;
+    padding: 20px 26px; border-radius: 22px; font-size: 15px; font-weight: 600; color: var(--ink); text-align: center; max-width: calc(100% - 32px);
+    background: rgba(247,248,250,0.88); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.85), 0 10px 30px rgba(15,20,32,0.14); animation: pg-fade 0.4s var(--pg-ease) both; }
+/* While the model is built, the finished plan steps back and the message has the stage. */
+.pg-hero-stage.is-building > .pg-hero-plan { opacity: 0.12; transform: scale(0.97); }
+.pg-hero-3d-ask { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); }
+/* The switch between the two views, after the first turn. */
+.pg-hero-switch { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 2px; padding: 3px; border-radius: 999px;
+    background: rgba(255,255,255,0.7); box-shadow: inset 0 1px 0 rgba(255,255,255,0.85), 0 6px 18px rgba(15,20,32,0.14); animation: pg-fade 0.5s var(--pg-ease) both; }
+.pg-hero-switch button { min-height: 32px; padding: 0 14px; border-radius: 999px; border: 0; background: transparent; color: var(--ink); font-size: 13px; font-weight: 600; cursor: pointer;
+    transition: background-color 0.2s var(--pg-ease), color 0.2s var(--pg-ease); }
+.pg-hero-switch button:hover { background: rgba(255,255,255,0.8); }
+.pg-hero-switch button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.pg-hero-switch button:focus-visible { outline: 2px solid #1C5A8C; outline-offset: 2px; }
+@media (pointer: coarse) { .pg-hero-switch button { min-height: 40px; } .pg-hero-3d-ctl .iconbtn { width: 40px; height: 40px; } }
+@media (max-width: 520px) { .pg-hero-3d-tag { display: none; } }
+@media (prefers-reduced-motion: reduce) { .pg-hero-stage > .pg-hero-plan, .pg-hero-stage > .pg-hero-3d { transition: opacity 0.3s linear; transform: none !important; } }
+
+/* "Say it. See it. Build it." - three beats, one per line from 860px. */
+@media (min-width: 860px) { .pg-hero-title span { display: block; } }

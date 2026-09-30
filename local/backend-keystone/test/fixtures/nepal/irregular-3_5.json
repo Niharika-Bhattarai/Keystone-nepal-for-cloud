@@ -1,0 +1,27 @@
+{
+  "jurisdiction": { "country": "NP", "municipality": "Pokhara Metropolitan City", "ward": "8" },
+  "site": {
+    "shape": "surveyedPolygon",
+    "vertices": [
+      { "x": 0, "y": 0, "unit": "m" }, { "x": 12, "y": 0, "unit": "m" },
+      { "x": 13, "y": 10, "unit": "m" }, { "x": 4, "y": 13, "unit": "m" }, { "x": 0, "y": 9, "unit": "m" }
+    ],
+    "sideLengths": [{ "value": 12, "unit": "m" }, { "value": 10.0498756, "unit": "m" }, { "value": 9.48683298, "unit": "m" }, { "value": 5.65685425, "unit": "m" }, { "value": 9, "unit": "m" }],
+    "north": { "bearingDegrees": 27, "evidence": "survey drawing" },
+    "frontageEdges": [{ "edgeIndex": 0, "roadWidth": { "value": 5, "unit": "m" } }]
+  },
+  "buildingProgram": {
+    "storeys": 3.5,
+    "households": 1, "bedrooms": 4, "bathrooms": 3, "kitchens": 1, "livingRooms": 1, "puja": true,
+    "rental": { "intended": false, "floorCount": 0 },
+    "ownerProgram": { "bedrooms": 4, "bathrooms": 3, "attachedBathrooms": 1, "kitchens": 1, "livingRooms": 1, "specialRooms": ["puja"] },
+    "levels": [
+      { "id": "ground", "kind": "full", "elevation": { "value": 0, "unit": "m" }, "use": "family", "occupancy": "owner", "bedrooms": 0, "bathrooms": 1, "kitchens": 1, "livingRooms": 1, "attachedBathrooms": 0, "specialRooms": ["puja"] },
+      { "id": "first", "kind": "full", "elevation": { "value": 3, "unit": "m" }, "use": "bedrooms", "occupancy": "owner", "bedrooms": 3, "bathrooms": 1, "kitchens": 0, "livingRooms": 0, "attachedBathrooms": 1, "specialRooms": [] },
+      { "id": "second", "kind": "full", "elevation": { "value": 6, "unit": "m" }, "use": "family", "occupancy": "owner", "bedrooms": 1, "bathrooms": 1, "kitchens": 0, "livingRooms": 0, "attachedBathrooms": 0, "specialRooms": [] },
+      { "id": "partial-third", "kind": "partial", "elevation": { "value": 9, "unit": "m" }, "targetArea": { "value": 40, "unit": "sq_m" }, "use": "roof room", "occupancy": "owner", "bedrooms": 0, "bathrooms": 0, "kitchens": 0, "livingRooms": 0, "attachedBathrooms": 0, "specialRooms": [] }
+    ],
+    "parking": { "bikes": 1, "cars": 1 }, "stair": { "type": "halfTurnLanding" }
+  },
+  "vastuProfile": "Jain-led"
+}

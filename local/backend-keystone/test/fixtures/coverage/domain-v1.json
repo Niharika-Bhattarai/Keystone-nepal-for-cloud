@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "domainId": "universal-survey-domain-v1",
+  "structural": {
+    "storeyPrimaryStates": [
+      { "stories": "1 Story", "masterLocation": "Level 1 (Main)" },
+      { "stories": "2 Stories", "masterLocation": "Level 1 (Main)" },
+      { "stories": "2 Stories", "masterLocation": "Level 2 (Upper)" }
+    ],
+    "bedrooms": [1, 2, 3, 4, 5],
+    "bathrooms": [1, 2, 3, 4, 5],
+    "areas": [600, 800, 1000, 1200, 1500, 1800, 2400, 3200, 5000, 10000],
+    "garages": ["No Garage", "1 Car Garage", "2 Car Garage"]
+  },
+  "categoricalFields": ["shape", "frontFacing", "lotContext", "openConcept", "kitchenPlacement", "laundryLocation", "ceilingHeight", "materials", "indoorOutdoor", "naturalLight", "accessibilityNeeds", "budgetTier", "foundationType", "hvacSystem", "outdoorLiving"],
+  "featureChips": ["Study", "Home Theater", "Gym", "Gaming Room", "Library", "Wine Cellar", "Music Room", "Guest Suite", "Playroom"],
+  "compatibilityShapes": ["L-Shaped", "T-Shaped"],
+  "notes": [
+    "This domain is independent of supportMatrix and includes unresolved coverage.",
+    "One-bath structural inputs explicitly request zero private bathrooms; others request one primary private bathroom.",
+    "Pairwise cases use two above-grade storeys; Single-level preferred is retained as a preference, not proof of conflict.",
+    "Outdoor structures receive 160 square feet in categorical tests; None receives zero."
+  ]
+}

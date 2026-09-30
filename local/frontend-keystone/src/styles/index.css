@@ -1,0 +1,92 @@
+/* ===================================================================
+   KEYSTONE - single stylesheet entry (Tailwind v4)
+   -------------------------------------------------------------------
+   Under v3 this was three separate files imported from main.jsx in a
+   fixed order, because CSS requires @import to precede every other
+   at-rule and `@tailwind utilities` had to come last. That split broke
+   under v4: Vite hands each CSS file to PostCSS as its OWN entry, so
+   `tailwindcss/utilities` in the third file could not see the theme
+   imported by the first. Utility generation silently lost every value
+   that comes from the theme - `md:` and `xl:` variants (no
+   --breakpoint-*), rounded-xs (no --radius-xs), blur-xs, tracking-*.
+   The visible symptom was the mobile nav bar, which is `md:hidden`,
+   rendering at 768px and 1600px.
+
+   One entry fixes it: every @import still sits at the top, and the
+   order below reproduces the cascade the site was built against.
+
+   ORDER MATTERS. Do not reorder these:
+     1. theme + preflight, in LAYERS, so they lose to everything below.
+     2. the custom stylesheet, UNLAYERED (unlayered always beats layered).
+     3. utilities, UNLAYERED and LAST, so they beat the custom sheet at
+        equal specificity - exactly what the old CDN <script> did by
+        injecting its <style> after the inline block.
+   Putting utilities in layer(utilities) inverts 3 against 2 and breaks
+   every `md:hidden`-style override on the site.
+   =================================================================== */
+
+@import 'tailwindcss/theme' layer(theme);
+@import 'tailwindcss/preflight' layer(base);
+
+@import './tokens.css';
+@import './base.css';
+@import './components.css';
+@import './effects.css';
+@import './studio.css';
+@import './sequence.css';
+@import './glass.css';
+@import './glass-home.css';
+@import './glass-pages.css';
+@import './account.css';
+
+@import 'tailwindcss/utilities';
+
+@source '../../index.html';
+@source '../**/*.{js,jsx}';
+
+/* NOTE on source detection.
+   v4 auto-detects sources IN ADDITION to the @source lines above, and that
+   sweep reaches the pre-migration rollback files still sitting in frontend/
+   (app.jsx, app.js, index.legacy.html). The build therefore emits a handful
+   of utility rules - five low-opacity steps - that only deleted code used.
+   Cost is about 150 bytes of 122 KB, so it is left alone.
+
+   `@source not "../../app.jsx"` does NOT suppress it; it was tried with both
+   quote styles on v4.3.3 and the rules were still emitted. The real fix is
+   to move those rollback files out of the Vite root - byte-identical copies
+   already exist in frontend-backup-2026-09-19/ - which is a call for whoever
+   owns the rollback plan, not something to do silently.
+
+   Do not name utility classes in comments in this file: Tailwind scans the
+   stylesheet itself for candidates, so a class mentioned here is generated. */
+
+/* Brand colours, so `text-ink`, `bg-paper` etc. keep resolving. Ported
+   from the v3 `theme.extend.colors` block. */
+@theme {
+  --color-ink: #14161a;
+  --color-paper: #fbf8f3;
+  --color-cream: #f2ede5;
+  --color-blue: #ad3300;
+  --color-blue-lt: #c94a14;
+  --color-red: #ad3300;
+  --color-red-dk: #8c2900;
+  --color-gold: #b5882a;
+  --color-mid: #5c5953;
+  --color-accent: #ad3300;
+  --color-accent-hi: #c94a14;
+  --color-ink-soft: #5c5953;
+  --color-drawing: #ffffff;
+}
+
+/* v4 changed the default border colour from gray-200 to currentcolor.
+   41 elements use a bare `border`/`border-t`, so this keeps them looking
+   as they did. Added by @tailwindcss/upgrade; kept deliberately. */
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}

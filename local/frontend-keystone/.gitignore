@@ -1,0 +1,12 @@
+node_modules
+dist
+# src/lib/renderPreferences.generated.js is deliberately COMMITTED.
+# It is generated from backend/lib/renderPreferences.js by
+# scripts/build-frontend.js, but that script lives above the Vercel Root
+# Directory and is not present in the deploy sandbox. Ignoring the output
+# meant the deployment had neither the generator nor its result.
+# scripts/test-render-experience.js gates it against the backend, so a
+# stale copy fails the suite rather than shipping silently.
+
+# Impeccable review captures (local evidence, regenerated each review)
+.impeccable/review/

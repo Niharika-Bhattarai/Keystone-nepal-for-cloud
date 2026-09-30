@@ -1,0 +1,147 @@
+/* ===================================================================
+   KEYSTONE DESIGN TOKENS  -  ethereal glass, dual light/dark
+   Single source of truth. Lifts verbatim into src/styles/tokens.css
+   when the Vite migration lands. Every text and control-boundary pair
+   below is verified by scripts/check-contrast.js against the
+   worst-case aurora wash. Run that script after changing any value.
+   =================================================================== */
+:root {
+    /* ---- Type ---------------------------------------------------
+       Two families, down from four loaded plus one phantom. Satoshi
+       replaces Manrope/Cormorant/Noto Serif AND the eight
+       'Space Grotesk' references that never had a font behind them. */
+    --font-sans:    'Onest', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-display: 'Onest', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-mono:    'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+    --t-display: clamp(2.5rem, 1.60rem + 3.80vw, 4.50rem);
+    --t-h1:      clamp(2.00rem, 1.40rem + 2.60vw, 3.25rem);
+    --t-h2:      clamp(1.50rem, 1.20rem + 1.40vw, 2.25rem);
+    --t-h3:      clamp(1.125rem, 1.00rem + 0.60vw, 1.50rem);
+    --t-body:    clamp(1.00rem, 0.97rem + 0.14vw, 1.125rem);
+    --t-ui:      0.9375rem;
+    --t-meta:    0.8125rem;
+
+    /* ---- Light: marketing ---------------------------------------
+       Monochrome ground + exactly one signal colour.
+
+       What was here before - #FBF8F3 warm paper with a #AD3300
+       terracotta accent - is, by hex, the "premium consumer" palette the
+       taste skill bans by name: warm cream plus clay. Three independent
+       design reviews identified it as the mechanical reason the page read
+       as generic. The signal colour survives because it carries the brand;
+       everything around it is now neutral so the signal actually signals.
+
+       Ratios against --paper: ink 19.6:1, graphite 9.0:1, signal 6.5:1. */
+    --paper:      #FFFFFF;
+    --paper-deep: #F4F4F1;   /* full-bleed banding only, never a card */
+    --ink:        #0B0B0B;
+    --ink-soft:   #4A4A4A;
+    --accent:     #AD3300;
+    --accent-hi:  #8C2900;
+    --drawing:    #FFFFFF;
+    --rule:       #DEDEDA;   /* every hairline on the site */
+    --blacktop:   #121212;   /* the one dark block: capabilities */
+    /* The signal colour is tuned for white paper and only reaches 3.4:1
+       on #121212. The dark block therefore uses the studio's brighter
+       ember, which clears 4.5:1 there. Same hue family, same identity. */
+    --accent-on-dark: #FF7A45;
+    --ember:      #FF7A45;
+    --ember-edge: rgba(255,122,69,0.55);
+
+    /* Elevation is expressed with rules and space, not with shadow or
+       translucency. These names are kept so existing call sites resolve,
+       but they now describe a flat, ruled surface. A glass panel on a
+       white ground is invisible work: it costs a compositor layer and
+       communicates nothing. */
+    --glass:        #FFFFFF;
+    --glass-quiet:  #FAFAF8;
+    --glass-edge:   var(--rule);
+    --glass-rim:    var(--rule);
+    --control-edge: #8A8A85;
+    --chip-bg:      #FFFFFF;
+    --surface-1:    #FAFAF8;
+    --blur:         none;
+
+    /* ---- Dark: studio ------------------------------------------- */
+    --d-base:         #0E1117;
+    --d-raise:        #151A22;
+    --d-text:         #F2EFE9;
+    /* Lifted from #9AA3AE: on the studio's raised panels that measured
+       4.21:1, under the 4.5 body-text floor. */
+    --d-muted:        #A7B0BB;
+    /* Brightened from #FF7A45: as TEXT on the studio's raised panels it
+       measured 4.15:1, under the body floor. As a fill it is better
+       still, because the dark ink sitting on it gains contrast too. */
+    --d-accent:       #FF9468;
+    /* The ember used as a FILL. #FF9468 exists because the accent has to
+       clear 4.5:1 as text on a raised panel; nothing forces a fill to be
+       lightened, and a filled control reads stronger and matches the
+       hero's button when it is the one ember the rest of the site uses.
+       Ink on this is 7.36:1, so the split costs no contrast. Both are
+       gated in scripts/check-contrast.js. */
+    --d-accent-fill:  #FF7A45;
+    --d-glass:        rgba(255,255,255,0.07);
+    --d-glass-edge:   rgba(255,255,255,0.09);
+    --d-control-edge: #6A7482;
+    --d-blur:         blur(20px) saturate(1.2);
+
+    /* ---- Space / radius / shadow -------------------------------- */
+    /* The nav is sticky, so it is in flow and eats the top of the first
+       screen. Anything sized to "one screenful" has to subtract it. */
+    --nav-h: 73px;
+    /* MobileNavBar is `md:hidden`, so it only occupies the bottom of the
+       screen below 768px. Declared here, switched on at that width. */
+    --bottom-bar-h: 0px;
+
+    --s1: 4px;  --s2: 8px;  --s3: 12px; --s4: 16px; --s5: 24px;
+    --s6: 32px; --s7: 48px; --s8: 72px; --s9: 96px;
+
+    /* Swiss discipline: no radius above 2px anywhere on the marketing
+       pages. --r-pill survives for the studio's controls only. */
+    --r-control: 2px; --r-panel: 2px; --r-card: 2px;
+    --r-hero: 2px;    --r-pill: 999px;
+
+    /* One shadow in the system: none. Kept as tokens so call sites
+       resolve while they are migrated to rules. */
+    --sh-1: none;
+    --sh-2: none;
+    --sh-3: none;
+    --sh-4: none;
+
+    /* Channel forms, so the ~120 rgba() literals scattered through the
+       component rules below can route through the palette instead of
+       hardcoding a fourth colour system. */
+    --ink-rgb:       11,11,11;
+    --accent-rgb:    173,51,0;
+    --accent-hi-rgb: 140,41,0;
+
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --dur:  180ms;
+
+    --nav-offset: 104px;
+    --shell-max:  1500px;
+}
+
+/* Legacy aliases. The blue/red/gold triad was a previous identity but
+   is still referenced by component rules written against it. These keep
+   those rules resolving, now pointing at the single accent, until
+   Phase 3 rewrites the components. Do not add new usage. */
+:root {
+    --cream:       var(--paper-deep);
+    --mid:         var(--ink-soft);
+    --border:      var(--glass-rim);
+    --night:       var(--d-base);
+    --night-2:     var(--d-raise);
+    --mist:        #8E8880;
+    --cloud:       var(--paper-deep);
+    --sand:        #D8D0C4;
+    --accent-2:    var(--accent-hi);
+    --accent-soft: #FBEDE6;
+    --blue:        var(--accent);
+    --blue-lt:     var(--accent-hi);
+    --red:         var(--accent);
+    --red-dk:      #8C2900;
+    --gold:        #B5882A;
+    --ease-smooth: var(--ease);
+}

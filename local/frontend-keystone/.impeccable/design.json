@@ -1,0 +1,527 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-26T19:15:50.113Z",
+  "title": "Design System: Keystone AI",
+  "extensions": {
+    "colorMeta": {
+      "ink": {
+        "role": "primary",
+        "displayName": "Drafting Ink",
+        "canonical": "oklch(19.2% 0.026 266.6)",
+        "purpose": "Text on clear and frost; fill of every primary action.",
+        "tonalRamp": [
+          "oklch(15% 0.026 266.6)",
+          "oklch(25% 0.026 266.6)",
+          "oklch(35% 0.026 266.6)",
+          "oklch(45% 0.026 266.6)",
+          "oklch(55% 0.026 266.6)",
+          "oklch(68% 0.026 266.6)",
+          "oklch(82% 0.018 266.6)",
+          "oklch(95% 0.009 266.6)"
+        ]
+      },
+      "ink-hover": {
+        "role": "primary",
+        "displayName": "Lifted Ink",
+        "canonical": "oklch(27.2% 0.034 262.7)",
+        "purpose": "Primary button hover.",
+        "tonalRamp": [
+          "oklch(15% 0.034 262.7)",
+          "oklch(25% 0.034 262.7)",
+          "oklch(35% 0.034 262.7)",
+          "oklch(45% 0.034 262.7)",
+          "oklch(55% 0.034 262.7)",
+          "oklch(68% 0.034 262.7)",
+          "oklch(82% 0.024 262.7)",
+          "oklch(95% 0.012 262.7)"
+        ]
+      },
+      "slate-secondary": {
+        "role": "neutral",
+        "displayName": "Cool Slate",
+        "canonical": "oklch(36.7% 0.030 254.2)",
+        "purpose": "Secondary text on frost or paper only.",
+        "tonalRamp": [
+          "oklch(15% 0.030 254.2)",
+          "oklch(25% 0.030 254.2)",
+          "oklch(35% 0.030 254.2)",
+          "oklch(45% 0.030 254.2)",
+          "oklch(55% 0.030 254.2)",
+          "oklch(68% 0.030 254.2)",
+          "oklch(82% 0.021 254.2)",
+          "oklch(95% 0.011 254.2)"
+        ]
+      },
+      "keystone-blue": {
+        "role": "secondary",
+        "displayName": "Keystone Blue",
+        "canonical": "oklch(45.4% 0.103 247.2)",
+        "purpose": "Focus rings, inline links, drawing progress, winning footprint.",
+        "tonalRamp": [
+          "oklch(15% 0.103 247.2)",
+          "oklch(25% 0.103 247.2)",
+          "oklch(35% 0.103 247.2)",
+          "oklch(45% 0.103 247.2)",
+          "oklch(55% 0.103 247.2)",
+          "oklch(68% 0.103 247.2)",
+          "oklch(82% 0.072 247.2)",
+          "oklch(95% 0.036 247.2)"
+        ]
+      },
+      "keystone-blue-deep": {
+        "role": "secondary",
+        "displayName": "Deep Keystone Blue",
+        "canonical": "oklch(40.1% 0.089 247.1)",
+        "purpose": "Text on the blue wash.",
+        "tonalRamp": [
+          "oklch(15% 0.089 247.1)",
+          "oklch(25% 0.089 247.1)",
+          "oklch(35% 0.089 247.1)",
+          "oklch(45% 0.089 247.1)",
+          "oklch(55% 0.089 247.1)",
+          "oklch(68% 0.089 247.1)",
+          "oklch(82% 0.062 247.1)",
+          "oklch(95% 0.031 247.1)"
+        ]
+      },
+      "keystone-blue-wash": {
+        "role": "secondary",
+        "displayName": "Keystone Blue Wash",
+        "canonical": "rgba(28, 90, 140, 0.12)",
+        "purpose": "Soon tags, focus halo, best footprint fill."
+      },
+      "live-green": {
+        "role": "tertiary",
+        "displayName": "Live Green",
+        "canonical": "oklch(51.5% 0.111 156.3)",
+        "purpose": "A dot, icon tint or one confirmation line.",
+        "tonalRamp": [
+          "oklch(15% 0.111 156.3)",
+          "oklch(25% 0.111 156.3)",
+          "oklch(35% 0.111 156.3)",
+          "oklch(45% 0.111 156.3)",
+          "oklch(55% 0.111 156.3)",
+          "oklch(68% 0.111 156.3)",
+          "oklch(82% 0.078 156.3)",
+          "oklch(95% 0.039 156.3)"
+        ]
+      },
+      "error-red": {
+        "role": "tertiary",
+        "displayName": "Error Red",
+        "canonical": "oklch(50.0% 0.182 29.5)",
+        "purpose": "Field errors only.",
+        "tonalRamp": [
+          "oklch(15% 0.182 29.5)",
+          "oklch(25% 0.182 29.5)",
+          "oklch(35% 0.182 29.5)",
+          "oklch(45% 0.182 29.5)",
+          "oklch(55% 0.182 29.5)",
+          "oklch(68% 0.182 29.5)",
+          "oklch(82% 0.127 29.5)",
+          "oklch(95% 0.064 29.5)"
+        ]
+      },
+      "sheet-white": {
+        "role": "neutral",
+        "displayName": "Sheet White",
+        "canonical": "oklch(100.0% 0.000 89.9)",
+        "purpose": "Ground of every drawing.",
+        "tonalRamp": [
+          "oklch(15% 0.000 89.9)",
+          "oklch(25% 0.000 89.9)",
+          "oklch(35% 0.000 89.9)",
+          "oklch(45% 0.000 89.9)",
+          "oklch(55% 0.000 89.9)",
+          "oklch(68% 0.000 89.9)",
+          "oklch(82% 0.000 89.9)",
+          "oklch(95% 0.000 89.9)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "oklch(97.9% 0.003 264.5)",
+        "purpose": "Opaque studio ground, fallbacks, text on deep glass.",
+        "tonalRamp": [
+          "oklch(15% 0.003 264.5)",
+          "oklch(25% 0.003 264.5)",
+          "oklch(35% 0.003 264.5)",
+          "oklch(45% 0.003 264.5)",
+          "oklch(55% 0.003 264.5)",
+          "oklch(68% 0.003 264.5)",
+          "oklch(82% 0.002 264.5)",
+          "oklch(95% 0.001 264.5)"
+        ]
+      },
+      "sky-ground": {
+        "role": "neutral",
+        "displayName": "Sky Ground",
+        "canonical": "oklch(85.3% 0.035 242.7)",
+        "purpose": "Page colour behind the scene image.",
+        "tonalRamp": [
+          "oklch(15% 0.035 242.7)",
+          "oklch(25% 0.035 242.7)",
+          "oklch(35% 0.035 242.7)",
+          "oklch(45% 0.035 242.7)",
+          "oklch(55% 0.035 242.7)",
+          "oklch(68% 0.035 242.7)",
+          "oklch(82% 0.024 242.7)",
+          "oklch(95% 0.012 242.7)"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Hairline Rule",
+        "canonical": "rgba(15, 20, 32, 0.12)",
+        "purpose": "Dividers."
+      },
+      "glass-clear": {
+        "role": "neutral",
+        "displayName": "Glass Clear",
+        "canonical": "rgba(255, 255, 255, 0.50)",
+        "purpose": "Blur 14px; ink text only."
+      },
+      "glass-frost": {
+        "role": "neutral",
+        "displayName": "Glass Frost",
+        "canonical": "rgba(255, 255, 255, 0.62)",
+        "purpose": "Blur 18px; Cool Slate allowed."
+      },
+      "glass-deep": {
+        "role": "neutral",
+        "displayName": "Glass Deep",
+        "canonical": "rgba(15, 20, 32, 0.64)",
+        "purpose": "Blur 18px; white text only."
+      },
+      "glass-rim": {
+        "role": "neutral",
+        "displayName": "Glass Rim",
+        "canonical": "rgba(255, 255, 255, 0.58)",
+        "purpose": "1px light edge on glass."
+      },
+      "deep-fallback": {
+        "role": "neutral",
+        "displayName": "Deep Fallback",
+        "canonical": "oklch(22.7% 0.029 266.3)",
+        "purpose": "Deep glass without backdrop-filter or with reduced transparency.",
+        "tonalRamp": [
+          "oklch(15% 0.029 266.3)",
+          "oklch(25% 0.029 266.3)",
+          "oklch(35% 0.029 266.3)",
+          "oklch(45% 0.029 266.3)",
+          "oklch(55% 0.029 266.3)",
+          "oklch(68% 0.029 266.3)",
+          "oklch(82% 0.020 266.3)",
+          "oklch(95% 0.010 266.3)"
+        ]
+      },
+      "control-edge": {
+        "role": "neutral",
+        "displayName": "Control Edge",
+        "canonical": "oklch(61.7% 0.027 259.8)",
+        "purpose": "Studio field hover border; 3:1 control contrast.",
+        "tonalRamp": [
+          "oklch(15% 0.027 259.8)",
+          "oklch(25% 0.027 259.8)",
+          "oklch(35% 0.027 259.8)",
+          "oklch(45% 0.027 259.8)",
+          "oklch(55% 0.027 259.8)",
+          "oklch(68% 0.027 259.8)",
+          "oklch(82% 0.019 259.8)",
+          "oklch(95% 0.009 259.8)"
+        ]
+      },
+      "rendered-slate": {
+        "role": "neutral",
+        "displayName": "Rendered Slate",
+        "canonical": "oklch(47.7% 0.017 224.8)",
+        "purpose": "Studio Rendered view ground and its PNG export only.",
+        "tonalRamp": [
+          "oklch(15% 0.017 224.8)",
+          "oklch(25% 0.017 224.8)",
+          "oklch(35% 0.017 224.8)",
+          "oklch(45% 0.017 224.8)",
+          "oklch(55% 0.017 224.8)",
+          "oklch(68% 0.017 224.8)",
+          "oklch(82% 0.012 224.8)",
+          "oklch(95% 0.006 224.8)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Home h1 only; height clamp keeps the hero in one screen."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Subpage h1."
+      },
+      "headline-section": {
+        "displayName": "Section Headline",
+        "purpose": "Section h2 inside a glass head panel."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Card, ledger, tier and dialog headings."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "One line under a headline, max 58ch."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running text, 62-70ch."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Field labels, segmented controls; Onest, sentence case."
+      },
+      "data-mono": {
+        "displayName": "Data Mono",
+        "purpose": "Measurements, briefs and code-like data only; never a label style."
+      }
+    },
+    "shadows": [
+      {
+        "name": "glass-rest",
+        "value": "inset 0 1px 0 rgba(255,255,255,0.85), inset 0 -1px 0 rgba(255,255,255,0.18), 0 10px 30px rgba(15,20,32,0.14)",
+        "purpose": "Every glass panel."
+      },
+      {
+        "name": "glass-deep",
+        "value": "inset 0 1px 0 rgba(255,255,255,0.22), 0 14px 36px rgba(15,20,32,0.3)",
+        "purpose": "Deep glass panels."
+      },
+      {
+        "name": "glass-nested",
+        "value": "inset 0 1px 0 rgba(255,255,255,0.8)",
+        "purpose": "Glass inside glass: rim only."
+      },
+      {
+        "name": "ink-button",
+        "value": "0 6px 18px rgba(15,20,32,0.25)",
+        "purpose": "Primary buttons."
+      },
+      {
+        "name": "sheet-lift",
+        "value": "0 1px 0 rgba(255,255,255,0.6), 0 12px 30px rgba(15,20,32,0.12)",
+        "purpose": "White drawing sheet inside the live panel."
+      },
+      {
+        "name": "studio-window",
+        "value": "inset 0 1px 0 rgba(255,255,255,0.85), 0 40px 120px -30px rgba(15,20,32,0.45)",
+        "purpose": "Studio overlay pane."
+      },
+      {
+        "name": "focus-halo",
+        "value": "0 0 0 3px rgba(28,90,140,0.12)",
+        "purpose": "Field focus."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-glass",
+        "value": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "All state and entrance transitions."
+      },
+      {
+        "name": "rise",
+        "value": "0.8s ease-glass; from opacity 0.3, translateY(16px), blur(6px); stagger 70ms",
+        "purpose": "Panels settle in once per page."
+      },
+      {
+        "name": "pop",
+        "value": "0.45s ease-glass; from translateY(-6px) scale(0.98) blur(4px)",
+        "purpose": "Dialogs and sheet menu."
+      },
+      {
+        "name": "drift",
+        "value": "28s ease-in-out infinite alternate; scale 1 to 1.045",
+        "purpose": "Backdrop house photograph."
+      },
+      {
+        "name": "pointer-light",
+        "value": "260px radial highlight, opacity 0.4s",
+        "purpose": "Light follows the pointer on glass (hover-capable only)."
+      },
+      {
+        "name": "press",
+        "value": "scale(0.97), 0.18s",
+        "purpose": "Button active state."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "all durations 0.001ms; drift off",
+        "purpose": "Everything resolves instantly."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "wrap",
+        "value": "700px"
+      },
+      {
+        "name": "hero-split",
+        "value": "860px"
+      },
+      {
+        "name": "wide",
+        "value": "900px"
+      },
+      {
+        "name": "nav-links",
+        "value": "960px"
+      },
+      {
+        "name": "grid-3",
+        "value": "1000px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Solid ink pill; every primary action.",
+      "html": "<button class=\"ds-btn-primary\">Open the studio <span aria-hidden=\"true\">&rarr;</span></button>",
+      "css": ":host{--ink:#0F1420;--ink-2:#34404F;--accent:#1C5A8C;--ok:#1F7A4C;--err:#B42318;--rim:rgba(255,255,255,0.58);--ease:cubic-bezier(0.22,1,0.36,1);font-family:Onest,ui-sans-serif,system-ui,sans-serif;} .ds-btn-primary{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 20px;border-radius:999px;border:0;background:var(--ink);color:#fff;font:600 15px Onest,ui-sans-serif,sans-serif;box-shadow:0 6px 18px rgba(15,20,32,0.25);cursor:pointer;transition:transform .18s var(--ease),background-color .2s var(--ease);} .ds-btn-primary:hover{background:#1E2738;} .ds-btn-primary:focus-visible{outline:2px solid var(--accent);outline-offset:3px;} .ds-btn-primary:active{transform:scale(0.97);}"
+    },
+    {
+      "name": "Glass Button",
+      "kind": "button",
+      "refersTo": "button-glass",
+      "description": "Translucent pill for secondary actions over imagery.",
+      "html": "<div class=\"ds-bg\"><button class=\"ds-btn-glass\">Follow one brief</button></div>",
+      "css": ":host{--ink:#0F1420;--ink-2:#34404F;--accent:#1C5A8C;--ok:#1F7A4C;--err:#B42318;--rim:rgba(255,255,255,0.58);--ease:cubic-bezier(0.22,1,0.36,1);font-family:Onest,ui-sans-serif,system-ui,sans-serif;} .ds-bg{padding:24px;background:linear-gradient(135deg,#9FB6C9,#D8C7AE);} .ds-btn-glass{min-height:44px;padding:0 20px;border-radius:999px;background:rgba(255,255,255,0.55);color:var(--ink);-webkit-backdrop-filter:blur(14px) saturate(1.5);backdrop-filter:blur(14px) saturate(1.5);border:1px solid var(--rim);box-shadow:inset 0 1px 0 rgba(255,255,255,0.8);font:600 15px Onest,ui-sans-serif,sans-serif;cursor:pointer;transition:transform .18s var(--ease),background-color .2s var(--ease);} .ds-btn-glass:hover{background:rgba(255,255,255,0.75);} .ds-btn-glass:focus-visible{outline:2px solid var(--accent);outline-offset:3px;} .ds-btn-glass:active{transform:scale(0.97);}"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Near-white field with a blue focus halo.",
+      "html": "<label class=\"ds-field\"><span>Email</span><input class=\"ds-input\" placeholder=\"you@example.com\"></label>",
+      "css": ":host{--ink:#0F1420;--ink-2:#34404F;--accent:#1C5A8C;--ok:#1F7A4C;--err:#B42318;--rim:rgba(255,255,255,0.58);--ease:cubic-bezier(0.22,1,0.36,1);font-family:Onest,ui-sans-serif,system-ui,sans-serif;} .ds-field{display:grid;gap:7px;max-width:320px;} .ds-field span{font-size:12.5px;font-weight:600;color:var(--ink);} .ds-input{min-height:44px;padding:0 14px;border-radius:14px;border:1px solid rgba(15,20,32,0.16);background:rgba(255,255,255,0.8);color:var(--ink);font:400 15px Onest,sans-serif;transition:border-color .2s,box-shadow .2s;} .ds-input:hover{border-color:#7C8696;} .ds-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(28,90,140,0.12);}"
+    },
+    {
+      "name": "Glass Nav",
+      "kind": "nav",
+      "refersTo": "glass-panel-frost",
+      "description": "Floating frost pill with the arch mark (it builds itself once per visit), pill links and the account control.",
+      "html": "<div class=\"ds-bg\"><nav class=\"ds-nav\"><a class=\"ds-brand\" href=\"#\"><svg width=\"26\" height=\"26\" viewBox=\"0 0 32 32\" aria-hidden=\"true\"><rect x=\"1\" y=\"1\" width=\"30\" height=\"30\" rx=\"8\" fill=\"#0F1420\"/><path d=\"M10 25V7.5h6.5a5.75 5.75 0 0 1 0 11.5H14\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.2\" stroke-linecap=\"square\"/><path d=\"M14 19a3.6 3.6 0 0 0-3.6-3.6\" fill=\"none\" stroke=\"#fff\" stroke-width=\"1\" opacity=\"0.75\"/></svg><b>Keystone</b><span>AI</span></a><a class=\"ds-link\" aria-current=\"page\" href=\"#\">How it works</a><a class=\"ds-link\" href=\"#\">Pricing</a><a class=\"ds-link\" href=\"#\">FAQ</a></nav></div>",
+      "css": ":host{--ink:#0F1420;--ink-2:#34404F;--accent:#1C5A8C;--ok:#1F7A4C;--err:#B42318;--rim:rgba(255,255,255,0.58);--ease:cubic-bezier(0.22,1,0.36,1);font-family:Onest,ui-sans-serif,system-ui,sans-serif;} .ds-bg{padding:16px;background:linear-gradient(135deg,#9FB6C9,#D8C7AE);} .ds-nav{display:flex;align-items:center;gap:6px;padding:7px 7px 7px 18px;border-radius:999px;background:rgba(255,255,255,0.62);-webkit-backdrop-filter:blur(18px) saturate(1.6);backdrop-filter:blur(18px) saturate(1.6);border:1px solid var(--rim);box-shadow:inset 0 1px 0 rgba(255,255,255,0.85),0 10px 30px rgba(15,20,32,0.14);color:var(--ink);} .ds-brand{display:inline-flex;align-items:center;gap:9px;margin-right:auto;font-size:17px;letter-spacing:-0.02em;color:inherit;text-decoration:none;} .ds-brand b{font-weight:800;} .ds-brand span{font-weight:400;color:var(--ink-2);} .ds-link{padding:8px 12px;border-radius:999px;font-size:14px;font-weight:500;color:inherit;text-decoration:none;transition:background-color .2s var(--ease);} .ds-link:hover{background:rgba(255,255,255,0.55);} .ds-link[aria-current=\"page\"]{background:rgba(15,20,32,0.08);} .ds-link:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}"
+    },
+    {
+      "name": "Tag",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Small pill on an ink wash; live variant carries a green dot, passkey variant is solid ink. Set in Onest (the shipped tags still use mono; see DESIGN.md).",
+      "html": "<span class=\"ds-tag ds-live\">Free</span> <span class=\"ds-tag ds-key\">Passkey</span> <span class=\"ds-tag ds-soon\">Soon</span>",
+      "css": ":host{--ink:#0F1420;--ink-2:#34404F;--accent:#1C5A8C;--ok:#1F7A4C;--err:#B42318;--rim:rgba(255,255,255,0.58);--ease:cubic-bezier(0.22,1,0.36,1);font-family:Onest,ui-sans-serif,system-ui,sans-serif;} .ds-tag{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:999px;font:600 12px Onest,sans-serif;background:rgba(15,20,32,0.07);color:var(--ink);} .ds-live::before{content:\"\";width:7px;height:7px;border-radius:50%;background:var(--ok);} .ds-key{background:var(--ink);color:#fff;} .ds-soon{background:rgba(28,90,140,0.12);color:#174B75;}"
+    },
+    {
+      "name": "Segmented Control",
+      "kind": "chip",
+      "refersTo": "segmented-selected",
+      "description": "Pill group; the selected segment is solid ink.",
+      "html": "<div class=\"ds-seg\" role=\"tablist\"><button role=\"tab\" aria-selected=\"true\">I have a passkey</button><button role=\"tab\" aria-selected=\"false\">Request one</button></div>",
+      "css": ":host{--ink:#0F1420;--ink-2:#34404F;--accent:#1C5A8C;--ok:#1F7A4C;--err:#B42318;--rim:rgba(255,255,255,0.58);--ease:cubic-bezier(0.22,1,0.36,1);font-family:Onest,ui-sans-serif,system-ui,sans-serif;} .ds-seg{display:inline-flex;padding:3px;gap:2px;border-radius:999px;background:rgba(255,255,255,0.62);border:1px solid rgba(15,20,32,0.12);} .ds-seg button{padding:6px 12px;border:0;border-radius:999px;background:none;font:600 12.5px Onest,sans-serif;color:var(--ink);cursor:pointer;transition:background-color .25s var(--ease),color .25s var(--ease);} .ds-seg button:hover{background:rgba(255,255,255,0.8);} .ds-seg button[aria-selected=\"true\"]{background:var(--ink);color:#fff;} .ds-seg button:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}"
+    },
+    {
+      "name": "Glass Panel (three levels)",
+      "kind": "card",
+      "refersTo": "glass-panel-frost",
+      "description": "Clear, frost and deep over imagery, each with its text rule.",
+      "html": "<div class=\"ds-bg\"><div class=\"ds-gl ds-clear\"><b>Clear</b><p>Ink text only.</p></div><div class=\"ds-gl\"><b>Frost</b><p class=\"ds-sec\">Secondary text allowed.</p></div><div class=\"ds-gl ds-deep\"><b>Deep</b><p>White text only.</p></div></div>",
+      "css": ":host{--ink:#0F1420;--ink-2:#34404F;--accent:#1C5A8C;--ok:#1F7A4C;--err:#B42318;--rim:rgba(255,255,255,0.58);--ease:cubic-bezier(0.22,1,0.36,1);font-family:Onest,ui-sans-serif,system-ui,sans-serif;} .ds-bg{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:24px;background:linear-gradient(135deg,#6F8FA8,#D8C7AE 60%,#8A7A66);} .ds-gl{padding:22px;border-radius:24px;background:rgba(255,255,255,0.62);-webkit-backdrop-filter:blur(18px) saturate(1.6);backdrop-filter:blur(18px) saturate(1.6);border:1px solid var(--rim);box-shadow:inset 0 1px 0 rgba(255,255,255,0.85),inset 0 -1px 0 rgba(255,255,255,0.18),0 10px 30px rgba(15,20,32,0.14);color:var(--ink);transition:transform .35s var(--ease);} .ds-gl:hover{transform:translateY(-3px);} .ds-gl p{margin:6px 0 0;font-size:14px;} .ds-sec{color:var(--ink-2);} .ds-clear{background:rgba(255,255,255,0.5);-webkit-backdrop-filter:blur(14px) saturate(1.5);backdrop-filter:blur(14px) saturate(1.5);} .ds-deep{background:rgba(15,20,32,0.64);color:#F7F8FA;border-color:rgba(255,255,255,0.2);box-shadow:inset 0 1px 0 rgba(255,255,255,0.22),0 14px 36px rgba(15,20,32,0.3);}"
+    },
+    {
+      "name": "Live Drawing Panel",
+      "kind": "custom",
+      "refersTo": "drawing-sheet",
+      "description": "Clear glass holding a brief line, the white drawing sheet and a draw-progress bar.",
+      "html": "<div class=\"ds-bg\"><figure class=\"ds-live\"><p class=\"ds-brief\">3 bed, 2 story, 2,400 sq ft, garage</p><div class=\"ds-sheet\"><svg viewBox=\"0 0 240 110\" aria-hidden=\"true\"><path d=\"M10 10h220v90H10zM90 10v55M90 65h60M150 10v90\" fill=\"none\" stroke=\"#0F1420\" stroke-width=\"3\"/></svg></div><div class=\"ds-prog\"><i></i></div><p class=\"ds-beat\"><span></span>Drawing…</p></figure></div>",
+      "css": ":host{--ink:#0F1420;--ink-2:#34404F;--accent:#1C5A8C;--ok:#1F7A4C;--err:#B42318;--rim:rgba(255,255,255,0.58);--ease:cubic-bezier(0.22,1,0.36,1);font-family:Onest,ui-sans-serif,system-ui,sans-serif;} .ds-bg{padding:24px;background:linear-gradient(135deg,#9FB6C9,#D8C7AE);} .ds-live{margin:0;padding:12px;border-radius:30px;display:grid;gap:10px;background:rgba(255,255,255,0.5);-webkit-backdrop-filter:blur(14px) saturate(1.5);backdrop-filter:blur(14px) saturate(1.5);border:1px solid var(--rim);box-shadow:inset 0 1px 0 rgba(255,255,255,0.85),0 10px 30px rgba(15,20,32,0.14);color:var(--ink);} .ds-brief{margin:0;padding:2px 4px;font:500 14px \"JetBrains Mono\",ui-monospace,monospace;} .ds-sheet{background:#fff;border-radius:18px;padding:12px;box-shadow:0 1px 0 rgba(255,255,255,0.6),0 12px 30px rgba(15,20,32,0.12);} .ds-sheet svg{display:block;width:100%;} .ds-prog{height:3px;border-radius:3px;background:rgba(15,20,32,0.1);overflow:hidden;} .ds-prog i{display:block;height:100%;width:62%;background:var(--ink);} .ds-beat{margin:0;display:flex;align-items:center;gap:8px;font:500 12px \"JetBrains Mono\",ui-monospace,monospace;} .ds-beat span{width:8px;height:8px;border-radius:50%;background:var(--accent);}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Plan on the Window",
+    "overview": "Every page is a pane of slightly frosted glass laid over a photograph of the house, and the drawing is the thing you look at through it. The house image is the backdrop, never the subject; the engine's plan is the headline, drawn live, on white paper, inside the glass. The interface is calm, pale, and quiet so that ink linework carries the page.\n\nDensity is moderate: rounded glass panels (24 to 30px) float over the scene with 12 to 16px gutters, headings are heavy and tight-tracked Onest, and all primary actions are solid ink pills. Colour is almost absent. Ink and a cool slate carry text; Keystone Blue appears only where something is focused, linked, or in progress; green is a single live dot. Motion is slow and physical: panels settle in once from a soft blur, the backdrop drifts over 28 seconds, light follows the pointer across glass, and the plan draws itself stroke by stroke.\n\nThe system rejects a stock-photo hero with feature cards, drawings placed on glass or tinted grounds, and chrome that competes with the linework.",
+    "keyCharacteristics": [
+      "The exterior house photograph sits behind every page as a fixed, slowly drifting scene; subpages blur it (10px) for long reading.",
+      "Three glass tint levels with fixed text rules, and never more than three stacked.",
+      "Drawings always sit on white paper inside the glass.",
+      "Ink pill buttons for primary actions; translucent glass pills for secondary.",
+      "One sans family (Onest); JetBrains Mono is reserved for measurements, briefs and code-like data.",
+      "The replayable plan-draw sequence is the signature interaction, carried from the hero into the scroll story and the studio."
+    ],
+    "rules": [
+      {
+        "name": "The Ink Carries Action Rule",
+        "body": "Primary actions are solid ink, not blue. Keystone Blue marks focus, links and progress; if a screen shows more than a few touches of blue, something is misusing it.",
+        "section": "colors"
+      },
+      {
+        "name": "The Green Is a Dot Rule",
+        "body": "Live Green appears as a dot, an icon tint or one short confirmation line. It never fills a panel or button.",
+        "section": "colors"
+      },
+      {
+        "name": "The Paper Ground Rule",
+        "body": "Drawings sit on white paper, never on glass, tint or a dark ground. The single cited exception is the studio's Rendered view, which keeps the engine's slate presentation ground because that is what its PNG export produces.",
+        "section": "colors"
+      },
+      {
+        "name": "The Mono Is Data Rule",
+        "body": "JetBrains Mono sets measurements, briefs and code-like data, and nothing else. It is never a label style: no uppercase tracked mono captions, no mono section markers, no mono tags as decoration.",
+        "section": "typography"
+      },
+      {
+        "name": "The Headline Stands Alone Rule",
+        "body": "No kicker, eyebrow or small caption sits above a heading. A section opens with its heading, inside its glass head panel.",
+        "section": "typography"
+      },
+      {
+        "name": "The Figures in Prose Rule",
+        "body": "Numbers are stated in sentences and captions (score, estimate range, engine facts), not blown up into big-number stat tiles.",
+        "section": "typography"
+      },
+      {
+        "name": "The Glass Over Imagery Rule",
+        "body": "Glass sits only over the house imagery, at most three layers stacked, and only the outermost layer casts a drop shadow.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Tint Floor Rule",
+        "body": "Clear never drops below 50% white, frost below 62%, deep below 64% ink, and each level's text rule holds: clear takes ink only, frost allows Cool Slate, deep takes white only.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Only the House Rule",
+        "body": "While the studio is open, only the house photograph sits under its overlay; the page's own panels are hidden, not blurred behind it.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** put every drawing on white paper (#FFFFFF) inside the glass; the studio's Rendered view on Rendered Slate (#535F64) is the only exception.",
+      "**Do** choose the glass level by the text it must carry: clear for ink only, frost when Cool Slate is needed, deep for white text.",
+      "**Do** give every clickable element hover, focus-visible (2px Keystone Blue, 3px offset) and active states.",
+      "**Do** open each section with its heading inside a glass head panel, followed by one lead line.",
+      "**Do** state figures in sentences and captions with tabular numerals.",
+      "**Do** size drawings to their own proportion and let the draw sequence replay.",
+      "**Do** resolve all motion instantly under reduced motion and all glass to near-opaque under reduced transparency."
+    ],
+    "donts": [
+      "**Don't** place a drawing on glass, a tinted panel or a dark ground.",
+      "**Don't** put a kicker, eyebrow or small caption above a heading.",
+      "**Don't** use JetBrains Mono as a label style; it is for measurements, briefs and code-like data only.",
+      "**Don't** turn numbers into big-number stat tiles.",
+      "**Don't** let anything but the house photograph sit under the studio overlay.",
+      "**Don't** lighten glass below its tint floor (clear 50% white, frost 62%, deep 64% ink) or put Cool Slate text on clear or anything but white on deep.",
+      "**Don't** use Keystone Blue as a button fill or large surface, or Live Green as anything bigger than a dot or a line of text.",
+      "**Don't** stack more than three glass layers or give nested glass its own drop shadow."
+    ]
+  }
+}

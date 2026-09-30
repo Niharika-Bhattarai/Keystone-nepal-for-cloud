@@ -1,0 +1,939 @@
+[
+  {
+    "id": "bylaws-resource-2023",
+    "title": "MoFAGA/PLGSP — Building By-laws and Building Permit System (June 2023)",
+    "category": "guidance",
+    "status": "reference_requires_local_instrument",
+    "original": "Design Files/Resource_Book_on_Building_Bylaws and Building Permit System in_Nepal.pdf",
+    "sha256": "728222ff85d0b560215f749698b69250cd5394c6f24f02b8a55b64f659e61a97",
+    "sections": 237,
+    "characters": 359503,
+    "flagged_sections": [
+      {
+        "locator": "page-0002",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0004",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0005",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0006",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0012",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0013",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0047",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0048",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0053",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0058",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0084",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0085",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0086",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0090",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0121",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0123",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0124",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0129",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0180",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0186",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0229",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "nbc105-2025",
+    "title": "NBC 105:2025 — Seismic design of buildings in Nepal",
+    "category": "code",
+    "status": "project_adoption_review_required",
+    "original": "Design Files/NBC 2025.pdf",
+    "sha256": "2ecc22003a3a295ac86e313dc024d8c5d8a92aff679eb7a921504b4c5d1d0550",
+    "sections": 137,
+    "characters": 180536,
+    "flagged_sections": [
+      {
+        "locator": "page-0001",
+        "flags": [
+          "ocr_unverified",
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0002",
+        "flags": [
+          "ocr_unverified",
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0003",
+        "flags": [
+          "ocr_unverified",
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0004",
+        "flags": [
+          "ocr_unverified",
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0005",
+        "flags": [
+          "ocr_unverified",
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0006",
+        "flags": [
+          "ocr_unverified",
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0007",
+        "flags": [
+          "ocr_unverified",
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0008",
+        "flags": [
+          "ocr_unverified",
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0009",
+        "flags": [
+          "ocr_unverified",
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0010",
+        "flags": [
+          "ocr_unverified",
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0011",
+        "flags": [
+          "ocr_unverified",
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0012",
+        "flags": [
+          "ocr_unverified",
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0013",
+        "flags": [
+          "ocr_unverified",
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0047",
+        "flags": [
+          "ocr_unverified",
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0137",
+        "flags": [
+          "ocr_unverified",
+          "sparse_text_or_figure_page"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "nbc201-1994",
+    "title": "NBC 201:1994 — RC buildings with masonry infill",
+    "category": "code",
+    "status": "historical_scope_review",
+    "original": "Design Files/1679824311_10.pdf",
+    "sha256": "25a110201134e8c8c8b6c2c26cf1064a8e9c89e18542896f26866eeb9fd7e824",
+    "sections": 48,
+    "characters": 72107,
+    "flagged_sections": [
+      {
+        "locator": "page-0002",
+        "flags": [
+          "possible_legacy_font"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "nbc202-2015",
+    "title": "NBC 202:2015 — Load bearing masonry",
+    "category": "code",
+    "status": "different_structural_system",
+    "original": "Design Files/1679824354_21.pdf",
+    "sha256": "232695aec77589a76742f9d6d9c4b52d2b4223390ce0d68efc8891af3ff57e34",
+    "sections": 48,
+    "characters": 47347,
+    "flagged_sections": [
+      {
+        "locator": "page-0001",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0011",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0021",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0026",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0028",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0030",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0040",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "nbc204-2015",
+    "title": "NBC 204:2015 — Earthen buildings",
+    "category": "code",
+    "status": "different_structural_system",
+    "original": "Design Files/1679824428_31.pdf",
+    "sha256": "6c5e2f482624bf3e9f7d2686ba2bb3672f00602032d4fae4236a32f3904ee8c6",
+    "sections": 80,
+    "characters": 107118,
+    "flagged_sections": [
+      {
+        "locator": "page-0001",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0021",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0031",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0046",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0070",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "nbc208-2003",
+    "title": "NBC 208:2003 — Sanitary and plumbing",
+    "category": "code",
+    "status": "adoption_review_required",
+    "original": "Design Files/1679824552_72.pdf",
+    "sha256": "d39a683b615e6d5dbf497e9fd1671770bae14992b10b00d9c21abfbc2b16a946",
+    "sections": 39,
+    "characters": 50962,
+    "flagged_sections": [
+      {
+        "locator": "page-0002",
+        "flags": [
+          "possible_legacy_font"
+        ]
+      },
+      {
+        "locator": "page-0014",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0015",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0016",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0017",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0033",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0034",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0039",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "nbc105-commentary-draft",
+    "title": "NBC 105:2019 commentary — DRAFT V1.2",
+    "category": "commentary",
+    "status": "draft_not_current_code",
+    "original": "Design Files/1679826147_18.pdf",
+    "sha256": "88e035ad7b398d9d600848b176a2b35aa2e9d61a09f7f05943c88f0688009a8e",
+    "sections": 58,
+    "characters": 93969,
+    "flagged_sections": []
+  },
+  {
+    "id": "nbc203-2015",
+    "title": "NBC 203:2015 — Low strength masonry",
+    "category": "code",
+    "status": "different_structural_system",
+    "original": "Design Files/1679826255_5.pdf",
+    "sha256": "83e2fea092aa73e6cf57103e957fe5c3e6dfaf7786e197c5ca3fe432a6bd8ae4",
+    "sections": 86,
+    "characters": 92702,
+    "flagged_sections": [
+      {
+        "locator": "page-0001",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0055",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0059",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0065",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0067",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "nbc205-2024",
+    "title": "NBC 205:2024 — Low rise RC without masonry infill",
+    "category": "code",
+    "status": "eligibility_and_adoption_review",
+    "original": "Design Files/NBC_205_READY-TO-USE_DETAILING_GUIDELINE_FOR-signed.pdf",
+    "sha256": "5285079da891a8b1082540978ef115776ac1f300d1cf26a450e94158280ff8c0",
+    "sections": 127,
+    "characters": 133737,
+    "flagged_sections": [
+      {
+        "locator": "page-0001",
+        "flags": [
+          "possible_legacy_font"
+        ]
+      },
+      {
+        "locator": "page-0021",
+        "flags": [
+          "replacement_characters"
+        ]
+      },
+      {
+        "locator": "page-0113",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0114",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0126",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0127",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "nbc206-2024",
+    "title": "NBC 206:2024 — Architectural design requirements",
+    "category": "code",
+    "status": "adoption_review_required",
+    "original": "Design Files/NBC_206_ARCHITECTURAL_DESIGN_REQUIREMENTS-signed.pdf",
+    "sha256": "8a05ae932cf34394cf082dde0d16abd18044e030c94c89702a305f13fd2e7189",
+    "sections": 37,
+    "characters": 54482,
+    "flagged_sections": [
+      {
+        "locator": "page-0001",
+        "flags": [
+          "possible_legacy_font"
+        ]
+      },
+      {
+        "locator": "page-0022",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0036",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0037",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "vastu-pathi",
+    "title": "A S Sethu Pathi — 280+ 2BHK plans (2019)",
+    "category": "vastu",
+    "status": "illustrative_plan_collection",
+    "original": "Design Files/Vastu/First, 1_ 280+ Various Sizes of 2BHK House Plans As Per Vastu Shastra{A S SETHU PATHI}(2019, A S SETHU PATHI){114366883} libgen.li.epub",
+    "sha256": "8df7bf4e9645be21e81428af328419794372822e1776a8c640cb64fa663948a2",
+    "sections": 13,
+    "characters": 32820,
+    "flagged_sections": [
+      {
+        "locator": "section-0005",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0006",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0007",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0008",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0009",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0010",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0011",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0013",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "vastu-jain",
+    "title": "Nidhi Jain and Ashish Jain — Vastu Shastra (2017)",
+    "category": "vastu",
+    "status": "author_tradition",
+    "original": "Design Files/Vastu/Nidhi Jain, Ashish Jain - Vastu Shastra_ for a Healthy, Prosperous and Happy life (2017, Notion Press) - libgen.li.epub",
+    "sha256": "d46d3bce2b7911c768fcdb6169cec00da7ceb95faf291e5539665818d042a6c7",
+    "sections": 41,
+    "characters": 212927,
+    "flagged_sections": [
+      {
+        "locator": "section-0001",
+        "flags": [
+          "images_require_visual_review",
+          "sparse_text"
+        ]
+      },
+      {
+        "locator": "section-0002",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0003",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0006",
+        "flags": [
+          "images_require_visual_review",
+          "sparse_text"
+        ]
+      },
+      {
+        "locator": "section-0007",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0008",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0009",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0010",
+        "flags": [
+          "images_require_visual_review",
+          "sparse_text"
+        ]
+      },
+      {
+        "locator": "section-0011",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0013",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0014",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0015",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0027",
+        "flags": [
+          "sparse_text"
+        ]
+      },
+      {
+        "locator": "section-0028",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0030",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0032",
+        "flags": [
+          "sparse_text"
+        ]
+      },
+      {
+        "locator": "section-0033",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0034",
+        "flags": [
+          "sparse_text"
+        ]
+      },
+      {
+        "locator": "section-0035",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0039",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0041",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "vastu-svoboda",
+    "title": "Robert E. Svoboda — Vastu: Breathing Life into Space (2013)",
+    "category": "vastu",
+    "status": "author_tradition",
+    "original": "Design Files/Vastu/Robert E. Svoboda - Vāstu_ Breathing Life into Space (2013, Namarupa Inc) - libgen.li.epub",
+    "sha256": "6006db52aa223bb54ca9641522bc8bbcf8b257bfa4f6cd2bece5336310ff64eb",
+    "sections": 19,
+    "characters": 544013,
+    "flagged_sections": [
+      {
+        "locator": "section-0001",
+        "flags": [
+          "images_require_visual_review",
+          "sparse_text"
+        ]
+      },
+      {
+        "locator": "section-0002",
+        "flags": [
+          "images_require_visual_review",
+          "sparse_text"
+        ]
+      },
+      {
+        "locator": "section-0004",
+        "flags": [
+          "images_require_visual_review",
+          "sparse_text"
+        ]
+      },
+      {
+        "locator": "section-0007",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0009",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0010",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0011",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0012",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0013",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0014",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0015",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0016",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0017",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0018",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      },
+      {
+        "locator": "section-0019",
+        "flags": [
+          "images_require_visual_review"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "vastu-chakrabarti",
+    "title": "Vibhuti Chakrabarti — Indian Architectural Theory and Practice (1998)",
+    "category": "vastu",
+    "status": "comparative_theory",
+    "original": "Design Files/Vastu/Vibhuti Chakrabarti - Indian Architectural Theory and Practice_ Contemporary Uses of Vastu Vidya (1998, Curzon Press) - libgen.li.pdf",
+    "sha256": "1fed01b04ddcd621624e31891968c8712cdf812699fff2267761288af6522245",
+    "sections": 229,
+    "characters": 480737,
+    "flagged_sections": [
+      {
+        "locator": "page-0001",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0002",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0003",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0031",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0074",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0109",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      },
+      {
+        "locator": "page-0211",
+        "flags": [
+          "sparse_text_or_figure_page"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "architecture-kathpalia",
+    "title": "Architectural Design 77(6), 2007 — architecture practice profiles",
+    "category": "architecture",
+    "status": "not_vastu_rulebook",
+    "original": "Design Files/Vastu/[Architectural Design 2007-nov vol. 77 iss. 6] Vastu Shilpa Consultants (Rajeev Kathpalia)(2007 November)[10.1002_ad.562]{6930522} libgen.li.pdf",
+    "sha256": "93091fe60fb9efdddf7a4fc9bca87d927e6ac28c9cc4cc8c34bafeb13490b0f7",
+    "sections": 8,
+    "characters": 15653,
+    "flagged_sections": []
+  }
+]

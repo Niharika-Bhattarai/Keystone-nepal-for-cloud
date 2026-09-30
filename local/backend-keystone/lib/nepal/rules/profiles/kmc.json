@@ -1,0 +1,14 @@
+{
+  "id": "kmc-residential-concept-2026-09-30",
+  "country": "NP",
+  "municipality": "Kathmandu Metropolitan City",
+  "status": "municipal_adoption_review_required",
+  "sourceReferences": [
+    {"title":"Kathmandu eBPS reference documents, including 2080 standard and 2082/2083 amendments","url":"https://ebps.kathmandu.gov.np/Hom/ReferenceDoc","retrieved":"2026-09-30","reviewStatus":"link_verified_clauses_not_adopted"},
+    {"title":"KMC 2080 standard, first revision 2082","url":"https://ebps.kathmandu.gov.np/UploadFiles/mapdanda2080Rev1.pdf","retrieved":"2026-09-30","sha256":"f9041b08643dba27f1af0b9d07e23b9260ed9c98c69d2eb323235e8bbf1e13a8","reviewStatus":"local_pdf_read_selected_pages_not_full_adoption"},
+    {"title":"KMC 2080 standard, 2083 amendment","url":"https://ebps.kathmandu.gov.np/UploadFiles/2.pdf","retrieved":"2026-09-30","sha256":"c81fa850fc6ba1f1d15688d12dac2a0d5e8363ed674bbac6c4ab46cc372032f3","reviewStatus":"visual_review_selected_pages_not_full_adoption"},
+    {"title":"NBC 206:2024 Architectural Design Requirements","url":"https://ebps.kathmandu.gov.np/UploadFiles/NBC206Amended.pdf","retrieved":"2026-09-30","reviewStatus":"source_verified_scope_requires_architect"}
+  ],
+  "parameters": {"maximumCoverageRatio":null,"maximumFAR":null,"setbacksMm":null,"farTreatment":null,"coverageTreatment":null,"permittedOpenings":null},
+  "manualReview": ["parcel land-use zoning and access-road classification","applicable 2080/2082/2083 bylaw clauses and precedence","coverage and FAR exclusions","road reserve and setbacks by edge","adjoining wall and legal openings","engineer seismic design route and site class"]
+}
