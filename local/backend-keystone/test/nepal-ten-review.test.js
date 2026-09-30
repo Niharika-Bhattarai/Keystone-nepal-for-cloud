@@ -109,13 +109,22 @@ test('owner bedroom floor moves its attached bath off the ground puja below (V06
       assert.ok(replan.proposed.excludedZoneSqM<=replan.original.excludedZoneSqM);
     }
   }
-  // West core, bedrooms south: leaving the NE would put the bath over the ground
-  // puja, so the NE toilet stays and is reported rather than traded for a V06 conflict.
-  const kept=candidates.find(c=>c.id==='rectangle-west-bedrooms-south');
-  assert.equal(kept.levels[1].rooms.bathReplan.status,'rejected_no_improvement');
-  assert.deepEqual(kept.validation.blockers.filter(b=>b.code==='TOILET_IN_NE_OR_CENTER')
-    .map(b=>[b.ruleId,b.levelId,b.excludedZoneSqM,b.excludedZoneShare]),[['V13','first',3.9,1]]);
-  assert.equal(kept.validation.toiletZones.facts['bathrooms.avoid_ne_center'],false);
+  // West core: an outer-wall bath cannot leave the NE without landing over the ground
+  // puja, so the floor is reworked with the bath against the family foyer and the
+  // alcove as the bedroom's entry vestibule (owner instruction 2026-09-30).
+  for(const id of ['rectangle-west-living-first','rectangle-west-bedrooms-south']){
+    const c=candidates.find(x=>x.id===id),first=c.levels[1].rooms;
+    assert.deepEqual([first.bathReplan.status,first.bathReplan.proposed.side],['applied','inner'],id);
+    const [primary,bath,alcove]=['primaryBedroom','bathroom','primaryAlcove'].map(t=>first.rooms.find(r=>r.type===t));
+    assert.deepEqual([alcove.doorReservation.from,primary.doorReservation.from,bath.doorReservation.from],
+      ['unit-corridor','primary-alcove','primary-bedroom'],id);
+    assert.equal(primary.doorReservation.status,'open_portal_reserved_no_door');
+    assert.ok(primary.clearAreaSqM>12,id);
+  }
+  for(const c of candidates){
+    assert.equal(c.validation.toiletZones.facts['bathrooms.avoid_ne_center'],true,c.id);
+    assert.ok(!c.validation.blockers.some(b=>b.code==='TOILET_IN_NE_OR_CENTER'),c.id);
+  }
 });
 
 test('toilet zone facts measure each bathroom against NE/centre and stay unknown without bathrooms',()=>{

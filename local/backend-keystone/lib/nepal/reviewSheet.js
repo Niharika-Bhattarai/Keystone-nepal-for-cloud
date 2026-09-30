@@ -114,7 +114,7 @@ function planSvg(candidate,level,brief){
       const crossings=roomGridCrossings(room,candidate.grid);
       const crossed=MAIN_GRID_ROOM_TYPES.has(room.type)&&
         (crossings.xAxesMm.length||crossings.yAxesMm.length);
-      svg+=txt(site,cx,cy+180,`${room.diningWithinKitchen?'KITCHEN + DINING':name[room.type]||room.type}${room.suggestedByPlanner?' *':''}${crossed?' ^':''}`,215,
+      svg+=txt(site,cx,cy+180,`${room.diningWithinKitchen?'KITCHEN + DINING':room.useIntent?.startsWith('bedroom_entry_vestibule')?'BEDROOM VESTIBULE':name[room.type]||room.type}${room.suggestedByPlanner?' *':''}${crossed?' ^':''}`,215,
         'text-anchor="middle" font-weight="700" fill="#24373b"');
       const clear=room.clearBox||room.box;
       svg+=txt(site,cx,cy-100,`${f(room.clearAreaSqM??room.areaSqM,1)} m² clear`,

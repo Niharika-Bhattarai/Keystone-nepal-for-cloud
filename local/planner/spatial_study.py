@@ -534,7 +534,8 @@ def add_balconies(candidate, levels):
                         'guard':balcony.boundary.difference(level['footprint'].boundary.buffer(.1)),
                         'replacedWindowAreaSqM':sum(w.get('provisionalClearAreaSqM',0) for w in replaced),
                         'proposedGlazingAreaSqM':width*2100/1e6,
-                        'boundary':'closable_glazed_opening_proposed',
+                        # Owner decision 2026-09-30: closable glazing, not a permanently open connection.
+                        'boundary':'closable_glazed_opening_owner_confirmed',
                         'status':'site_contained_projection_permission_and_support_unverified'})
                     break
                 if level['balconies']:

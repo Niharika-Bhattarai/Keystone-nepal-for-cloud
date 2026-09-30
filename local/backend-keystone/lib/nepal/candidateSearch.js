@@ -80,6 +80,7 @@ function coordinateOpenings(level,core,grid,site){
   for(const room of level.rooms.rooms){
     const neighbor=room.entryFrom==='living-room'?level.rooms.rooms.find(r=>r.type==='livingRoom'):
       room.entryFrom==='primary-bedroom'?level.rooms.rooms.find(r=>r.type==='primaryBedroom'):
+      room.entryFrom==='primary-alcove'?level.rooms.rooms.find(r=>r.type==='primaryAlcove'):
         room.entryFrom==='near-bedroom'?level.rooms.rooms.find(r=>r.type==='bedroom'):
         room.entryFrom==='kitchen'?level.rooms.rooms.find(r=>r.type==='kitchen'):
           room.entryFrom==='cross-hall'?level.rooms.crossHall:

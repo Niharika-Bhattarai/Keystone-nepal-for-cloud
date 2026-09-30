@@ -2,7 +2,7 @@
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const {frameGrid,MAX_PLANNING_BAY_SPAN_MM,PREFERRED_MIN_BAY_SPAN_MM}=require('../lib/nepal/frameGrid');
-const {roomGridCrossings}=require('../lib/nepal/validateNepalPlan');
+const {roomGridCrossings,MAIN_GRID_ROOM_TYPES}=require('../lib/nepal/validateNepalPlan');
 const {normalizeBrief}=require('../lib/nepal/normalizeBrief');
 const {searchConcepts}=require('../lib/nepal/candidateSearch');
 
@@ -33,8 +33,16 @@ test('reference owner plan reports rooms crossing bays instead of claiming four-
   assert.equal(result.candidates.length,3);
   for(const candidate of result.candidates){
     assert.ok(candidate.grid.maxAdjacentAxisSpanMm<=4267);
-    const exceptions=candidate.validation.blockers.filter(b=>b.code==='MAIN_ROOM_GRID_CELL_NOT_MET');
-    assert.ok(exceptions.length>0);
-    assert.ok(exceptions.flatMap(e=>e.rooms).some(r=>r.roomId.includes('primaryBedroom')));
+    // Every main room that an axis crosses is reported, and nothing else is.
+    const reported=candidate.validation.blockers.filter(b=>b.code==='MAIN_ROOM_GRID_CELL_NOT_MET')
+      .flatMap(e=>e.rooms.map(r=>r.roomId)).sort();
+    const measured=candidate.levels.flatMap(l=>(l.rooms?.rooms||[]).filter(r=>
+      MAIN_GRID_ROOM_TYPES.has(r.type)).filter(r=>{const c=roomGridCrossings(r,candidate.grid);
+      return c.xAxesMm.length||c.yAxesMm.length;}).map(r=>r.id)).sort();
+    assert.deepEqual(reported,measured,candidate.id);
   }
+  // The east-core plan's primary bedroom still spans two bays and says so.
+  const east=result.candidates.find(c=>c.id==='rectangle-east-living-first');
+  assert.ok(east.validation.blockers.some(b=>b.code==='MAIN_ROOM_GRID_CELL_NOT_MET'&&
+    b.rooms.some(r=>r.roomId.includes('primaryBedroom'))));
 });

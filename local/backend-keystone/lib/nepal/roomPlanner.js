@@ -108,12 +108,16 @@ function planCompactRental({level,footprint,core,bearingDegrees}){
 // The primary bedroom keeps at least 2,800 mm of its band width.
 const ATTACHED_BATH_DEFAULT={widthMm:1500,lengthMm:2600,end:'start'};
 const BATH_MIN_CLEAR_MM=1200,BATH_MIN_CLEAR_SQM=2.8,ALCOVE_MIN_CLEAR_MM=1200,ALCOVE_MIN_CLEAR_SQM=2.0;
-function attachedBathLayout({west,mainX1,mainX2,y0,y1,widthMm,lengthMm,end}){
-  const bathX1=west?mainX2-widthMm:mainX1,bathX2=west?mainX2:mainX1+widthMm;
+// side 'outer': bath and open alcove on the far exterior wall (default).
+// side 'inner': bath and alcove against the family foyer; the alcove becomes the
+// bedroom's entry vestibule (door from the foyer, open portal into the bedroom).
+function attachedBathLayout({west,mainX1,mainX2,y0,y1,widthMm,lengthMm,end,side='outer'}){
+  const atMaxX=west===(side==='outer');
+  const bathX1=atMaxX?mainX2-widthMm:mainX1,bathX2=atMaxX?mainX2:mainX1+widthMm;
   const [bathY1,bathY2]=end==='start'?[y0,y0+lengthMm]:[y1-lengthMm,y1];
   const [alcoveY1,alcoveY2]=end==='start'?[bathY2,y1]:[y0,bathY1];
-  return {bathBox:rect([bathX1,bathY1,bathX2,bathY2]),alcoveBox:rect([bathX1,alcoveY1,bathX2,alcoveY2]),
-    primaryBox:rect(west?[mainX1,y0,bathX1,y1]:[bathX2,y0,mainX2,y1])};
+  return {side,bathBox:rect([bathX1,bathY1,bathX2,bathY2]),alcoveBox:rect([bathX1,alcoveY1,bathX2,alcoveY2]),
+    primaryBox:rect(atMaxX?[mainX1,y0,bathX1,y1]:[bathX2,y0,mainX2,y1])};
 }
 function placeAttachedBath({west,mainX1,mainX2,y0,y1,slabs,bearingDegrees,pujaBoxesBelow}){
   const args={west,mainX1,mainX2,y0,y1};
@@ -125,20 +129,23 @@ function placeAttachedBath({west,mainX1,mainX2,y0,y1,slabs,bearingDegrees,pujaBo
   if(initialOverlap<0.01&&initialExcluded<0.01)return {...initial,replan:null};
   // Conservative clear sizes: the bath/alcove take the 229 mm exterior wall on
   // the outer face and the band end at y0 is treated as exterior as well.
-  const clear=(box,atStart)=>[box.x2-box.x1-EXTERIOR_WALL_MM-INTERIOR_WALL_MM/2,
+  const clear=(box,atStart,side)=>[box.x2-box.x1-(side==='outer'?EXTERIOR_WALL_MM+INTERIOR_WALL_MM/2:INTERIOR_WALL_MM),
     box.y2-box.y1-INTERIOR_WALL_MM/2-(atStart?EXTERIOR_WALL_MM:INTERIOR_WALL_MM/2)];
   const options=[];
-  for(const end of ['start','end'])for(const widthMm of [1500,1600,1800])
+  for(const side of ['outer','inner'])for(const end of ['start','end'])for(const widthMm of [1500,1600,1800])
     for(let lengthMm=2600;lengthMm>=2200;lengthMm-=50){
-      const layout=attachedBathLayout({...args,widthMm,lengthMm,end});
-      const [bw,bl]=clear(layout.bathBox,end==='start'),[aw,al]=clear(layout.alcoveBox,end!=='start');
+      // An inner bath needs the band end for its exterior (ventilation) wall.
+      if(side==='inner'&&end!=='start')continue;
+      const layout=attachedBathLayout({...args,widthMm,lengthMm,end,side});
+      const [bw,bl]=clear(layout.bathBox,end==='start',side),[aw,al]=clear(layout.alcoveBox,end!=='start',side);
       if(Math.min(bw,bl)<BATH_MIN_CLEAR_MM||bw*bl/1e6<BATH_MIN_CLEAR_SQM+0.05)continue;
       if(Math.min(aw,al)<ALCOVE_MIN_CLEAR_MM||aw*al/1e6<ALCOVE_MIN_CLEAR_SQM)continue;
       if(layout.primaryBox.x2-layout.primaryBox.x1<2800)continue;
       const finding=zones(layout.bathBox);
-      options.push({layout,end,widthMm,lengthMm,pujaOverlapSqM:pujaOverlap(layout.bathBox),
+      // Entering the bedroom through a vestibule is a larger change than resizing.
+      options.push({layout,side,end,widthMm,lengthMm,pujaOverlapSqM:pujaOverlap(layout.bathBox),
         excludedZoneSqM:excluded(layout.bathBox),preferredShare:finding.preferredShare,
-        change:Math.abs(widthMm-1500)+Math.abs(lengthMm-2600)+(end==='start'?0:1)});
+        change:Math.abs(widthMm-1500)+Math.abs(lengthMm-2600)+(end==='start'?0:1)+(side==='inner'?10000:0)});
     }
   options.sort((a,b)=>a.pujaOverlapSqM-b.pujaOverlapSqM||a.excludedZoneSqM-b.excludedZoneSqM||
     b.preferredShare-a.preferredShare||a.change-b.change);
@@ -155,7 +162,7 @@ function placeAttachedBath({west,mainX1,mainX2,y0,y1,slabs,bearingDegrees,pujaBo
     optionsTested:options.length,
     status:!best?'rejected_no_fitting_option':!improves?'rejected_no_improvement':
       best.pujaOverlapSqM>=0.01?'applied_still_over_puja':'applied',
-    ...(best?{proposed:{end:best.end,widthMm:best.widthMm,lengthMm:best.lengthMm,box:best.layout.bathBox,
+    ...(best?{proposed:{side:best.side,end:best.end,widthMm:best.widthMm,lengthMm:best.lengthMm,box:best.layout.bathBox,
       pujaOverlapSqM:round(best.pujaOverlapSqM),excludedZoneSqM:round(best.excludedZoneSqM),
       preferredShare:round(best.preferredShare)}}:{})};
   return replan.status.startsWith('applied')?{...best.layout,replan}:{...initial,replan};
@@ -175,8 +182,9 @@ function planOwnerBedroomFloor({level,footprint,core,bearingDegrees,pujaBoxesBel
   const coreAxis=west?b.x2-175:b.x1+175,
     outerAxis=west?slab.x2-175:slab.x1+175,
     bedroomSplit=Math.round((coreAxis+outerAxis)/2)+(west?175:-175);
-  const {primaryBox,bathBox,alcoveBox,replan:bathReplan}=placeAttachedBath({west,mainX1,mainX2,
+  const {primaryBox,bathBox,alcoveBox,side:bathSide,replan:bathReplan}=placeAttachedBath({west,mainX1,mainX2,
     y0,y1,slabs,bearingDegrees,pujaBoxesBelow});
+  const vestibule=bathSide==='inner';
   const bedroomA=rect(west?[near,y1+1000,bedroomSplit,y2]:
     [bedroomSplit,y1+1000,near,y2]);
   const bedroomB=rect(west?[bedroomSplit,y1+1000,far,y2]:
@@ -184,17 +192,19 @@ function planOwnerBedroomFloor({level,footprint,core,bearingDegrees,pujaBoxesBel
   const balcony={box:rect(b.x1===slab.x1?[b.x1,y1,b.x2,y2]:
     [b.x1,y1,b.x2,y2]),status:'open_first_floor_balcony_rail_and_drainage_unverified'};
   const items=[
-    ['primaryBedroom',primaryBox,'unit-corridor'],
+    ['primaryBedroom',primaryBox,vestibule?'primary-alcove':'unit-corridor'],
     ['bathroom',bathBox,'primary-bedroom'],
-    ['primaryAlcove',alcoveBox,'primary-bedroom'],
+    ['primaryAlcove',alcoveBox,vestibule?'unit-corridor':'primary-bedroom'],
     ['bedroom',bedroomA,'cross-hall'],
     ['bedroom',bedroomB,'cross-hall']];
   const rooms=items.map(([type,box,entryFrom],i)=>({
     id:`${level.id}-${type}-${i+1}`,levelId:level.id,type,box,
     areaSqM:areaSqM([box]),entryFrom,
     ...(type==='bathroom'?{attachedTo:`${level.id}-primaryBedroom-1`}:{}),
-    ...(type==='primaryAlcove'?{openConnection:true,suggestedByPlanner:true,
+    ...(type==='primaryAlcove'?vestibule?{suggestedByPlanner:true,
+      useIntent:'bedroom_entry_vestibule_with_door_from_family_foyer'}:{openConnection:true,suggestedByPlanner:true,
       useIntent:'open_bedroom_alcove_not_an_assumed_closet'}:{}),
+    ...(type==='primaryBedroom'&&vestibule?{openConnection:true}:{}),
     openingFace:west?'east':'west',openingStatus:'legal_exposure_unverified'}));
   const arrival=core.flights[0]?.arrivalLandings?.[0]?.box;
   const unitEntryDoor=arrival&&doorOnSharedEdge(
@@ -213,6 +223,7 @@ function planOwnerBedroomFloor({level,footprint,core,bearingDegrees,pujaBoxesBel
       room.apertureRuleSource='NBC 206:2024 PDF page 17, hilly-region normal residential';
     }
     const target=room.entryFrom==='primary-bedroom'?rooms[0].box:
+      room.entryFrom==='primary-alcove'?rooms[2].box:
       room.entryFrom==='cross-hall'?crossHall:corridor;
     const door=doorOnSharedEdge(room.box,target,{
       clearWidthMm:room.type==='bathroom'?750:room.openConnection?1200:900,

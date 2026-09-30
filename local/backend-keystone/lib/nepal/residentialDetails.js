@@ -3,6 +3,9 @@
 // Owner-supplied Nepal residential conventions. These are design intent, not
 // measured construction quantities or evidence that furniture/balconies fit.
 const KITCHEN_BALCONY_DEPTH_MM=[914,1219]; // 3–4 ft, rounded to integer mm
+// Owner decision 2026-09-30: the living-room balcony connection is closable glazing
+// (e.g. sliding glazed doors), not a permanently open opening.
+const LIVING_BALCONY_CONNECTION='closable_glazing_owner_confirmed_2026_09_30';
 
 function attachResidentialDetails(candidate,brief){
   const requestedBalconies=new Set(brief.buildingProgram.balconies||[]);
@@ -12,6 +15,8 @@ function attachResidentialDetails(candidate,brief){
       requestedBalcony:requestedBalconies.has(level.id),
       balconyStatus:requestedBalconies.has(level.id)?'requested_not_placed':'optional_not_placed',
       kitchenBalconyPreferredDepthMm:KITCHEN_BALCONY_DEPTH_MM,
+      livingBalconyConnection:level.rooms?.rooms.some(r=>r.type==='livingRoom')?
+        LIVING_BALCONY_CONNECTION:'not_applicable',
       bedroomBalcony:level.rooms?.rooms.some(r=>['bedroom','primaryBedroom','guestBedroom'].includes(r.type))?
         'optional_if_site_structure_and_daylight_permit':'not_applicable',
       tulsiMuth:level.id===uppermost?'preferred_on_topmost_safe_balcony_not_placed':'not_applicable',
@@ -50,4 +55,4 @@ function attachResidentialDetails(candidate,brief){
   return candidate;
 }
 
-module.exports={attachResidentialDetails,KITCHEN_BALCONY_DEPTH_MM};
+module.exports={LIVING_BALCONY_CONNECTION,attachResidentialDetails,KITCHEN_BALCONY_DEPTH_MM};

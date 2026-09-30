@@ -90,6 +90,9 @@ test('owner residential conventions are explicit design intent, and requested ba
     assert.equal(ground.residentialDetails.rainChajja.status,
       'geometric_projection_reserved_legal_structure_unverified');
     assert.deepEqual(ground.residentialDetails.kitchenBalconyPreferredDepthMm,[914,1219]);
+    assert.equal(ground.residentialDetails.livingBalconyConnection,'closable_glazing_owner_confirmed_2026_09_30');
+    assert.equal(first.residentialDetails.livingBalconyConnection,first.rooms.rooms.some(r=>r.type==='livingRoom')?
+      'closable_glazing_owner_confirmed_2026_09_30':'not_applicable');
     assert.equal(first.residentialDetails.bedroomBalcony,
       'optional_if_site_structure_and_daylight_permit');
     assert.ok(candidate.validation.blockers.some(b=>
