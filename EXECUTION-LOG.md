@@ -277,3 +277,24 @@ No implementation is claimed complete. Future agents should not mistake proposed
 - **Mutation check.** Temporarily restoring the old CRLF rules pin in `catalog.json` made both new tests fail, as well as the Kathmandu test. The file was then restored from git.
 - **Verification (cloud copy, Linux, Shapely installed).** `node --test test/nepal-*.test.js`: **56/57**. The only failure is still `nepal-milestone-c` "Kathmandu overlay is explicit and unreviewed…". Its blocker now reports `causes: ['original_missing']` for all 15 manifest sources. The Kathmandu test is intentionally unchanged; it should pass in the full repository.
 - **Still open.** A full-repository run with `Design Files/` present, a real `buildCatalog.js` rebuild there, and pushing these local commits once GitHub access is granted. The larger design backlog is unchanged: multi-floor wet-zone/circulation topology.
+
+## 2026-09-30 — cross-level (section) checks: puja/toilet, puja/stair, wet stack
+
+- **Why.** DESIGN-PRINCIPLES §3 ("check room/stair/puja/wet-core overlaps across levels") and INTEGRATION step 4 (vertical-stack checks) asked for this, but `validateNepalPlan.js` checked each floor only in isolation. Catalog rules V06 (`puja.toilet_conflict`) and V07 (`puja.stair_overlap`) define facts that no code derived.
+- **Implemented.** `verticalStackFacts(candidate)` in `validateNepalPlan.js`, kept in that file so the cloud copy stays at 99 files. It compares plan boxes on consecutive levels. Overlaps under 0.01 m² count as touching, not stacking. The results are returned as `validation.verticalStack`, with evidence per room ID. Three new review findings:
+  - `PUJA_TOILET_SEPARATION_NOT_MET` (V06): a bathroom directly above or below the puja, or sharing a wall with it on the same floor.
+  - `PUJA_STAIR_VERTICAL_OVERLAP` (V07): the puja overlaps the full stair-core envelope (flights, landings and arrival pads) on the level above or below.
+  - `WET_ROOM_NOT_OVER_WET_ZONE_REVIEW` (C17): an upper bathroom or kitchen with no wet room anywhere below it. C17 gives no threshold, so only a wet room with none below is flagged; partial shares are reported but not judged.
+- **Honest limits.** Door sightline "directly facing" (V06) is not measured. So `puja.toilet_conflict` is `true` when a conflict is found and otherwise `null` (unknown), never `false`. Bathrooms are treated as containing a WC. Pipe routes, falls, shafts and maintenance access (C17) are not modelled. These are findings only: candidate ranking and generation are **unchanged**. All rules remain `curated_not_professionally_approved`.
+- **Measured results on the current generator.**
+  - *Owner 2.5-storey fixture, puja on ground as supplied.* Both living-first candidates put the ground-floor puja directly below the first-floor attached bathroom (3.30 m²). The bedrooms-south candidates have no conflict.
+  - *Ten-plan review set, puja on the top floor.* Plans 1–4 (owner) have no V06 conflict. **Plans 5–10 (rental) all put the partial-third-floor puja directly above both second-floor bathrooms (6.13 + 1.71 m², or 6.06 + 1.77 m²).** The puja takes the service bay beside the stair core, which is the bathroom stack below. This was not reported to the architect before.
+  - *C17.* The owner living-first plans and all rental plans have one upper bathroom with no wet room below. It is the second second-floor bathroom in the rental plans.
+  - *V07.* No candidate's puja overlaps the stair core above or below.
+- **Review outputs.** The ten-plan CSV/JSON gained `puja_toilet_v06_conflicts` and `wet_rooms_not_over_wet_c17`. The HTML sheet lists the new codes automatically. The review set was regenerated locally (HTML/CSV/JSON only; no PDF, because the PDF step needs Windows Edge). Runtime output is not part of this copy.
+- **Tests.** In `nepal-ten-review.test.js`:
+  - *Hand-built case.* Toilet below, shared wall, stair below, edge-touch not counted as overlap, wet share 0.5 and 0, and unknown staying `null`.
+  - *Real-geometry case.* Owner living-first candidates must report V06 `toilet_above` 3.3 m², and bedrooms-south must not.
+  - *Mutation check.* Dropping the "toilet above" direction made the real-geometry test fail.
+  - *Results.* Nepal Node suite **58/59**; the only failure is still the missing-original-PDF test. Python geometry suite: OK.
+- **Next.** Make generation avoid these conflicts rather than only report them: puja placement needs the plan of the floors above and below. Moving the puja can trade against its NE preference, so any trade-off must be shown to the owner, not silently chosen.

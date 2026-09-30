@@ -28,6 +28,62 @@ function routeColumnObstructions(route,grid,orientation){
     return Math.max(0,cross-half-crossLow,crossHigh-(cross+half))<1000;
   }).map(column=>column.id);
 }
+// Cross-level (section) relationships: catalog V06 (puja/toilet), V07 (puja/stair)
+// and C17 (wet-service coordination). Plan boxes are compared between consecutive
+// levels; overlaps under 0.01 m² (e.g. shared edges) are treated as touching only.
+const WET_TYPES=new Set(['bathroom','kitchen','laundry']);
+const STACK_TOLERANCE_SQM=0.01;
+const overlapSqM=(a,b)=>Math.max(0,Math.min(a.x2,b.x2)-Math.max(a.x1,b.x1))*
+  Math.max(0,Math.min(a.y2,b.y2)-Math.max(a.y1,b.y1))/1e6;
+const sharedEdgeMm=(a,b)=>{
+  if(a.x2===b.x1||b.x2===a.x1)return Math.max(0,Math.min(a.y2,b.y2)-Math.max(a.y1,b.y1));
+  if(a.y2===b.y1||b.y2===a.y1)return Math.max(0,Math.min(a.x2,b.x2)-Math.max(a.x1,b.x1));
+  return 0;
+};
+const round2=n=>Math.round(n*100)/100;
+function verticalStackFacts(candidate){
+  const levels=candidate.levels,roomsOf=l=>l?.rooms?.rooms||[];
+  const coreLevels=new Set(candidate.core?.levelIds||[]);
+  const pujaToilet=[],pujaStair=[],wetStack=[];
+  levels.forEach((level,i)=>{
+    for(const puja of roomsOf(level).filter(r=>r.type==='puja')){
+      for(const bath of roomsOf(level).filter(r=>r.type==='bathroom')){
+        const edge=sharedEdgeMm(puja.box,bath.box);
+        if(edge>0)pujaToilet.push({relation:'shares_wall',levelId:level.id,pujaId:puja.id,
+          toiletRoomId:bath.id,sharedEdgeMm:edge});
+      }
+      for(const [relation,other] of [['toilet_below',levels[i-1]],['toilet_above',levels[i+1]]])
+        for(const bath of roomsOf(other).filter(r=>r.type==='bathroom')){
+          const area=overlapSqM(puja.box,bath.box);
+          if(area>=STACK_TOLERANCE_SQM)pujaToilet.push({relation,levelId:level.id,pujaId:puja.id,
+            otherLevelId:other.id,toiletRoomId:bath.id,overlapSqM:round2(area)});
+        }
+      for(const [relation,other] of [['stair_below',levels[i-1]],['stair_above',levels[i+1]]]){
+        if(!other||!coreLevels.has(other.id)||!candidate.core?.box)continue;
+        const area=overlapSqM(puja.box,candidate.core.box);
+        if(area>=STACK_TOLERANCE_SQM)pujaStair.push({relation,levelId:level.id,pujaId:puja.id,
+          otherLevelId:other.id,coreId:candidate.core.id,overlapSqM:round2(area)});
+      }
+    }
+    if(i===0)return;
+    const wetBelow=roomsOf(levels[i-1]).filter(r=>WET_TYPES.has(r.type));
+    for(const room of roomsOf(level).filter(r=>WET_TYPES.has(r.type))){
+      const area=(room.box.x2-room.box.x1)*(room.box.y2-room.box.y1)/1e6;
+      const over=wetBelow.reduce((sum,r)=>sum+overlapSqM(room.box,r.box),0);
+      wetStack.push({levelId:level.id,roomId:room.id,type:room.type,belowLevelId:levels[i-1].id,
+        overWetShare:round2(Math.min(1,over/area)),
+        overWetRoomIds:wetBelow.filter(r=>overlapSqM(room.box,r.box)>=STACK_TOLERANCE_SQM).map(r=>r.id)});
+    }
+  });
+  const hasPuja=levels.some(l=>roomsOf(l).some(r=>r.type==='puja'));
+  return {toleranceSqM:STACK_TOLERANCE_SQM,pujaToilet,pujaStair,wetStack,
+    facts:{
+      // Door/sightline facing is not measured, so absence of a found conflict stays unknown.
+      'puja.toilet_conflict':!hasPuja?null:pujaToilet.length?true:null,
+      'puja.stair_overlap':!hasPuja?null:pujaStair.length>0},
+    unmeasured:['V06 puja/toilet door sightline facing','V06 bathroom vs separate WC distinction (bathrooms treated as containing a WC)',
+      'C17 pipe routes, falls, shafts and maintenance access']};
+}
 function validateSpatialHypothesis(candidate) {
   const blockers=[];
   for(const level of candidate.levels){
@@ -126,6 +182,14 @@ function validateSpatialHypothesis(candidate) {
       blockers.push({code:'ATTACHED_BATHROOM_ACCESS_UNVERIFIED',levelId:level.id,
         requested:level.attachedBathroomsRequested});
   }
+  const verticalStack=verticalStackFacts(candidate);
+  for(const conflict of verticalStack.pujaToilet)
+    blockers.push({code:'PUJA_TOILET_SEPARATION_NOT_MET',ruleId:'V06',...conflict});
+  for(const conflict of verticalStack.pujaStair)
+    blockers.push({code:'PUJA_STAIR_VERTICAL_OVERLAP',ruleId:'V07',...conflict});
+  const offset=verticalStack.wetStack.filter(item=>item.overWetShare===0);
+  if(offset.length)blockers.push({code:'WET_ROOM_NOT_OVER_WET_ZONE_REVIEW',ruleId:'C17',
+    rooms:offset.map(({levelId,roomId,type,belowLevelId})=>({levelId,roomId,type,belowLevelId}))});
   if(!candidate.rulePack.permitRulesReady)blockers.push({code:'MUNICIPAL_RULES_UNVERIFIED'});
   if(!candidate.grid.engineerReviewed)blockers.push({code:'RC_FRAME_NOT_ENGINEERED'});
   if(candidate.levels[0]?.rooms?.occupancy==='rental')
@@ -147,7 +211,7 @@ function validateSpatialHypothesis(candidate) {
   return {structuralGeometryOkay:!blockers.some(b=>[
     'ROOM_OVERLAP','COLUMN_IN_ROOM_CLEAR_AREA','CIRCULATION_COLUMN_OBSTRUCTION',
     'WALL_CROSSES_COLUMN_CORE','OPENING_OVERLAPS_COLUMN'].includes(b.code)),
-    eligibility:'unverified_concept_only',blockers};
+    eligibility:'unverified_concept_only',blockers,verticalStack};
 }
-module.exports={validateSpatialHypothesis,roomGridCrossings,columnsInsideRoom,
+module.exports={validateSpatialHypothesis,verticalStackFacts,roomGridCrossings,columnsInsideRoom,
   routeColumnObstructions,MAIN_GRID_ROOM_TYPES};
