@@ -250,7 +250,7 @@ function planOwnerBedroomFloor({level,footprint,core,bearingDegrees,pujaBoxesBel
     unresolved:['Family landing furniture fit, balcony guard and bath detailing remain unverified.']};
 }
 function planFloorRooms({level,footprint,core,bearingDegrees,order='living-first',
-  groundParking=null,pujaInMainStrip=false,toiletBoxesAdjacent=[],pujaBoxesBelow=[]}) {
+  groundParking=null,pujaInMainStrip=false,toiletBoxesAdjacent=[],pujaBoxesBelow=[],avoidColumnBoxes=[]}) {
   if(level.occupancy==='owner'&&level.bedrooms===3&&level.bathrooms===1&&
     level.attachedBathrooms===1&&!level.livingRooms&&!level.kitchens){
     const owner=planOwnerBedroomFloor({level,footprint,core,bearingDegrees,pujaBoxesBelow});
@@ -402,7 +402,11 @@ function planFloorRooms({level,footprint,core,bearingDegrees,order='living-first
     const share=box=>vastuFindings([{id:'puja',type:'puja',box}],
       {bearingDegrees,domainBoxes:slabs})[0].preferredShare;
     const toilet=box=>toiletBoxesAdjacent.reduce((sum,t)=>sum+overlapSqM(box,t),0);
-    const pujaBox=options.filter(box=>areaSqM([box],slabs)<=1e-9)
+    // A known frame column must not stand wholly inside the puja (as the
+    // COLUMN_IN_ROOM_CLEAR_AREA validator counts it); columns in its walls are normal.
+    const hitsColumn=box=>avoidColumnBoxes.some(c=>c.x1>box.x1+INTERIOR_WALL_MM/2&&
+      c.x2<box.x2-INTERIOR_WALL_MM/2&&c.y1>box.y1+INTERIOR_WALL_MM/2&&c.y2<box.y2-INTERIOR_WALL_MM/2);
+    const pujaBox=options.filter(box=>areaSqM([box],slabs)<=1e-9&&!hitsColumn(box))
       .map(box=>({box,toilet:toilet(box),share:share(box)}))
       .sort((a,b)=>a.toilet-b.toilet||b.share-a.share||a.box.y1-b.box.y1)[0]?.box;
     if(!pujaBox)return {ok:false,reason:'Puja does not fit in the main strip of this floor.'};

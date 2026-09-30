@@ -157,8 +157,15 @@ test('rental top-floor puja is moved off the bathroom stack by widening within t
     assert.ok(Math.min(puja.clearBox.x2-puja.clearBox.x1,puja.clearBox.y2-puja.clearBox.y1)>=1800);
     assert.ok(!candidate.validation.blockers.some(b=>b.code==='ROOM_SIZE_BELOW_PROVISIONAL_NBC206'&&b.roomId===puja.id));
   }
-  for(const candidate of concepts('rectangle-2_5'))
-    assert.ok(candidate.levels.every(level=>!level.pujaReplan),candidate.id);
+  // Owner top-floor pujas had no toilet below. A V05 (NE/N/E) move is tried, but the
+  // best column-free, toilet-free main-strip spot stays under a 0.5 share (the west
+  // plans' NE corner is above the first-floor bath), so the service-bay puja is kept.
+  for(const candidate of concepts('rectangle-2_5')){
+    const replan=candidate.levels.at(-1).pujaReplan;
+    assert.deepEqual([replan.ruleId,replan.status],['V05','rejected_preferred_zone_not_reached'],candidate.id);
+    assert.ok(replan.proposedPreferredShare<0.5,candidate.id);
+    assert.equal(candidate.levels.at(-1).rooms.rooms.find(r=>r.type==='puja').id,'partial-second-puja-1',candidate.id);
+  }
 });
 
 test('a tighter top-floor cap keeps the puja/toilet conflict visible instead of hiding it',()=>{

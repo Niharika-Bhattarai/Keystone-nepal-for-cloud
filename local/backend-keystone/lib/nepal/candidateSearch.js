@@ -199,6 +199,14 @@ function searchConcepts(brief,{provisionalSetbacksMm,workingCoverageLimit=null,
       core.reservoir.vastuFinding=vastuFindings([{id:core.reservoir.id,type:'undergroundReservoir',
         box:core.reservoir.innerPlanBox}],{bearingDegrees:brief.site.north.bearingDegrees,
         domainBoxes:footprint.slabs})[0];
+      // Columns fixed before rooms exist: every planning x axis on the outer rows and
+      // the stair-core corner rows (row variants never move these; frameGrid.js).
+      let fixedColumnBoxes=[];
+      try{
+        const g=frameGrid(footprint,{protectedCore:core.box}),half=COLUMN_WIDTH_MM/2;
+        const ys=[...new Set([g.yAxesMm[0],g.yAxesMm.at(-1),core.box.y1+half,core.box.y2-half])];
+        fixedColumnBoxes=g.xAxesMm.flatMap(x=>ys.map(y=>rect([x-half,y-half,x+half,y+half])));
+      }catch{}
       const plannedLevels=[];
       for(const level of levels){
         const floorprint=level.kind==='partial'?partialTopFootprint(footprint,core,
@@ -220,7 +228,14 @@ function searchConcepts(brief,{provisionalSetbacksMm,workingCoverageLimit=null,
         const pujaOverToilet=plan=>(plan?.rooms||[]).filter(r=>r.type==='puja')
           .reduce((sum,p)=>sum+toiletsBelow.reduce((n,t)=>n+overlapSqM(p.box,t),0),0);
         let floorprintUsed=floorprint,pujaReplan=null;
-        if(rooms&&pujaOverToilet(rooms)>=0.01){
+        // Puja preferred-zone share (NE/N/E, V05) on this floor's own domain.
+        const pujaShare=plan=>{const p=(plan?.vastuFindings||[]).filter(f=>f.type==='puja');
+          return p.length?Math.min(...p.map(f=>f.preferredShare)):null;};
+        const overToilet=rooms?pujaOverToilet(rooms)>=0.01:false;
+        // Also retry a service-bay puja (floor without a living room) that sits
+        // mostly outside NE/N/E: the main strip may reach the preferred corner.
+        const lowShare=rooms&&!level.livingRooms&&pujaShare(rooms)!==null&&pujaShare(rooms)<0.5;
+        if(rooms&&(overToilet||lowShare)){
           const corridorMm=CLEAR_CORRIDOR_MM+INTERIOR_WALL_MM;
           const needWidthMm=core.box.x2-core.box.x1+corridorMm+PUJA_MAIN_STRIP_MIN_WIDTH_MM;
           const fullAreaSqM=footprint.areaSqM;
@@ -233,20 +248,29 @@ function searchConcepts(brief,{provisionalSetbacksMm,workingCoverageLimit=null,
             try{axisWidths=frameGrid(footprint,{protectedCore:core.box}).xAxesMm.map(a=>
               core.side==='west'?a+half-fx1:fx2-(a-half)).filter(w=>w>=needWidthMm);}catch{}
             const widthMm=axisWidths.length?Math.min(...axisWidths):needWidthMm;
-            const wider=level.kind==='partial'?partialTopFootprint(footprint,core,level.targetAreaSqM,
+            const currentWidthMm=Math.max(...floorprint.slabs.map(b=>b.x2))-Math.min(...floorprint.slabs.map(b=>b.x1));
+            const wider=level.kind==='partial'&&currentWidthMm<needWidthMm?partialTopFootprint(footprint,core,level.targetAreaSqM,
               {preferredDepthMm:level.specialRooms?.includes('puja')?7600:0,minWidthMm:widthMm}):floorprint;
             const withinCap=wider.areaSqM<=partialTopMaxShare*fullAreaSqM+1e-9;
             const retry=withinCap&&planFloorRooms({...planArgs,footprint:wider,pujaInMainStrip:true,
-              toiletBoxesAdjacent:toiletsBelow});
-            pujaReplan={ruleId:'V06',reason:'service-bay puja was above a toilet on the floor below',
+              toiletBoxesAdjacent:toiletsBelow,avoidColumnBoxes:fixedColumnBoxes});
+            const originalShare=pujaShare(rooms),retryShare=retry?.ok?pujaShare(retry):null;
+            pujaReplan={ruleId:overToilet?'V06':'V05',
+              reason:overToilet?'service-bay puja was above a toilet on the floor below':
+                'service-bay puja was mostly outside the NE/N/E preferred zones',
+              originalPreferredShare:originalShare,proposedPreferredShare:retryShare,
               originalAreaSqM:floorprint.areaSqM,proposedAreaSqM:wider.areaSqM,
               minimumWidthMm:needWidthMm,widthMm,edgeOnColumnLine:axisWidths.length>0,
               areaCapSqM:partialTopMaxShare*fullAreaSqM,areaCapShare:partialTopMaxShare,
               fullFloorAreaSqM:fullAreaSqM,status:!withinCap?'rejected_area_cap':
                 !retry?.ok?`rejected_${retry?.reason||'no_plan'}`:
-                pujaOverToilet(retry)>=0.01?'rejected_still_over_toilet':'applied'};
+                pujaOverToilet(retry)>=0.01?'rejected_still_over_toilet':
+                  // A preference-only move must actually reach the NE/N/E zones (majority
+                  // share); a partial gain does not justify re-planning the floor.
+                  !overToilet&&!(retryShare>=0.5&&retryShare>originalShare+1e-9)?
+                    'rejected_preferred_zone_not_reached':'applied'};
             if(pujaReplan.status==='applied'){rooms=retry;floorprintUsed=wider;}
-          }catch(error){pujaReplan={ruleId:'V06',status:`rejected_${error.message}`};}
+          }catch(error){pujaReplan={ruleId:overToilet?'V06':'V05',status:`rejected_${error.message}`};}
         }
         plannedLevels.push({id:level.id,kind:level.kind,footprint:floorprintUsed,rooms,
           ...(pujaReplan?{pujaReplan}:{}),
