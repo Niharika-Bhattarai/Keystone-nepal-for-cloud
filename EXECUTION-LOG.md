@@ -335,3 +335,8 @@ No implementation is claimed complete. Future agents should not mistake proposed
   - *Mutation check.* Disabling the re-plan made both tests fail.
   - *Results.* Nepal Node suite **60/61**; the only failure is still the missing-original-PDF test. Python geometry suite 10/10.
 - The ten-plan review HTML/CSV/JSON was regenerated locally; no PDF, because that step needs Windows Edge.
+
+## 2026-09-30 — terminology note: "rental plans 5–10"
+
+- In the entries above, "rental plans 5–10" means the **3.5-storey rental-plus-owner** review program, not a puja on a rental floor. In that fixture the ground and first floors are rental flats with no puja. The second floor is the owner home, and the partial third floor is the owner terrace. The puja is only ever on an owner floor: second floor as supplied, partial third floor in the review set. The second-floor bathrooms it was above belong to the owner home.
+- The owner confirmed (2026-09-30) that pujas are for the home owners only. `roomPlanner.js` already enforces this by rejecting a puja on any floor that is not owner-only ("A private puja room requires an owner-only unit."). No code change was needed.
