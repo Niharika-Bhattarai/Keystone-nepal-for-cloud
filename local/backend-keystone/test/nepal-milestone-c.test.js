@@ -2,7 +2,11 @@
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const {areaSqM,measureAreaLedger,evaluateAreaLimits}=require('../lib/nepal/areaLedger');
-const {resolveRulePack}=require('../lib/nepal/rules/resolveRulePack');
+const fs=require('node:fs');
+const path=require('node:path');
+const {resolveRulePack,catalogDrift}=require('../lib/nepal/rules/resolveRulePack');
+const {normalizedTextSha256}=require('../lib/nepal/rules/buildCatalog');
+const catalog=require('../lib/nepal/rules/catalog.json');
 const box=(x1,y1,x2,y2)=>[x1,y1,x2,y2];
 test('union counts an overlapping rectangle only once',()=>{
   assert.equal(areaSqM([box(0,0,10000,10000),box(5000,0,15000,10000)]),150);
@@ -57,4 +61,18 @@ test('exact and over-limit boundaries use independent coverage and FAR values in
   assert.equal(evaluateAreaLimits(ledger,{parameters:{...profile.parameters,maximumCoverageRatio:0.49}}).status,'fail');
   assert.equal(evaluateAreaLimits(ledger,{parameters:{...profile.parameters,maximumFAR:0.99}}).status,'fail');
   assert.equal(evaluateAreaLimits(ledger,{parameters:{}}).status,'needs_review');
+});
+test('knowledge catalog pins ignore CRLF/LF checkout differences but not content changes',()=>{
+  for(const [file,pin] of [['rules.json',catalog.knowledgeRulesSha256],['manifest.json',catalog.knowledgeManifestSha256]]) {
+    const text=fs.readFileSync(path.join(__dirname,'../../../knowledge',file),'utf8').replace(/\r\n/g,'\n');
+    assert.equal(normalizedTextSha256(Buffer.from(text)),pin);
+    assert.equal(normalizedTextSha256(Buffer.from(text.replace(/\n/g,'\r\n'))),pin);
+    assert.notEqual(normalizedTextSha256(Buffer.from(text.replace('"','" '))),pin);
+  }
+});
+test('rule source drift names its cause; only absent originals may remain',()=>{
+  const drift=catalogDrift();
+  assert.deepEqual(drift.filter(item=>item.kind!=='original_missing'),[]);
+  const blocker=resolveRulePack({jurisdiction:{municipality:'Kathmandu'}}).blockers.find(b=>b.code==='RULE_SOURCE_DRIFT');
+  if(drift.length)assert.deepEqual(blocker.causes,['original_missing']); else assert.equal(blocker,undefined);
 });

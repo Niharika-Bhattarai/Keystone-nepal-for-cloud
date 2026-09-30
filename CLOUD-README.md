@@ -22,7 +22,7 @@ A trimmed copy of `Keystone Nepal` for cloud work under a 100-file cap. The fold
 
 The first check used to fail on every non-Windows checkout. The pins had been computed over CRLF bytes, and git stores these files with LF (`* text=auto`). The pins now hash line-ending-normalized text, so this check passes on Linux, macOS and Windows.
 
-The second check still fails here because the PDFs and EPUBs are not in this trimmed copy. That is expected and not masked. It reports `RULE_SOURCE_DRIFT`, so `nepal-milestone-c` test "Kathmandu overlay is explicit and unreviewed…" fails. It is the only expected failure: in a verification run the other 54 of 55 Nepal tests passed.
+The second check still fails here because the PDFs and EPUBs are not in this trimmed copy. That is expected and not masked. It reports `RULE_SOURCE_DRIFT`, so `nepal-milestone-c` test "Kathmandu overlay is explicit and unreviewed…" fails. The blocker's `causes` field shows `original_missing` here. Any other cause means real drift. It is the only expected failure: in a verification run the other 56 of 57 Nepal tests passed.
 
 The polygon-study tests also need Python Shapely. Without it, two more tests fail with "Polygon study unavailable". Install it with `pip install -r local/planner/requirements.txt`.
 
