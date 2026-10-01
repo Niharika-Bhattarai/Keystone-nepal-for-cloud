@@ -356,7 +356,7 @@ export function NepalBrief() {
       {massing && <>
         {massing.length > 1 && <label style={{ display: 'grid', gap: 5, fontSize: 12, marginTop: 10 }}>Hypothesis
           <select value={massingIndex} onChange={e => setMassingIndex(Number(e.target.value))}>
-            {massing.map((c, i) => <option key={c.id} value={i}>{i + 1}. {c.id}</option>)}
+            {massing.map((c, i) => <option key={c.id} value={i}>{i + 1}. {c.id}{c.entrance?.faces ? ` — entrance from the ${c.entrance.faces} road` : ''}{c.alternative ? ' — Vaastu alternative (kitchen SE/E)' : ''}</option>)}
           </select>
         </label>}
         <button type="button" className="studio-btn" onClick={() => openDrawingSet(massingIndex)}>

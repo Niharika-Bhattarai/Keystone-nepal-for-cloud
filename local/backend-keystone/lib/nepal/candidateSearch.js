@@ -243,7 +243,7 @@ function fitCoverage(envelope,cap,roadEdge){
 function searchProgram(brief,{provisionalSetbacksMm,workingCoverageLimit=null,
   partialTopMaxShare=0.65,
   tankLitres=brief.buildingProgram.services?.groundReservoirLitres||8000,
-  maxCandidates=3}={}) {
+  maxCandidates=3,vastuAlternatives=false}={}) {
   if(!Number.isSafeInteger(maxCandidates)||maxCandidates<1||maxCandidates>24)
     throw new RangeError('Review candidate count must be between 1 and 24');
   const rulePack=resolveRulePack(brief);
@@ -412,6 +412,20 @@ function searchProgram(brief,{provisionalSetbacksMm,workingCoverageLimit=null,
   const chosen=[];
   for(const candidate of candidates){if(chosen.some(x=>x.geometryHash===candidate.geometryHash))continue;
     chosen.push(candidate);if(chosen.length===maxCandidates)break;}
+  // Owner review 2026-10-01 (east-road entrance question): the default keeps the
+  // entrance into living, but when no shown option has its kitchen mainly in the
+  // Vaastu-preferred SE/E zones and another plan does, that plan is added and
+  // labelled so the household can compare the trade-off.
+  if(vastuAlternatives){
+    const kitchenShare=c=>Math.max(0,...c.levels.flatMap(l=>(l.rooms?.vastuFindings||[]).filter(v=>/kitchen/.test(v.roomId))
+      .map(v=>v.preferredShare||0)));
+    if(!chosen.some(c=>kitchenShare(c)>=0.5)){
+      const alt=candidates.find(c=>!chosen.includes(c)&&kitchenShare(c)>=0.5);
+      if(alt){alt.alternative={reason:'kitchen_in_vastu_preferred_se_e_zone',
+        note:`Kitchen ${Math.round(kitchenShare(alt)*100)} % in the Vaastu-preferred south-east/east zones; compare its entrance, living-room zone and parking with the options above.`};
+        chosen.push(alt);}
+    }
+  }
   const variations=[];
   for(let i=0;i<chosen.length;i++)for(let j=i+1;j<chosen.length;j++){
     const a=chosen[i],b=chosen[j],changes=[];

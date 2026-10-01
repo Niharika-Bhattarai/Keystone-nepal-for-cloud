@@ -11,7 +11,23 @@ Every case was entered through the studio's own survey builder (`buildNepalSurve
 
 Re-run it with `node local/tools/nepal-survey-matrix.cjs [prefix] --out report.md`.
 
-## Result
+## Result (latest, after the second pass)
+**76 cases: 51 planned end to end, 23 refused with a message, 2 no plan with reasons, 0 crashes.**
+First run: 18 of 60. After the first fix pass: 42. The second pass (see `HANDOVER.md` §2) added:
+- road-side orientation and corner plots;
+- all Annex C municipalities;
+- narrow, mid-stair and shallow layouts;
+- room-redistribution program variants;
+- plannability-ranked rectangles for drawn plots.
+
+Still no plan:
+- **R3** (7.5 m plot with 1 m side setbacks, 4 bedrooms + puja on 2 floors). It works with 0 m shared-wall sides, and a hint says so.
+- **D6** (triangle: largest plannable rectangle 5.7 × 6 m).
+
+Refused by design: invalid inputs, rentals above owner floors, straight/quarter-turn stairs.
+
+## First pass (history)
+
 **76 cases: 42 planned end to end, 24 refused with a message, 10 get no plan, 0 crashes.**
 
 Before this pass, only **18 of 60** valid-or-invalid cases produced plans. Only the default 11.25 m square and near-identical plots worked.
@@ -49,65 +65,65 @@ Before this pass, only **18 of 60** valid-or-invalid cases produced plans. Only 
 - **Plot slope, levels and basement.** Recorded as free text only.
 - **Soil test results.** Asked only in the structural panel (soil type, bearing capacity), not in the survey.
 
-## Full table
+## Full table (latest)
 | Case | Result | Detail |
 |---|---|---|
-| R1 standard 11.25×11.25 (4 aana), 2.5 st owner | planned | 3 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=418 kN, NBC205=false |
+| R1 standard 11.25×11.25 (4 aana), 2.5 st owner | planned | 4 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=418 kN, NBC205=false |
 | R2 tiny 6×9 m (1.7 aana), 2.5 st | refused | PARTIAL_AREA_TOO_LARGE: The partial top floor cannot exceed 65 % of a full floor; on this 54 m² plot that is well under 35 m². |
-| R3 small 7.5×12 m, 2 st | no plan | 1× Buildable area 5.50 × 10.00 m (plot minus setbacks) is below the planner's minimum 6.5 × 7.5 m for a stair core and rooms. On shared-wall sides enter a 0 m proposed setback; narrow-plot layouts are not yet available. |
-| R4 narrow-deep 6×18 m, 3 st | no plan | 1× Buildable area 4.00 × 16.00 m (plot minus setbacks) is below the planner's minimum 6.5 × 7.5 m for a stair core and rooms. On shared-wall sides enter a 0 m proposed setback; narrow-plot layouts are not yet available. |
-| R5 wide-shallow 16×8 m, 2.5 st | no plan | 1× Buildable area 14.00 × 6.00 m (plot minus setbacks) is below the planner's minimum 6.5 × 7.5 m for a stair core and rooms. On shared-wall sides enter a 0 m proposed setback; narrow-plot layouts are not yet available. |
+| R3 small 7.5×12 m, 2 st | no plan | 20× Mid-stair layout: the rooms need 6.3 m behind the stair; 2.4 m is available.; 10× Narrow layout: the rooms need 7.7 m behind the stair; 5.4 m is available. |
+| R4 narrow-deep 6×18 m, 3 st | planned | 2 options, floors f5/f5/f4/p2; drawings 200 (11 sheets), DXF 200, structure: 500 col, 350×500 beam, pass=false, V=647 kN, NBC205=false |
+| R5 wide-shallow 16×8 m, 2.5 st | planned | 2 options, floors f3/f4/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=462 kN, NBC205=false |
 | R6 large 20×25 m, 3 st, 2 cars | planned | 3 options, floors f9/f8/f8; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=1530 kN, NBC205=false |
 | R7 single storey 10×12 | planned | 3 options, floors f6; drawings 200 (8 sheets), DXF 200, structure: 350 col, 230×355 beam, pass=true, V=134 kN, NBC205=true |
 | R8 3.5 st owner 12×14 | planned | 3 options, floors f6/f5/f5/p0; drawings 200 (11 sheets), DXF 200, structure: 400 col, 300×400 beam, pass=true, V=744 kN, NBC205=false |
 | S1 7.5×12, side setbacks 0 (shared walls), 2.5 st | planned | 3 options, floors f4/f6/p1; drawings 200 (10 sheets), DXF 200, structure: 450 col, 300×450 beam, pass=true, V=391 kN, NBC205=false |
-| S2 6×15, side setbacks 0, 2.5 st | no plan | 1× Buildable area 6.00 × 10.40 m (plot minus setbacks) is below the planner's minimum 6.5 × 7.5 m for a stair core and rooms. On shared-wall sides enter a 0 m proposed setback; narrow-plot layouts are not yet available. |
-| S3 9×12, side setbacks 0, rear 1.5, 3 st | no plan | 10× Requested habitable rooms need more frontage length than this footprint provides.; 10× Bathrooms and special rooms do not fit beside the stair landing. |
-| S4 8×10 (2.5 aana), side 0, 2.5 st | no plan | 10× Partial top floor cannot contain the continuous stair within this footprint; 10× Bathrooms and special rooms do not fit beside the stair landing. |
+| S2 6×15, side setbacks 0, 2.5 st | planned | 2 options, floors f4/f4/p3; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×400 beam, pass=true, V=381 kN, NBC205=false |
+| S3 9×12, side setbacks 0, rear 1.5, 3 st | planned | 3 options, floors f6/f5/f5/p1; drawings 200 (11 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=579 kN, NBC205=false |
+| S4 8×10 (2.5 aana), side 0, 2.5 st | planned | 3 options, floors f3/f5/f1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=370 kN, NBC205=true |
 | T1 single storey 11.25 sq, 2 bed + puja | planned | 3 options, floors f6; drawings 200 (8 sheets), DXF 200, structure: 350 col, 230×355 beam, pass=true, V=130 kN, NBC205=false |
 | T2 single storey 12×14, 2 bed + puja | planned | 3 options, floors f7; drawings 200 (8 sheets), DXF 200, structure: 350 col, 230×355 beam, pass=true, V=181 kN, NBC205=false |
 | T3 single storey 11.25 sq, 2 bed no puja | planned | 3 options, floors f6; drawings 200 (8 sheets), DXF 200, structure: 350 col, 230×355 beam, pass=true, V=131 kN, NBC205=false |
 | T4 single storey 14×16, 3 bed + puja | planned | 3 options, floors f8; drawings 200 (8 sheets), DXF 200, structure: 350 col, 230×355 beam, pass=true, V=223 kN, NBC205=false |
 | T5 2 storey on 11.25 sq | planned | 3 options, floors f6/f5; drawings 200 (9 sheets), DXF 200, structure: 400 col, 300×400 beam, pass=true, V=310 kN, NBC205=false |
-| T6 3 storey owner on 11.25 sq | no plan | 10× Requested habitable rooms need more frontage length than this footprint provides.; 10× Bathrooms and special rooms do not fit beside the stair landing. |
-| T7 3.5 owner on 11.25 sq | planned | 3 options, floors f7/f5/f5/p0; drawings 200 (11 sheets), DXF 200, structure: 450 col, 350×500 beam, pass=true, V=595 kN, NBC205=false |
-| R10 wide-shallow 16×9 m | no plan | 1× Buildable area 14.00 × 7.00 m (plot minus setbacks) is below the planner's minimum 6.5 × 7.5 m for a stair core and rooms. On shared-wall sides enter a 0 m proposed setback; narrow-plot layouts are not yet available. |
-| R11 13×20 m, 2.5 st, 1 car | planned | 3 options, floors f4/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 500 col, 350×500 beam, pass=true, V=771 kN, NBC205=false |
-| R9 feet-sized 35×40 ft entered as m (10.67×12.19) | planned | 3 options, floors f4/f6/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×400 beam, pass=true, V=456 kN, NBC205=false |
-| N1 road top edge, north 90 | planned | 3 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=418 kN, NBC205=false |
-| N2 road right edge (east road), north 90 | planned | 3 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=418 kN, NBC205=false |
+| T6 3 storey owner on 11.25 sq | planned | 3 options, floors f6/f5/f5/p1; drawings 200 (11 sheets), DXF 200, structure: 450 col, 350×500 beam, pass=true, V=612 kN, NBC205=false |
+| T7 3.5 owner on 11.25 sq | planned | 4 options, floors f7/f5/f5/p0; drawings 200 (11 sheets), DXF 200, structure: 450 col, 350×500 beam, pass=true, V=595 kN, NBC205=false |
+| R10 wide-shallow 16×9 m | planned | 2 options, floors f4/f4/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=486 kN, NBC205=false |
+| R11 13×20 m, 2.5 st, 1 car | planned | 4 options, floors f4/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 500 col, 350×500 beam, pass=true, V=771 kN, NBC205=false |
+| R9 feet-sized 35×40 ft entered as m (10.67×12.19) | planned | 4 options, floors f4/f6/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×400 beam, pass=true, V=456 kN, NBC205=false |
+| N1 road top edge, north 90 | planned | 3 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=420 kN, NBC205=false |
+| N2 road right edge (east road), north 90 | planned | 4 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=420 kN, NBC205=false |
 | N3 road left edge (west road) | planned | 3 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=418 kN, NBC205=false |
-| N4 north 0 (north to the right) | planned | 3 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=420 kN, NBC205=false |
-| N5 north 45 (skewed) | planned | 3 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=418 kN, NBC205=false |
+| N4 north 0 (north to the right) | planned | 4 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=420 kN, NBC205=false |
+| N5 north 45 (skewed) | planned | 4 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=418 kN, NBC205=false |
 | N6 north 270 (south up) | planned | 3 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=420 kN, NBC205=false |
-| N7 north 200 + east road | planned | 3 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=418 kN, NBC205=false |
-| N8 two road edges (corner plot) marked in boundaries | planned | 3 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=418 kN, NBC205=false |
+| N7 north 200 + east road | planned | 3 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=420 kN, NBC205=false |
+| N8 two road edges (corner plot) marked in boundaries | planned | 8 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=418 kN, NBC205=false |
 | P1 rental 3.5 st (2 rental floors) | planned | 6 options, floors f6/f6/f7/p0; drawings 200 (11 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=607 kN, NBC205=false |
 | P2 rental 3 st (1 rental floor), stair west | planned | 6 options, floors f6/f7/f4; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×400 beam, pass=true, V=617 kN, NBC205=false |
 | P3 rental above owner (should be refused) | refused | RENTAL_ABOVE_OWNER_PENDING: Independent rentals above owner floors need a separate reviewed access arrangement. Place rentals below the owner home for this first profile. |
 | P4 big family 3 st, separate dining, store, laundry, walk-in | planned | 3 options, floors f8/f8/f8; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×400 beam, pass=true, V=757 kN, NBC205=false |
-| P5 balconies requested on level-2 | planned | 3 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=418 kN, NBC205=false |
-| P6 car parking 1 on 11.25×11.25 | planned | 3 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=418 kN, NBC205=false |
-| P7 10,000 L reservoir | planned | 3 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=418 kN, NBC205=false |
-| P8 floor height 2.9 m | planned | 3 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=411 kN, NBC205=false |
-| P9 floor height 3.3 m | planned | 3 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×400 beam, pass=true, V=452 kN, NBC205=false |
-| P10 declared area 4 aana (matches 126.56 m²? 4 aana=127.2 m²) | planned | 3 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=418 kN, NBC205=false |
-| D1 drawn rectangle 11.25×11.25 | planned | 3 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=418 kN, NBC205=false |
-| D2 drawn near-rectangle (88° corner) | planned | 3 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=417 kN, NBC205=false |
+| P5 balconies requested on level-2 | planned | 4 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=418 kN, NBC205=false |
+| P6 car parking 1 on 11.25×11.25 | planned | 4 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=418 kN, NBC205=false |
+| P7 10,000 L reservoir | planned | 4 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=418 kN, NBC205=false |
+| P8 floor height 2.9 m | planned | 4 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=411 kN, NBC205=false |
+| P9 floor height 3.3 m | planned | 4 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×400 beam, pass=true, V=452 kN, NBC205=false |
+| P10 declared area 4 aana (matches 126.56 m²? 4 aana=127.2 m²) | planned | 4 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=418 kN, NBC205=false |
+| D1 drawn rectangle 11.25×11.25 | planned | 4 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=418 kN, NBC205=false |
+| D2 drawn near-rectangle (88° corner) | planned | 4 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=417 kN, NBC205=false |
 | D3 trapezoid (front 12, back 9, depth 10) | planned | 3 options, floors f4/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 350×450 beam, pass=true, V=365 kN, NBC205=false |
 | D7 rotated rectangle (road on side 3), north 30 | planned | 3 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×400 beam, pass=true, V=477 kN, NBC205=false |
 | D8 5-sided, road on side 2, 3.5 rental | planned | 6 options, floors f6/f6/f7/p0; drawings 200 (11 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=607 kN, NBC205=false |
-| D9 drawn in feet via sketcher (35×50 ft) | planned | 3 options, floors f4/f6/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=493 kN, NBC205=false |
+| D9 drawn in feet via sketcher (35×50 ft) | planned | 4 options, floors f4/f6/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=493 kN, NBC205=false |
 | D4 5-sided irregular (fixture shape) | planned | 3 options, floors f4/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=398 kN, NBC205=false |
-| D5 L-shaped plot (6 corners) | no plan | 1× Buildable area 6.00 × 12.00 m (plot minus setbacks) is below the planner's minimum 6.5 × 7.5 m for a stair core and rooms. On shared-wall sides enter a 0 m proposed setback; narrow-plot layouts are not yet available. |
-| D6 triangle | no plan | 1× Buildable area 7.00 × 5.00 m (plot minus setbacks) is below the planner's minimum 6.5 × 7.5 m for a stair core and rooms. On shared-wall sides enter a 0 m proposed setback; narrow-plot layouts are not yet available. |
+| D5 L-shaped plot (6 corners) | planned | 3 options, floors f4/f4/p3; drawings 200 (10 sheets), DXF 200, structure: 450 col, 300×450 beam, pass=true, V=418 kN, NBC205=false |
+| D6 triangle | no plan | 20× Shared core does not fit within this footprint; 10× Shallow layout: the rooms need 7.3 m of frontage beside the stair; 3.0 m is available. |
 | X1 ward missing | refused | REQUIRED: Enter the plot ward number. |
-| X2 Lalitpur (no reviewed bylaw profile) | refused | MUNICIPALITY_NOT_REVIEWED: This municipality needs a reviewed local rule profile before generation. Available now: Kathmandu Metropolitan City, Pokhara Metropolitan City. |
-| X3 Pokhara | planned | 3 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 450 col, 300×450 beam, pass=true, V=474 kN, NBC205=false |
-| X4 municipality typed "Kathmandu" | planned | 3 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=418 kN, NBC205=false |
-| X25 municipality typed "kmc" | planned | 3 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=418 kN, NBC205=false |
-| X26 municipality typed "pokhara" | planned | 3 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 450 col, 300×450 beam, pass=true, V=474 kN, NBC205=false |
-| X27 partial floor 70 m² on 11.25 sq plot | planned | 3 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 450 col, 300×450 beam, pass=true, V=459 kN, NBC205=false |
+| X2 Lalitpur (no reviewed bylaw profile) | planned | 4 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=418 kN, NBC205=false |
+| X3 Pokhara | planned | 4 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 450 col, 300×450 beam, pass=true, V=474 kN, NBC205=false |
+| X4 municipality typed "Kathmandu" | planned | 4 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=418 kN, NBC205=false |
+| X25 municipality typed "kmc" | planned | 4 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 400 col, 300×450 beam, pass=true, V=418 kN, NBC205=false |
+| X26 municipality typed "pokhara" | planned | 4 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 450 col, 300×450 beam, pass=true, V=474 kN, NBC205=false |
+| X27 partial floor 70 m² on 11.25 sq plot | planned | 4 options, floors f5/f5/p1; drawings 200 (10 sheets), DXF 200, structure: 450 col, 300×450 beam, pass=true, V=459 kN, NBC205=false |
 | X5 width 0 | refused | INVALID_UNIT: site.rectangle.width needs a positive number and a supported unit (mm, cm, m, ft). |
 | X6 width blank | refused | INVALID_UNIT: site.rectangle.width needs a positive number and a supported unit (mm, cm, m, ft). |
 | X7 north blank | refused | REQUIRED: Enter true-north bearing. |

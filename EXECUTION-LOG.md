@@ -666,3 +666,43 @@ No implementation is claimed complete. Future agents should not mistake proposed
   - Large programs on small plots (needs two-row floor layouts).
   - Corner plots (second road not planned for).
   - Municipalities other than Kathmandu and Pokhara, pending reviewed bylaw profiles (owner decision).
+
+## 2026-10-01 — road orientation, municipalities, narrow/shallow layouts, program variants, east-road study, 3D colours
+
+- **Owner decisions applied.**
+  - Other municipalities are allowed with generic assumptions.
+  - Build the narrow-plot layouts.
+  - Decide the east-road entrance after inspecting plans.
+  - Add exterior and interior colour schemes with a visual gallery.
+  - Write a handover document (`HANDOVER.md`).
+- **Bug found and fixed: the planner ignored the road side.** The entrance was always on the survey's bottom edge. `plotFit.js` now turns rectangles by quarter turns so the road edge is the front, with north, setbacks and boundary notes turned too. Corner plots are planned once per road and labelled.
+- **Municipalities.** `normalizeBrief.js` accepts any NBC 105 Annex C local unit (fuzzy match, English names). Unreviewed ones carry `jurisdiction.profile.status='generic_working_assumptions_bylaws_unreviewed'`; the review sheet and site plan say so. Unknown names get "did you mean".
+- **Narrow layouts (`roomPlanner.js`).**
+  - `planNarrowFloor`: front stair, pass-through front room, side passage, rows behind the stair.
+  - `planMidStairFloor`: stair set back 3.0/3.6 m (`corePlanner.js` `offsetMm`), full-width front room, passage and bath beside the stair, rooms stacked behind. Only for owner-only narrow houses.
+  - Narrow mode is decided by the building width, not the floor width, so normal houses' partial top floors are unchanged.
+- **Shallow layout.** `planShallowFloor` puts a 1.6 m front gallery from the stair landing, with rooms side by side behind it. `frameGrid.js` puts the middle column row on the gallery wall. `drawingSet.structuralLayout` now joins each column to the next column on its line.
+- **Envelope.** The minimum buildable area is now 3.9 × 6.0 m. Narrow plots keep their width in the coverage fit. Depth is never cut below 7.5 m when it started above. Partial floors are clamped to the building width (narrow) or take the full depth (shallow); the extra length applies only to narrowed floors (the 8 m² over-constrained test still rejects).
+- **Program variants (`programVariants.js`).** `redistributionVariants` tries, in order:
+  1. a balanced spread (puja to the top owner floor; at most 2–3 main rooms per full floor and 1 on a partial floor);
+  2. moves from the failing floors to the emptiest floors;
+  3. adding a floor.
+  
+  Up to 24 variants are searched. Each is labelled and blocked with `PROGRAM_CHANGED_TO_FIT_OWNER_REVIEW`.
+- **Drawn plots.** `largestRectangle` now ranks by plannability class before area, so the triangle gets 7.65 × 8.05 m, not 9 × 7.
+- **East-road study.** Rendered and compared on an 11.25 m east-road plot. Decision: the default stays entrance-into-living; the top plan has the stair south-east, living east and the north-east open as parking. `searchConcepts({vastuAlternatives:true})`, used by the review path, appends the best plan with its kitchen ≥ 50 % in south-east/east when no shown plan has one, labelled "Vaastu alternative (kitchen SE/E)".
+- **3D colours.**
+  - `colourSchemes.js`: 8 exterior and 6 interior schemes.
+  - `NepalModel3D.jsx` additions:
+    - painted walls, floor bands, window frames and glass, plinth, parapets and terrace roofs;
+    - room paint strips with opening gaps;
+    - a dolls'-house "look inside" view;
+    - galleries that render the current house in every scheme as thumbnails;
+    - the choice is remembered in localStorage.
+  - Preview: `docs/handover/colour-schemes.png`. The "Vaastu colour guidance" scheme is labelled as not sourced from the supplied library (the library DB is absent here).
+- **Tests.**
+  - Backend 96/97; the only failure is the missing-original-PDF catalog test.
+  - `nepal-survey-coverage.test.js` has 9 tests, including narrow layouts and variants.
+  - Frontend 39/42, with `colour-schemes.test.mjs` added; the same 3 preview-config failures as before.
+  - Survey matrix: 51 planned / 23 refused / 2 no plan / 0 crashes.
+- **Next.** See `HANDOVER.md` §4.
