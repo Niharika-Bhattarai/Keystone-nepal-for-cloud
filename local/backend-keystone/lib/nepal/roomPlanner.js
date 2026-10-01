@@ -15,13 +15,16 @@ function roomTypes(level) {
   for(let i=0;i<level.livingRooms;i++)main.push('livingRoom');
   for(let i=0;i<level.kitchens;i++)main.push('kitchen');
   if(level.separateDiningRoom)main.push('dining');
-  for(let i=0;i<level.bedrooms;i++)main.push(i===0&&level.occupancy==='owner'?'primaryBedroom':
+  for(let i=0;i<level.bedrooms;i++)main.push(i===0&&level.occupancy==='owner'&&!level.secondaryBedroomsOnly?'primaryBedroom':
     i===level.bedrooms-1&&level.specialRooms?.includes('guestBedroom')?'guestBedroom':'bedroom');
   if(level.specialRooms?.includes('study'))main.push('study');
   const service=[...Array(level.bathrooms).fill('bathroom'),...(level.specialRooms||[]).filter(s=>SERVICE.has(s)&&s!=='puja')];
   return {main,service};
 }
-function planCompactRental({level,footprint,core,bearingDegrees}){
+// Rental flat beside the shared stair. With one bedroom and requested ground
+// bikes (owner instruction 2026-10-01: give up a ground room for parking), the
+// outer front bay becomes an open bike bay and the kitchen moves to the rear row.
+function planCompactRental({level,footprint,core,bearingDegrees,groundParking=null}){
   const slabs=footprint.slabs.map(rect),b=rect(core.box);
   if(slabs.length!==1)return null;
   const slab=slabs[0],west=core.side==='west',y0=slab.y1,y1=b.y2,y2=slab.y2;
@@ -46,7 +49,18 @@ function planCompactRental({level,footprint,core,bearingDegrees}){
   // route; the remaining rear bay is a private flex space off bedroom 2.
   const bathBox=rect([b.x1,y1,b.x2,y1+1525]);
   const utilityBox=rect([b.x1,y1+1525,b.x2,y2]);
-  const items=[
+  const bikeBay=level.bedrooms===1&&groundParking?.bikes>0;
+  if(bikeBay&&(kitchenBox.x2-kitchenBox.x1<2400||y1-y0<3500))return null;
+  const parking=bikeBay?{box:kitchenBox,bikesRequested:groundParking.bikes,
+    carsRequested:groundParking.cars||0,type:'roofed_open_ground_bay',
+    replacesRoom:'second ground-floor rental bedroom (moved to an upper owner floor)',
+    status:'geometric_bay_only_gate_manoeuvring_and_coverage_unverified'}:null;
+  const items=bikeBay?[
+    ['livingRoom',livingBox,'shared-floor-level-arrival'],
+    ['kitchen',nearBedroom,'cross-hall'],
+    ['bedroom',farBedroom,'cross-hall'],
+    ['bathroom',bathBox,'cross-hall'],
+    ['serviceNiche',utilityBox,'kitchen']]:[
     ['livingRoom',livingBox,'shared-floor-level-arrival'],
     ['kitchen',kitchenBox,'living-room'],
     ['bedroom',nearBedroom,'cross-hall'],
@@ -77,7 +91,8 @@ function planCompactRental({level,footprint,core,bearingDegrees}){
     const target=room.entryFrom==='shared-floor-level-arrival'?null:
       room.entryFrom==='living-room'?living.box:
         room.entryFrom==='cross-hall'?crossHall:
-          room.entryFrom==='near-bedroom'?rooms[2].box:null;
+          room.entryFrom==='near-bedroom'?rooms[2].box:
+            room.entryFrom==='kitchen'?rooms.find(r=>r.type==='kitchen').box:null;
     const open=room.type==='kitchen';
     const door=target?doorOnSharedEdge(room.box,target,{
       clearWidthMm:open?1200:room.type==='bathroom'?750:900,
@@ -92,7 +107,7 @@ function planCompactRental({level,footprint,core,bearingDegrees}){
       if(!room.windowReservation)room.openingStatus='no_physical_exterior_window_reserved';
     }
   }
-  return {ok:true,levelId:level.id,occupancy:level.occupancy,rooms,corridor:null,crossHall,
+  return {ok:true,levelId:level.id,occupancy:level.occupancy,rooms,corridor:null,crossHall,parking,
     circulationPortal:{...circulationPortal,status:'open_portal_reserved_no_door',
       openingStyle:'open_connection',from:'living-room',to:'cross-hall'},
     unitEntry:{from:'shared-floor-level-arrival',to:'living-room',doorReservation:{
@@ -256,10 +271,10 @@ function planFloorRooms({level,footprint,core,bearingDegrees,order='living-first
     const owner=planOwnerBedroomFloor({level,footprint,core,bearingDegrees,pujaBoxesBelow});
     if(owner)return owner;
   }
-  if(level.occupancy==='rental'&&level.bedrooms===2&&level.bathrooms===1&&
-    level.livingRooms===1&&level.kitchens===1&&!level.specialRooms?.length&&
+  if(level.occupancy==='rental'&&(level.bedrooms===2||level.bedrooms===1&&groundParking?.bikes>0)&&
+    level.bathrooms===1&&level.livingRooms===1&&level.kitchens===1&&!level.specialRooms?.length&&
     order==='living-first'){
-    const compact=planCompactRental({level,footprint,core,bearingDegrees});
+    const compact=planCompactRental({level,footprint,core,bearingDegrees,groundParking});
     if(compact)return compact;
   }
   const b=rect(core.box),slabs=footprint.slabs.map(rect);
@@ -311,6 +326,13 @@ function planFloorRooms({level,footprint,core,bearingDegrees,order='living-first
     if(firstDepth>=minimumHeight[types[0]]&&ymax-ymin-firstDepth>=minimumHeight[types[1]]){
       depths[0]=firstDepth;depths[1]=ymax-ymin-firstDepth;
     }
+  }
+  // Bedrooms on a partial (terrace) floor stop at the stair-core row so no fixed
+  // frame column stands inside them; the rest of the strip stays open terrace.
+  if(level.kind==='partial'&&types.length&&types.every(t=>/bedroom/i.test(t))&&
+    b.y2-ymin>=types.length*2280&&b.y2<ymax){
+    const each=Math.floor((b.y2-ymin)/types.length);
+    types.forEach((t,i)=>{depths[i]=i===types.length-1?b.y2-ymin-each*i:each;});
   }
   if(ownerBedroomFloor){
     depths[0]=b.y2-ymin;

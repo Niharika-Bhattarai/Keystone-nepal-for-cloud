@@ -14,6 +14,7 @@ const {doorOnSharedEdge,reserveWindow}=require('./spatialReservations');
 const {rect}=require('./areaLedger');
 const {COLUMN_WIDTH_MM,INTERIOR_WALL_MM,CLEAR_CORRIDOR_MM}=require('./constructionProfile');
 const {attachResidentialDetails}=require('./residentialDetails');
+const {parkingProgramVariant}=require('./programVariants');
 const {reserveRainChajjas}=require('./rainChajja');
 function gridTargetVariants(base,partitionLines){
   const centers=base.yAxesMm.slice(1,-1),clearance=(COLUMN_WIDTH_MM+INTERIOR_WALL_MM)/2;
@@ -178,7 +179,25 @@ function compare(a,b) {
   for(let i=0;i<a.score.length;i++)if(a.score[i]!==b.score[i])return b.score[i]-a.score[i];
   return a.id.localeCompare(b.id);}
 // Owner instruction (2026-09-30): a partial top floor may grow up to 65% of a full floor.
-function searchConcepts(brief,{provisionalSetbacksMm,workingCoverageLimit=null,
+// Requested parking that no candidate places triggers the owner-approved program
+// variant (programVariants.js); its candidates are returned separately, labelled.
+function searchConcepts(brief,options={}) {
+  const result=searchProgram(brief,options);
+  const unplaced=result.candidates.length>0&&result.candidates.every(c=>
+    c.validation.blockers.some(b=>b.code==='PARKING_AND_GATE_NOT_PLACED'));
+  const variant=unplaced&&options.programVariants!==false?parkingProgramVariant(brief):null;
+  if(variant){
+    const alt=searchProgram(variant.brief,options);
+    for(const c of alt.candidates){
+      c.programChange=variant.change;
+      c.validation.blockers.unshift({code:'PROGRAM_CHANGED_FOR_PARKING_OWNER_REVIEW',...variant.change.moved});
+    }
+    result.parkingProgramVariant={change:variant.change,brief:variant.brief,candidates:alt.candidates,
+      attempts:alt.attempts,placesParking:alt.candidates.some(c=>c.levels[0].rooms?.parking)};
+  }
+  return result;
+}
+function searchProgram(brief,{provisionalSetbacksMm,workingCoverageLimit=null,
   partialTopMaxShare=0.65,
   tankLitres=brief.buildingProgram.services?.groundReservoirLitres||8000,
   maxCandidates=3}={}) {

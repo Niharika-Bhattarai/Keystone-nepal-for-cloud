@@ -210,3 +210,35 @@ test('open ground bays and partial upper floors are reported as NBC 105 configur
   assert.ok(owner.validation.blockers.some(x=>x.code==='OPEN_GROUND_BAY_SOFT_STOREY_AND_TORSION_REVIEW'));
   assert.ok(owner.validation.blockers.some(x=>x.code==='UPPER_FLOOR_SETBACK_IRREGULARITY_REVIEW'));
 });
+
+test('rental parking: one ground bedroom moves up so the requested bikes fit at the front (owner instruction)',()=>{
+  const brief=normalizeBrief(require('./fixtures/nepal/rental-3_5.json')).brief;
+  const result=searchConcepts(brief,{provisionalSetbacksMm:[1000,1000,1000,1000],workingCoverageLimit:0.7,maxCandidates:6});
+  // The supplied program is untouched and still reports the missing bay.
+  assert.ok(result.candidates.every(c=>c.validation.blockers.some(b=>b.code==='PARKING_AND_GATE_NOT_PLACED')));
+  const variant=result.parkingProgramVariant;
+  assert.deepEqual(variant.change.moved,{roomType:'bedroom',fromLevelId:'ground',fromOccupancy:'rental',
+    toLevelId:'partial-third',toOccupancy:'owner'});
+  assert.equal(variant.change.status,'program_change_requires_household_confirmation');
+  assert.equal(variant.brief.buildingProgram.bedrooms,brief.buildingProgram.bedrooms);
+  const withBay=variant.candidates.filter(c=>c.levels[0].rooms.parking);
+  assert.ok(withBay.length>=2);
+  assert.equal(variant.candidates[0],withBay[0]);
+  for(const c of withBay){
+    const bay=c.levels[0].rooms.parking.box;
+    assert.equal(bay.y1,c.envelope.buildable.y1);// on the road-side front edge
+    assert.ok(bay.x2-bay.x1>=2400&&bay.y2-bay.y1>=3500);
+    assert.deepEqual(c.levels[0].rooms.rooms.filter(r=>['livingRoom','kitchen','bedroom','bathroom'].includes(r.type))
+      .map(r=>r.type).sort(),['bathroom','bedroom','kitchen','livingRoom']);
+    const top=c.levels.at(-1).rooms.rooms.find(r=>/bedroom/i.test(r.type));
+    assert.equal(top.type,'bedroom');// an extra family bedroom, not a second primary
+    assert.ok(c.validation.blockers.some(b=>b.code==='PROGRAM_CHANGED_FOR_PARKING_OWNER_REVIEW'));
+    assert.ok(c.validation.blockers.some(b=>b.code==='OPEN_GROUND_BAY_SOFT_STOREY_AND_TORSION_REVIEW'));
+    assert.ok(!c.validation.blockers.some(b=>['COLUMN_IN_ROOM_CLEAR_AREA','PARKING_AND_GATE_NOT_PLACED',
+      'ROOM_SIZE_BELOW_PROVISIONAL_NBC206'].includes(b.code)),c.id);
+  }
+  // An owner brief whose bay already fits gets no variant.
+  const owner=searchConcepts(normalizeBrief(require('./fixtures/nepal/rectangle-2_5.json')).brief,
+    {provisionalSetbacksMm:[1000,1000,1000,1000],workingCoverageLimit:0.7,maxCandidates:6});
+  assert.equal(owner.parkingProgramVariant,undefined);
+});

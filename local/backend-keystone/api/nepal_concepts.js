@@ -11,10 +11,18 @@ module.exports=async(req,res)=>{
     message:preflight.message,blockers:preflight.blockers});
   try{
     const review=buildReviewCase('Your Nepal survey',preflight.normalizedBrief);
+    const variant=review.result.parkingProgramVariant;
+    // Owner-approved program variant, shown separately and labelled as a change.
+    const variantReview=variant?{label:'Program variant for parking: one ground bedroom moved up (household must confirm)',
+      brief:variant.brief,assumptions:review.assumptions,
+      result:{candidates:variant.candidates,attempts:variant.attempts,variations:[],
+        status:'unverified_concepts_only',generationAvailable:false}}:null;
     if(req.body?.format==='json'){
       const {exportCandidateGeometry}=require('../lib/nepal/geometryExport');
       return res.status(200).json({success:true,status:'unverified_concepts_only',generationAvailable:false,
-        candidates:review.result.candidates.map(c=>exportCandidateGeometry(c,preflight.normalizedBrief)),
+        candidates:[...review.result.candidates.map(c=>exportCandidateGeometry(c,preflight.normalizedBrief)),
+          ...(variant?variant.candidates.map(c=>({...exportCandidateGeometry(c,variant.brief),
+            id:`${c.id} (parking variant)`,programChange:variant.change})):[])],
         attempts:review.result.attempts.filter(a=>a.status==='rejected').length});
     }
     if(req.body?.spatialStudy===true){
@@ -24,7 +32,7 @@ module.exports=async(req,res)=>{
       const result=await runSpatialStudy(review.result.candidates);
       return res.status(200).type('html').send(renderSpatialStudy(result));
     }
-    return res.status(200).type('html').send(renderReviewDocument([review]));
+    return res.status(200).type('html').send(renderReviewDocument(variantReview?[review,variantReview]:[review]));
   }catch(error){
     return res.status(422).json({success:false,code:'CONCEPT_GEOMETRY_UNAVAILABLE',
       message:error.message});
