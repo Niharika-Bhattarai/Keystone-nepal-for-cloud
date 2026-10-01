@@ -35,8 +35,41 @@ function largestRectangle(poly){
   return {x1:x0+best.i1*CELL_MM,y1:y0+best.j1*CELL_MM,x2:x0+best.i2*CELL_MM,y2:y0+best.j2*CELL_MM};
 }
 
+// Compass side a plan edge faces, from the north bearing (CCW from plan +x).
+function facing(edgeIndex,bearingDeg){
+  const out=[270,0,90,180][edgeIndex]??270;// outward normal of bottom/right/top/left
+  const rel=((out-bearingDeg)%360+360)%360;// angle from north, counter-clockwise
+  return ['north','north-west','west','south-west','south','south-east','east','north-east'][Math.round(rel/45)%8];
+}
+// A rectangle whose road is not on the bottom edge is turned by quarter turns so
+// it is: the planner always puts the entrance on the bottom (front) edge. North,
+// setbacks and boundary notes turn with it.
+function turnRectangle(brief,front){
+  const site=brief.site,e=front.edgeIndex;
+  const [w,d]=[site.verticesMm[2].xMm-site.verticesMm[0].xMm,site.verticesMm[2].yMm-site.verticesMm[0].yMm];
+  const [nw,nd]=e%2?[d,w]:[w,d];
+  const boundaries=[0,1,2,3].map(k=>{const b=site.boundaries?.[(k+e)%4];return b?{...b,edgeIndex:k}:undefined;}).filter(Boolean);
+  return {...brief,site:{...site,verticesMm:[{xMm:0,yMm:0},{xMm:nw,yMm:0},{xMm:nw,yMm:nd},{xMm:0,yMm:nd}],
+    measuredAreaSqM:nw*nd/1e6,north:{...site.north,bearingDegrees:((site.north.bearingDegrees-90*e)%360+360)%360},
+    frontageEdges:[{...front,edgeIndex:0}],otherRoadEdges:(site.frontageEdges||[]).filter(f=>f!==front).map(f=>({...f,edgeIndex:(f.edgeIndex-e+4)%4})),
+    boundaries:boundaries.length===4?boundaries:site.boundaries,
+    entrance:{surveyEdgeIndex:e,faces:facing(e,site.north.bearingDegrees),turnedDegrees:e?-90*e:0},
+    planningFit:e?{status:'turned_rectangle',rotationDegrees:90*e,
+      note:`Plan turned ${90*e}° so the road side (survey ${['bottom','right','top','left'][e]} edge, facing ${facing(e,site.north.bearingDegrees)}) is at the front; the north arrow shows true north.`}:null}};
+}
+// One planning brief per road frontage (a corner plot gets one per road).
+function planningBriefs(brief){
+  const fronts=brief?.site?.frontageEdges?.length?brief.site.frontageEdges:[{edgeIndex:0}];
+  const uniq=fronts.filter((f,i)=>fronts.findIndex(g=>g.edgeIndex===f.edgeIndex)===i);
+  return uniq.map(front=>planningBrief({...brief,site:{...brief.site,frontageEdges:[front,...uniq.filter(f=>f!==front)]}}));
+}
 function planningBrief(brief){
   const site=brief?.site;
+  if(site?.shape==='rectangle'&&Array.isArray(site.verticesMm)&&site.verticesMm.length===4){
+    const front=site.frontageEdges?.[0]||{edgeIndex:0};
+    const turned=turnRectangle(brief,front);
+    return turned;
+  }
   if(site?.shape!=='surveyedPolygon'||!Array.isArray(site.verticesMm)||site.verticesMm.length<3)return brief;
   let poly=site.verticesMm.map(v=>({xMm:v.xMm,yMm:v.yMm}));
   const front=site.frontageEdges?.[0]||{edgeIndex:0};
@@ -62,10 +95,11 @@ function planningBrief(brief){
     frontageEdges:[{...front,edgeIndex:0}],
     boundaries:[0,1,2,3].map(i=>({edgeIndex:i,neighbor:i===0?(roadBoundary?.neighbor||'road'):'unknown',neighborHeightMm:null,
       neighborHasWindows:null,proposedSetbackMm:i===0?roadBoundary?.proposedSetbackMm??null:null,note:''})),
-    plotPolygonMm:rot,plotAreaSqM,
+    plotPolygonMm:rot,plotAreaSqM,otherRoadEdges:[],
+    entrance:{surveyEdgeIndex:front.edgeIndex,faces:facing(0,Math.round(bearing*100)/100)},
     planningFit:{status:'largest_inscribed_rectangle',rotationDegrees:Math.round(thetaDeg*100)/100,
       rectangleMm:[w,d],rectangleAreaSqM:w*d/1e6,plotAreaSqM,usedShare:w*d/1e6/plotAreaSqM,touchesRoadEdge:touchesRoad,
       note:`Planned on the largest rectangle inside the drawn plot (${(w/1000).toFixed(2)} × ${(d/1000).toFixed(2)} m, ${Math.round(w*d/1e6/plotAreaSqM*100)} % of ${plotAreaSqM.toFixed(1)} m²), turned ${Math.round(thetaDeg)}° so the road edge is at the bottom. Setbacks are measured from this rectangle; coverage is reported against the rectangle (conservative).`}}};
 }
 
-module.exports={planningBrief,largestRectangle};
+module.exports={planningBrief,planningBriefs,largestRectangle,facing};

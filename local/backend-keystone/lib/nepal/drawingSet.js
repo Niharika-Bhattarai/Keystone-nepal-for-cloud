@@ -466,7 +466,7 @@ function renderDrawingSet(candidate,brief,{option='Option 1',date=new Date().toI
         `text-anchor="middle"${e%2?` transform="rotate(-90 ${v.x((road.x1+road.x2)/2)} ${v.y((road.y1+road.y2)/2)+1})"`:''}`);}
     s+=chain(v,'x',[site.x1,site.x2],v.y(site.y2)-4,'top')+chain(v,'y',[site.y1,site.y2],v.x(site.x1)-4,'left');
     const sb=candidate.envelope.setbacksMm||[];
-    s+=text(area.x1,area.y2-2,`Working setbacks ${sb.map(m=>ftin(m)).join(' / ')} — provisional; adopted municipal setbacks to be applied.`,2);
+    s+=text(area.x1,area.y2-2,`Working setbacks ${sb.map(m=>ftin(m)).join(' / ')} — provisional; adopted municipal setbacks to be applied.${brief.jurisdiction?.profile?.status==='generic_working_assumptions_bylaws_unreviewed'?' Bylaws of this municipality not yet reviewed in Keystone.':''}`,2);
     const fit=brief.site?.planningFit;
     if(fit?.rectangleMm)s+=text(area.x1,area.y2-6,`Drawn plot (heavy dashed) planned on its largest inner rectangle ${(fit.rectangleMm[0]/1000).toFixed(2)} × ${(fit.rectangleMm[1]/1000).toFixed(2)} m (light dashed), turned ${Math.round(fit.rotationDegrees)}° so the road is at the bottom; setbacks from the rectangle.`,1.8);
     if(candidate.envelope.coverageFit)s+=text(area.x1,area.y2-(fit?.rectangleMm?10:6),candidate.envelope.coverageFit.note.slice(0,190),1.8);

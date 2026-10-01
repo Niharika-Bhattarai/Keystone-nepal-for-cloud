@@ -55,7 +55,10 @@ export function buildNepalSurvey(form) {
         depth: { value: decimal(form.depth), unit: 'm' } } }),
     ...(form.declaredArea !== '' ? { declaredArea: { value: decimal(form.declaredArea), unit: form.areaUnit } } : {}),
     north: { bearingDegrees: decimal(form.north), evidence: form.northEvidence },
-    frontageEdges: [{ edgeIndex: decimal(form.roadEdge), roadWidth: { value: decimal(form.roadWidth), unit: 'm' } }],
+    // The chosen road side first; any other edge marked "road" makes a corner plot.
+    frontageEdges: [{ edgeIndex: decimal(form.roadEdge), roadWidth: { value: decimal(form.roadWidth), unit: 'm' } },
+      ...Array.from({ length: edgeCount }, (_, i) => i).filter(i => i !== Number(form.roadEdge) && form.boundaryNeighbors?.[i] === 'road')
+        .map(i => ({ edgeIndex: i, roadWidth: { value: decimal(form.boundaryRoadWidths?.[i] || form.roadWidth), unit: 'm' } }))],
     boundaries: Array.from({ length: edgeCount }, (_, i) => ({
       neighbor: form.boundaryNeighbors?.[i] || 'unknown',
       ...(form.boundaryHeights?.[i] ? { neighborHeight: { value: decimal(form.boundaryHeights[i]), unit: 'm' } } : {}),
@@ -179,8 +182,8 @@ export function NepalBrief() {
     <div className="studio-item-title">Nepal site brief</div>
     <p className="studio-empty-note">Enter a rectangular plot, or draw the plot side by side with lengths and angles. The house itself can have a rectangular, stepped L or courtyard shape. On a side shared with a neighbour's wall, enter a 0 m proposed setback (plot edges section). Check the brief before design.</p>
     <Field label="Municipality" value={form.municipality} onChange={set('municipality')} list="nepal-municipalities"/>
-    <datalist id="nepal-municipalities"><option value="Kathmandu Metropolitan City"/><option value="Pokhara Metropolitan City"/></datalist>
-    <p className="studio-empty-note">Plans are available for Kathmandu and Pokhara Metropolitan Cities while other municipalities' bylaws are reviewed.</p>
+    <datalist id="nepal-municipalities"><option value="Kathmandu Metropolitan City"/><option value="Lalitpur Metropolitan City"/><option value="Bhaktapur Municipality"/><option value="Madhyapur Thimi Municipality"/><option value="Kirtipur Municipality"/><option value="Tokha Municipality"/><option value="Budhanilakantha Municipality"/><option value="Tarakeshwar Municipality"/><option value="Nagarjun Municipality"/><option value="Chandragiri Municipality"/><option value="Kageshwori Manohara Municipality"/><option value="Gokarneshwor Municipality"/><option value="Shankharapur Municipality"/><option value="Dakshinkali Municipality"/><option value="Godawari Municipality"/><option value="Mahalaxmi Municipality"/><option value="Suryabinayak Municipality"/><option value="Changunarayan Municipality"/><option value="Pokhara Metropolitan City"/><option value="Bharatpur Metropolitan City"/><option value="Biratnagar Metropolitan City"/><option value="Birgunj Metropolitan City"/><option value="Dharan Sub-Metropolitan City"/><option value="Butwal Sub-Metropolitan City"/><option value="Hetauda Sub-Metropolitan City"/><option value="Itahari Sub-Metropolitan City"/><option value="Dhangadhi Sub-Metropolitan City"/><option value="Nepalgunj Sub-Metropolitan City"/><option value="Banepa Municipality"/><option value="Dhulikhel Municipality"/></datalist>
+    <p className="studio-empty-note">Any municipality or rural municipality in Nepal can be entered. Kathmandu has a reviewed bylaw profile; elsewhere plans use generic working setbacks and coverage until that municipality's bylaws are reviewed.</p>
     <Field label="Ward" value={form.ward} onChange={set('ward')} placeholder="Ward number"/>
     <label style={{ display: 'grid', gap: 5, fontSize: 12, marginBottom: 10 }}>Plot shape
       <select value={form.shape === 'surveyedPolygon' ? 'surveyedPolygon' : 'rectangle'} onChange={e => set('shape')(e.target.value)}>
@@ -234,6 +237,9 @@ export function NepalBrief() {
             {['unknown', 'open', 'building', 'road'].map(v => <option key={v}>{v}</option>)}
           </select>
         </label>
+        {form.boundaryNeighbors?.[i] === 'road' && i !== Number(form.roadEdge) &&
+          <Field label="Second road on this edge: road width (m) — the plot is treated as a corner plot" type="number" step="any"
+            value={form.boundaryRoadWidths?.[i] || ''} onChange={setLevel('boundaryRoadWidths', i)} placeholder={form.roadWidth}/>}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
           <Field label="Neighbor height (m, if known)" type="number" step="any" value={form.boundaryHeights?.[i] || ''} onChange={setLevel('boundaryHeights', i)}/>
           <Field label="Proposed setback (m, if known)" type="number" step="any" value={form.boundarySetbacks?.[i] || ''} onChange={setLevel('boundarySetbacks', i)}/>

@@ -85,8 +85,18 @@ test('common municipality spellings resolve; partial floors larger than the plot
   for(const name of ['Kathmandu','kmc','KATHMANDU METROPOLITAN CITY','Kathmandu Mahanagarpalika'])
     assert.equal(normalizeBrief(survey({'jurisdiction.municipality':name})).brief.jurisdiction.municipality,'Kathmandu Metropolitan City');
   assert.equal(normalizeBrief(survey({'jurisdiction.municipality':'pokhara'})).brief.jurisdiction.municipality,'Pokhara Metropolitan City');
-  const lalitpur=preflightNepal(survey({'jurisdiction.municipality':'Lalitpur Metropolitan City'}));
-  assert.match(lalitpur.message,/Available now: Kathmandu Metropolitan City, Pokhara Metropolitan City/);
+  // Owner decision 2026-10-01: other municipalities plan with generic working assumptions.
+  for(const [typed,name] of [['lalitpur','Lalitpur Metropolitan City'],['Bhaktapur','Bhaktapur Municipality'],['Tokha','Tokha Municipality'],
+    ['Kageshwori Manohara Municipality','Kageshwori Manahora Municipality']]){
+    const pf=preflightNepal(survey({'jurisdiction.municipality':typed}));
+    assert.equal(pf.contractReady,true,typed);assert.equal(pf.normalizedBrief.jurisdiction.municipality,name);
+    assert.equal(pf.normalizedBrief.jurisdiction.profile.status,'generic_working_assumptions_bylaws_unreviewed');
+    assert.ok(pf.blockers.some(b=>b.code==='MUNICIPAL_OVERLAY_PENDING'));
+  }
+  const html=require('../lib/nepal/reviewSheet').renderReviewDocument([plan(survey({'jurisdiction.municipality':'Lalitpur'}))]);
+  assert.match(html,/Lalitpur Metropolitan City has no reviewed bylaw profile/);
+  const unknown=preflightNepal(survey({'jurisdiction.municipality':'Nowhere Town'}));
+  assert.equal(unknown.contractReady,false);assert.match(unknown.message,/Did you mean/);
   const big=preflightNepal(survey({'buildingProgram.levels':rental.buildingProgram.levels.map(l=>l.kind==='partial'?{...l,targetArea:{value:500,unit:'sq_m'}}:l)}));
   assert.ok(big.blockers.some(b=>b.code==='PARTIAL_AREA_TOO_LARGE'));
 });

@@ -1,5 +1,6 @@
 'use strict';
 const { lengthMm, areaSqM } = require('./units');
+const { zoneFactorFor } = require('./structural/hazard');
 const allowedStoreys = new Set([1, 2, 2.5, 3, 3.5]);
 const allowedMunicipalities = new Set(['Kathmandu Metropolitan City', 'Pokhara Metropolitan City']);
 const issue = (code, field, message) => ({ code, field, message });
@@ -8,10 +9,17 @@ const issue = (code, field, message) => ({ code, field, message });
 const MUNICIPALITY_ALIASES = [
   [/^(kathmandu|kmc|kathmandu metropolitan( city)?|kathmandu mahanagar ?palika)$/, 'Kathmandu Metropolitan City'],
   [/^(pokhara|pokhara lekhnath|pokhara metropolitan( city)?|pokhara (lekhnath )?mahanagar ?palika)$/, 'Pokhara Metropolitan City']];
+const TYPE_NAMES = [[/ Upamahanagarpalika$/, ' Sub-Metropolitan City'], [/ Mahanagarpalika$/, ' Metropolitan City'],
+  [/ Gaunpalika$/, ' Rural Municipality'], [/ Nagarpalika$/, ' Municipality']];
+const englishName = localUnit => TYPE_NAMES.reduce((name, [re, en]) => name.replace(re, en), localUnit);
 function canonicalMunicipality(value) {
   const typed = String(value || '').trim().replace(/\s+/g, ' ');
   const key = typed.toLowerCase().replace(/[.,]/g, '');
-  return MUNICIPALITY_ALIASES.find(([re]) => re.test(key))?.[1] || typed;
+  const alias = MUNICIPALITY_ALIASES.find(([re]) => re.test(key))?.[1];
+  if (alias || !typed) return alias || typed;
+  // Any spelling of an Annex C local unit becomes its English official name.
+  const match = zoneFactorFor(typed);
+  return match.found && match.confidence >= 0.85 ? englishName(match.row.localUnit) : typed;
 }
 const finite = n => Number.isFinite(n);
 const distance = (a, b) => Math.hypot(b.xMm - a.xMm, b.yMm - a.yMm);
@@ -42,8 +50,18 @@ function normalizeBrief(raw) {
   const municipality = canonicalMunicipality(jurisdiction.municipality);
   need(municipality, 'jurisdiction.municipality', 'Choose the municipality for the plot.');
   need(String(jurisdiction.ward ?? '').trim(), 'jurisdiction.ward', 'Enter the plot ward number.');
-  if (municipality && !allowedMunicipalities.has(municipality)) unsupported.push(issue('MUNICIPALITY_NOT_REVIEWED',
-    'jurisdiction.municipality', `This municipality needs a reviewed local rule profile before generation. Available now: ${[...allowedMunicipalities].join(', ')}.`));
+  // Owner decision 2026-10-01: every local unit in NBC 105:2025 Annex C may be
+  // planned with the generic working setbacks and coverage. Only Kathmandu and
+  // Pokhara have reviewed profiles; elsewhere the rule pack reports
+  // MUNICIPAL_OVERLAY_PENDING and plans say the bylaws are unchecked.
+  let municipalityProfile = null;
+  if (municipality && !allowedMunicipalities.has(municipality)) {
+    const match = zoneFactorFor(municipality, jurisdiction.district);
+    if (match.found && match.confidence >= 0.85) municipalityProfile = { status: 'generic_working_assumptions_bylaws_unreviewed',
+      annexC: { sn: match.row.sn, district: match.row.district, localUnit: match.row.localUnit } };
+    else unsupported.push(issue('MUNICIPALITY_NOT_FOUND', 'jurisdiction.municipality',
+      `“${municipality}” is not in the NBC 105 list of local units. Did you mean ${match.candidates?.map(r => englishName(r.localUnit)).join(', ') || 'another spelling'}?`));
+  } else if (municipality) municipalityProfile = { status: 'reviewed_profile_available' };
 
   const site = raw.site || {};
   const shape = site.shape;
@@ -317,7 +335,7 @@ function normalizeBrief(raw) {
   if (stairType !== 'halfTurnLanding') unsupported.push(issue('STAIR_TYPE_PENDING', 'buildingProgram.stair.type', 'This stair type needs a verified Nepal geometry profile.'));
   const vastuProfile = raw.vastuProfile || 'Jain-led';
   if (vastuProfile !== 'Jain-led') unsupported.push(issue('VASTU_PROFILE_NOT_REVIEWED', 'vastuProfile', 'This Vaastu interpretation needs a reviewed profile.'));
-  return { brief: { version: 1, jurisdiction: { country: 'NP', municipality, ward: String(jurisdiction.ward ?? '').trim() },
+  return { brief: { version: 1, jurisdiction: { country: 'NP', municipality, ward: String(jurisdiction.ward ?? '').trim(), profile: municipalityProfile },
     site: { shape, verticesMm: vertices, measuredAreaSqM, declaredAreaSqM, north: { bearingDegrees: bearing, evidence: north.evidence },
       frontageEdges, boundaries: normalizedBoundaries, context: siteContext },
     buildingProgram: { storeys, levels, ...programCounts, puja: program.puja,
