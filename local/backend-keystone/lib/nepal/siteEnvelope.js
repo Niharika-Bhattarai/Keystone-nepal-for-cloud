@@ -18,7 +18,7 @@ function siteEnvelope(brief,{setbacksMm,reviewed=false}={}) {
 }
 function footprints(envelope,{compactRectangle=false}={}) {
   const b=envelope.buildable,w=b.x2-b.x1,h=b.y2-b.y1;
-  if (w<6500||h<7500) return [];
+  if (w<3900||h<6000) return [];
   // On the compact reference parcel the 4,585 mm stair bay plus one other
   // bay must fit inside two <= 4,267 mm column-axis spans. A 400 mm north
   // Pullback makes the 9.25 m buildable length an 8.85 m, 3-axis plan.
@@ -29,6 +29,8 @@ function footprints(envelope,{compactRectangle=false}={}) {
   const courtW=Math.max(3000,Math.floor(w*0.28/100)*100);
   const courtD=Math.max(3000,Math.floor(h*0.35/100)*100);
   const courtLeft=b.x1+Math.floor((w-courtW)/2),courtRight=courtLeft+courtW;
+  // Narrow buildings (< 6.5 m) keep a plain rectangle: wings would be too thin.
+  if (w<6500||h<7500) return [{family:'rectangle',slabs:[b],voids:[],areaSqM:areaSqM([b]),envelopeStatus:envelope.legalStatus}];
   const cases=[
     {family:'rectangle',slabs:[rectangleSlab],voids:[]},
     {family:'L-northwest',slabs:[rect([b.x1,b.y1,b.x2,b.y2-ny]),rect([b.x1+nx,b.y2-ny,b.x2,b.y2])],voids:[]},
@@ -49,10 +51,18 @@ function partialTopFootprint(full,core,targetAreaSqM,{preferredDepthMm=0,minWidt
     Math.ceil(targetAreaSqM*1e6/preferredDepthMm)):
     Math.max(c.x2-c.x1+1000,Math.ceil(Math.sqrt(targetAreaSqM*1e6)/100)*100);
   // A widened floor keeps its preferred depth, so its area grows above the target.
-  const width=Math.max(baseWidth,minWidthMm);
+  // On a narrow building the partial floor takes the full width and more depth.
+  const width=Math.min(Math.max(baseWidth,minWidthMm),x2-x1);
   const height=width>baseWidth?Math.max(Math.ceil(targetAreaSqM*1e6/width),preferredDepthMm):
-    Math.ceil(targetAreaSqM*1e6/width);
-  const box=rect(core.side==='west'?[x1,y1,x1+width,y1+height]:[x2-width,y1,x2,y1+height]);
+    width<baseWidth?Math.max(Math.ceil(targetAreaSqM*1e6/width),c.y2-c.y1+1200):Math.ceil(targetAreaSqM*1e6/width);
+  // A shallow building: the partial floor takes the full depth and grows along the front.
+  if(height>y2-y1&&y2-y1<7500){const h=y2-y1,w=Math.min(x2-x1,Math.max(c.x2-c.x1+1000,Math.ceil(targetAreaSqM*1e6/h/100)*100));
+    const box=rect(core.side==='west'?[x1,y1,x1+w,y2]:[x2-w,y1,x2,y2]);
+    if(areaSqM([c],[box])>1e-9)throw new Error('Partial top floor cannot contain the continuous stair within this footprint');
+    return {family:`${full.family}-partial`,slabs:[box],voids:[],areaSqM:areaSqM([box]),envelopeStatus:full.envelopeStatus};}
+  // A mid-depth stair: the partial floor ends behind the stair, not at the front.
+  const by1=c.y2>y1+height?Math.max(y1,c.y2-height):y1;
+  const box=rect(core.side==='west'?[x1,by1,x1+width,by1+height]:[x2-width,by1,x2,by1+height]);
   if(box.y2>y2||areaSqM([box],slabs)>1e-9||areaSqM([c],[box])>1e-9)
     throw new Error('Partial top floor cannot contain the continuous stair within this footprint');
   return {family:`${full.family}-partial`,slabs:[box],voids:[],areaSqM:areaSqM([box]),

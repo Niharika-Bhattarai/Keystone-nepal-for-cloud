@@ -41,7 +41,7 @@ const boxArea=b=>(b.x2-b.x1)*(b.y2-b.y1)/1e6;
 const ROOM_NAMES={livingRoom:'LIVING',kitchen:'KITCHEN + DINING',primaryBedroom:'MASTER BEDROOM',
   bedroom:'BEDROOM',guestBedroom:'GUEST BEDROOM',bathroom:'TOILET/BATH',puja:'PUJA',
   primaryAlcove:'BEDROOM ALCOVE',livingAnnex:'LIVING ANNEX',diningAnnex:'DINING',
-  utilityFlex:'UTILITY',serviceNiche:'STORE/UTILITY',study:'STUDY',store:'STORE',laundry:'LAUNDRY'};
+  utilityFlex:'UTILITY',serviceNiche:'STORE/UTILITY',lobby:'LOBBY / SITTING',study:'STUDY',store:'STORE',laundry:'LAUNDRY'};
 const roomName=r=>r.useIntent?.startsWith('bedroom_entry_vestibule')?'VESTIBULE':ROOM_NAMES[r.type]||r.type.toUpperCase();
 
 // ---------- geometry helpers ----------
@@ -110,14 +110,14 @@ function structuralLayout(candidate){
   const at=new Set(cols.map(c=>`${c.xMm},${c.yMm}`));
   const beams=[];
   const depth=span=>Math.max(300,Math.ceil(span/12/25)*25);
-  for(const y of g.yAxesMm)for(let i=0;i+1<g.xAxesMm.length;i++){
-    const [a,b]=[g.xAxesMm[i],g.xAxesMm[i+1]];
-    if(at.has(`${a},${y}`)&&at.has(`${b},${y}`)&&inSlab((a+b)/2,y))beams.push({axis:'x',line:y,from:a,to:b,spanMm:b-a});
-  }
-  for(const x of g.xAxesMm)for(let i=0;i+1<g.yAxesMm.length;i++){
-    const [a,b]=[g.yAxesMm[i],g.yAxesMm[i+1]];
-    if(at.has(`${x},${a}`)&&at.has(`${x},${b}`)&&inSlab(x,(a+b)/2))beams.push({axis:'y',line:x,from:a,to:b,spanMm:b-a});
-  }
+  // A beam joins each column to the next column on the same line (axes without
+  // a column there, e.g. the shallow-plan stair row, are skipped).
+  for(const y of g.yAxesMm){const xs=g.xAxesMm.filter(x=>at.has(`${x},${y}`));
+    for(let i=0;i+1<xs.length;i++){const [a,b]=[xs[i],xs[i+1]];
+      if(inSlab((a+b)/2,y))beams.push({axis:'x',line:y,from:a,to:b,spanMm:b-a});}}
+  for(const x of g.xAxesMm){const ys=g.yAxesMm.filter(y=>at.has(`${x},${y}`));
+    for(let i=0;i+1<ys.length;i++){const [a,b]=[ys[i],ys[i+1]];
+      if(inSlab(x,(a+b)/2))beams.push({axis:'y',line:x,from:a,to:b,spanMm:b-a});}}
   const beamTypes=new Map();
   for(const b of beams){const d=depth(b.spanMm);const key=`230x${d}`;
     if(!beamTypes.has(key))beamTypes.set(key,{id:`B${beamTypes.size+1}`,widthMm:230,depthMm:d,maxSpanMm:0,count:0});

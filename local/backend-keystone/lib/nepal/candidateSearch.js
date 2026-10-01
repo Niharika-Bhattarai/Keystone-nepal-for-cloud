@@ -14,7 +14,7 @@ const {doorOnSharedEdge,reserveWindow}=require('./spatialReservations');
 const {rect}=require('./areaLedger');
 const {COLUMN_WIDTH_MM,INTERIOR_WALL_MM,CLEAR_CORRIDOR_MM}=require('./constructionProfile');
 const {attachResidentialDetails}=require('./residentialDetails');
-const {parkingProgramVariant}=require('./programVariants');
+const {parkingProgramVariant,redistributionVariants}=require('./programVariants');
 const {reserveRainChajjas}=require('./rainChajja');
 function gridTargetVariants(base,partitionLines){
   const centers=base.yAxesMm.slice(1,-1),clearance=(COLUMN_WIDTH_MM+INTERIOR_WALL_MM)/2;
@@ -44,7 +44,7 @@ function coordinateOpenings(level,core,grid,site){
     return rect([column.xMm-h,column.yMm-h,column.xMm+h,column.yMm+h]);});
   const arrival=core.flights[0]?.arrivalLandings[0].box||core.entryPad,b=rect(core.box);
   const living=level.rooms.rooms.find(r=>r.entryFrom==='shared-floor-level-arrival');
-  const entry=doorOnSharedEdge(rect([b.x1,arrival.y1,b.x2,arrival.y2]),
+  const entry=doorOnSharedEdge(rect([b.x1,Math.min(arrival.y1,b.y1),b.x2,arrival.y2]),
     living?.box||level.rooms.corridor,{clearWidthMm:1000,endClearanceMm:50,avoidBoxes:columns});
   if(!entry)throw new Error(`${level.id}: Floor-level unit entry cannot avoid a planning column.`);
   level.rooms.unitEntry.doorReservation={...entry,from:'shared-floor-level-arrival',
@@ -89,7 +89,7 @@ function coordinateOpenings(level,core,grid,site){
     const door=room.entryFrom==='shared-floor-level-arrival'?entry:
       doorOnSharedEdge(room.box,neighbor.box||neighbor,{
       clearWidthMm:room.openConnection||room.type==='kitchen'?1200:room.type==='bathroom'?750:900,
-      endClearanceMm:room.type==='bathroom'?50:150,
+      endClearanceMm:room.type==='bathroom'||room.openConnection||room.type==='kitchen'||String(level.rooms.layout||'').startsWith('narrow')?50:150,
       avoidBoxes:columns,
       preferredCenterMm:room.type==='livingRoom'?entryCenter:null});
     if(!door)throw new Error(`${level.id}: ${room.id} has no column-free entrance interval.`);
@@ -195,6 +195,24 @@ function searchConcepts(brief,options={}) {
     result.parkingProgramVariant={change:variant.change,brief:variant.brief,candidates:alt.candidates,
       attempts:alt.attempts,placesParking:alt.candidates.some(c=>c.levels[0].rooms?.parking)};
   }
+  // Nothing fits as requested: try spreading the owner rooms over the floors.
+  if(!result.candidates.length&&!variant&&options.programVariants!==false){
+    // floors that failed, most often first (attempt reasons start with the level id)
+    const fails={};for(const a of result.attempts){const id=a.reason?.match(/^([\w-]+):/)?.[1];if(id)fails[id]=(fails[id]||0)+1;}
+    const failing=Object.keys(fails).sort((a,b)=>fails[b]-fails[a]);
+    let tried=0;
+    const env=siteEnvelope(brief,{setbacksMm:options.provisionalSetbacksMm,reviewed:false});
+    const narrow=env.buildable.x2-env.buildable.x1<6500;
+    for(const v of redistributionVariants(brief,failing,{narrow})){
+      if(++tried>24)break;
+      const alt=searchProgram(v.brief,options);
+      if(!alt.candidates.length)continue;
+      for(const c of alt.candidates){c.programChange=v.change;
+        c.validation.blockers.unshift({code:'PROGRAM_CHANGED_TO_FIT_OWNER_REVIEW',...v.change.moved});}
+      result.parkingProgramVariant={change:v.change,brief:v.brief,candidates:alt.candidates,attempts:alt.attempts};
+      break;
+    }
+  }
   return result;
 }
 // The working coverage cap limits the ground footprint. On plots where the
@@ -202,7 +220,7 @@ function searchConcepts(brief,options={}) {
 // footprint keeps the road-side setback and shrinks proportionally (the extra
 // open space goes to the rear and sides) — so larger plots still get a plan
 // instead of a coverage failure.
-const MIN_BUILDABLE_MM=[6500,7500];
+const MIN_BUILDABLE_MM=[3900,6000];// 3.9 m: mid-depth stair + 1.3 m passage; 6 m: front-gallery layout
 function fitCoverage(envelope,cap,roadEdge){
   if(cap==null)return envelope;
   const b=envelope.buildable,site=envelope.site,siteArea=(site.x2-site.x1)*(site.y2-site.y1);
@@ -211,8 +229,11 @@ function fitCoverage(envelope,cap,roadEdge){
   // Both sides shrink by the same factor, which keeps the plan proportions the
   // room planner was given; the road-side edge stays where it is.
   const k=Math.sqrt(limit/(w*h));
-  const nw=Math.max(Math.min(w,MIN_BUILDABLE_MM[0]),Math.floor(w*k/100)*100);
-  const nh=Math.max(Math.min(h,MIN_BUILDABLE_MM[1]),Math.floor(Math.min(h*k,limit/nw)/100)*100);
+  // Narrow buildings keep their width (the scarce dimension) and give up depth.
+  let nw=w<9000&&w*k<6500?w:Math.max(Math.min(w,MIN_BUILDABLE_MM[0]),Math.floor(w*k/100)*100);
+  let nh=Math.max(Math.min(h,MIN_BUILDABLE_MM[1]),Math.floor(Math.min(h*k,limit/nw)/100)*100);
+  // never push the depth below 7.5 m (the normal layouts' minimum) when it started above it
+  if(h>=7500&&nh<7500){nh=7500;nw=Math.max(Math.min(w,3900),Math.floor(limit/nh/100)*100);}
   const x1=roadEdge===1?b.x2-nw:roadEdge===3?b.x1:b.x1+Math.floor((w-nw)/200)*100;
   const y1=roadEdge===2?b.y2-nh:roadEdge===0?b.y1:b.y1+Math.floor((h-nh)/200)*100;
   const buildable=rect([x1,y1,x1+nw,y1+nh]);
@@ -231,14 +252,20 @@ function searchProgram(brief,{provisionalSetbacksMm,workingCoverageLimit=null,
   const attempts=[],candidates=[],levels=brief.buildingProgram.levels;
   const bw=envelope.buildable.x2-envelope.buildable.x1,bh=envelope.buildable.y2-envelope.buildable.y1;
   if(bw<MIN_BUILDABLE_MM[0]||bh<MIN_BUILDABLE_MM[1])attempts.push({id:'site-envelope',status:'rejected',
-    reason:`Buildable area ${(bw/1000).toFixed(2)} × ${(bh/1000).toFixed(2)} m (plot minus setbacks) is below the planner's minimum ${MIN_BUILDABLE_MM[0]/1000} × ${MIN_BUILDABLE_MM[1]/1000} m for a stair core and rooms. On shared-wall sides enter a 0 m proposed setback; narrow-plot layouts are not yet available.`});
+    reason:`Buildable area ${(bw/1000).toFixed(2)} × ${(bh/1000).toFixed(2)} m (plot minus setbacks) is below the planner's minimum ${MIN_BUILDABLE_MM[0]/1000} × ${MIN_BUILDABLE_MM[1]/1000} m for a stair and rooms. On shared-wall sides enter a 0 m proposed setback.`});
+  // On a narrow house, say plainly that shared-wall (0 m) side setbacks widen it.
+  const sides=[provisionalSetbacksMm?.[1],provisionalSetbacksMm?.[3]];
+  if(bw<6500&&sides.some(n=>n>0))attempts.push({id:'narrow-plot-hint',status:'hint',
+    reason:`This house is ${(bw/1000).toFixed(2)} m wide after ${sides.map(n=>(n/1000).toFixed(1)).join(' m and ')} m side setbacks. If the side walls are shared with neighbours, entering 0 m there adds ${((sides[0]+sides[1])/1000).toFixed(1)} m of width.`});
   for(const footprint of footprints(envelope,{compactRectangle:
     !brief.buildingProgram.rental?.intended&&
-    envelope.buildable.x2-envelope.buildable.x1>=9000}))for(const side of ['west','east'])for(const order of
+    envelope.buildable.x2-envelope.buildable.x1>=9000}))for(const side of ['west','east'])for(const offset of
+    // Narrow owner houses also try the stair set back mid-depth (front room first).
+    (envelope.buildable.x2-envelope.buildable.x1<6500&&!brief.buildingProgram.rental?.intended?[0,3000,3600]:[0]))for(const order of
     ['living-first','kitchen-south','bedrooms-south','vastu-zones','vastu-zones-entry']) {
-    const id=`${footprint.family}-${side}-${order}`;
+    const id=`${footprint.family}-${side}${offset?`-mid${offset}`:''}-${order}`;
     try {
-      const core=reserveCore({footprint,levels,side,tankLitres});
+      const core=reserveCore({footprint,levels,side,tankLitres,offsetMm:offset});
       core.vastuFinding=vastuFindings([{id:core.id,type:'stair',box:core.box}],
         {bearingDegrees:brief.site.north.bearingDegrees,domainBoxes:footprint.slabs})[0];
       core.reservoir.vastuFinding=vastuFindings([{id:core.reservoir.id,type:'undergroundReservoir',
@@ -263,6 +290,8 @@ function searchProgram(brief,{provisionalSetbacksMm,workingCoverageLimit=null,
         const pujaBoxesBelow=(plannedLevels.at(-1)?.rooms?.rooms||[])
           .filter(r=>r.type==='puja').map(r=>r.box);
         const planArgs={level,core,bearingDegrees:brief.site.north.bearingDegrees,order,
+          buildingWidthMm:Math.max(...footprint.slabs.map(s=>s.x2))-Math.min(...footprint.slabs.map(s=>s.x1)),
+          buildingDepthMm:Math.max(...footprint.slabs.map(s=>s.y2))-Math.min(...footprint.slabs.map(s=>s.y1)),
           groundParking:level.id===levels[0].id?brief.buildingProgram.parking:null,pujaBoxesBelow};
         let rooms=hasRooms?planFloorRooms({...planArgs,footprint:floorprint}):null;
         if(rooms&&!rooms.ok)throw new Error(`${level.id}: ${rooms.reason}`);

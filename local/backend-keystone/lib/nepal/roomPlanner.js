@@ -289,7 +289,265 @@ function zoneFirstOrder(types,{mainX1,mainX2,ymin,ymax,slabs,bearingDegrees}){
   const rest=scored.filter(s=>!taken.has(s.index)).map(s=>s.type);
   return order.map(t=>t??rest.shift());
 }
-function planFloorRooms({level,footprint,core,bearingDegrees,order='living-first',
+// Narrow house (buildable width below ~6.5 m, common on 5–7 m Kathmandu plots):
+// there is no room for a corridor beside the stair, so the front zone beside
+// the stair is a pass-through living room (or a lobby on floors without one),
+// and behind the stair the full width is used: a 1 m side passage on the outer
+// side serves rooms stacked one behind another. Service rooms pair up side by
+// side where the width allows; an attached bath follows its bedroom.
+const NARROW_MIN_FRONT_MM=2000,NARROW_MIN_REAR_ROOM_MM=2400;
+const serviceMin={bathroom:1500,puja:1800,store:1500,laundry:1500};
+function planNarrowFloor({level,footprint,core,bearingDegrees,order='living-first'}){
+  const slabs=footprint.slabs.map(rect),b=rect(core.box);
+  if(slabs.length!==1)return {ok:false,reason:'Narrow layout needs a single rectangular floor.'};
+  const slab=slabs[0],west=core.side==='west';
+  const xmin=slab.x1,xmax=slab.x2,ymin=slab.y1,ymax=slab.y2;
+  const corridorWidth=CLEAR_CORRIDOR_MM+INTERIOR_WALL_MM;
+  if((west?xmax-b.x2:b.x1-xmin)<NARROW_MIN_FRONT_MM)return {ok:false,reason:'Narrow layout: the strip beside the stair is under 2 m.'};
+  const rearX1=west?xmin:xmin+corridorWidth,rearX2=west?xmax-corridorWidth:xmax;
+  if(rearX2-rearX1<NARROW_MIN_REAR_ROOM_MM+INTERIOR_WALL_MM)return {ok:false,reason:'Narrow layout: rooms behind the stair would be under 2.4 m wide.'};
+  const corridor=rect(west?[rearX2,b.y2,xmax,ymax]:[xmin,b.y2,rearX1,ymax]);
+  const {main,service}=roomTypes(level);
+  const frontType=main.includes('livingRoom')?'livingRoom':'lobby';
+  const rest=main.filter((t,i)=>!(t==='livingRoom'&&i===main.indexOf('livingRoom')));
+  const priority=order==='bedrooms-south'?{primaryBedroom:0,bedroom:0,guestBedroom:0,kitchen:1,dining:2,study:3}:
+    {kitchen:0,dining:1,primaryBedroom:2,bedroom:2,guestBedroom:2,study:3};
+  rest.sort((a,c)=>(priority[a]??4)-(priority[c]??4));
+  const attached=Math.min(level.attachedBathrooms||0,rest.filter(t=>/edroom/.test(t)).length);
+  const shared=[...Array(Math.max(0,level.bathrooms-attached)).fill('bathroom'),
+    ...(level.specialRooms||[]).filter(t=>t==='puja'||SERVICE.has(t))];
+  // Rows behind the stair: main rooms, an attached bath after each of the first
+  // bedrooms, then shared service rooms two to a row where both fit.
+  const rows=[];let baths=attached;
+  for(const t of rest){rows.push([t]);if(baths>0&&/edroom/.test(t)){rows.push(['attachedBath']);baths--;}}
+  const width=rearX2-rearX1;
+  for(const t of shared)rows.push([t]);// each its own row, so every room opens off the passage
+  const minOf=row=>Math.max(...row.map(t=>t==='attachedBath'?1500:serviceMin[t]||minimumHeight[t]||2280));
+  const available=ymax-b.y2,need=rows.reduce((n,r)=>n+minOf(r),0);
+  if(need>available)return {ok:false,reason:`Narrow layout: the rooms need ${(need/1000).toFixed(1)} m behind the stair; ${(available/1000).toFixed(1)} m is available.`};
+  const isMain=row=>row.length===1&&!(row[0] in serviceMin)&&row[0]!=='attachedBath';
+  const mains=rows.filter(isMain).length||1,extra=available-need;
+  let y=b.y2;const rooms=[];
+  const frontBox=rect(west?[b.x2,ymin,xmax,b.y2]:[xmin,ymin,b.x1,b.y2]);
+  rooms.push({id:`${level.id}-${frontType}-front`,levelId:level.id,type:frontType,box:frontBox,areaSqM:areaSqM([frontBox]),
+    entryFrom:'shared-floor-level-arrival',openingFace:'south',openingStatus:'legal_exposure_unverified',
+    ...(frontType==='lobby'?{openConnection:true,suggestedByPlanner:true,useIntent:'stair_lobby_and_family_sitting'}:{})});
+  let lastBedroom=null;
+  rows.forEach((row,ri)=>{
+    let depth=minOf(row)+(isMain(row)?Math.floor(extra/mains):0);
+    if(ri===rows.length-1)depth=ymax-y;
+    row.forEach((t,ci)=>{
+      const x1=rearX1+Math.round(width*ci/row.length),x2=rearX1+Math.round(width*(ci+1)/row.length);
+      const box=rect([x1,y,x2,y+depth]);
+      const type=t==='attachedBath'?'bathroom':t;
+      const room={id:`${level.id}-${type}-${ri+1}${row.length>1?String.fromCharCode(97+ci):''}`,levelId:level.id,type,box,
+        areaSqM:areaSqM([box]),entryFrom:'unit-corridor',suggestedByPlanner:false,
+        openingFace:west?'west':'east',openingStatus:'legal_exposure_unverified',
+        ...(type==='kitchen'&&!level.separateDiningRoom?{diningWithinKitchen:true}:{}),
+        ...(type==='puja'?{privacyIntent:'owner_only_behind_unit_entry'}:{})};
+      if(t==='attachedBath'){room.entryFrom='primary-bedroom';room.attachedTo=lastBedroom?.id;
+        if(lastBedroom?.type!=='primaryBedroom')room.entryFrom='unit-corridor';}
+      if(/edroom/.test(type))lastBedroom=room;
+      rooms.push(room);
+    });
+    y+=depth;
+  });
+  const arrival=core.flights[0]?.arrivalLandings?.[0]?.box||core.entryPad;
+  const front=rooms[0];
+  const unitEntryDoor=arrival&&doorOnSharedEdge(rect([b.x1,arrival.y1,b.x2,arrival.y2]),front.box,{clearWidthMm:1000,endClearanceMm:50});
+  if(!unitEntryDoor)return {ok:false,reason:'Narrow layout: the stair arrival cannot open into the front room.'};
+  let portal=doorOnSharedEdge(front.box,corridor,{clearWidthMm:1000,endClearanceMm:0});
+  if(!portal)return {ok:false,reason:'Narrow layout: the front room has no route to the side passage.'};
+  for(const room of rooms.slice(1)){
+    const entry=room.entryFrom==='primary-bedroom'?rooms.find(r=>r.id===room.attachedTo):
+      room.entryFrom==='kitchen'?rooms.find(r=>r.type==='kitchen'):null;
+    const openPortal=room.openConnection||room.type==='kitchen';
+    const door=doorOnSharedEdge(room.box,entry?.box||corridor,{clearWidthMm:openPortal?1200:room.type==='bathroom'?750:900});
+    if(!door)return {ok:false,reason:`Narrow layout: ${room.id} has no door to the passage.`};
+    room.doorReservation={...door,from:room.entryFrom,to:room.id,
+      ...(openPortal?{status:'open_portal_reserved_no_door',openingStyle:room.type==='kitchen'?'decorative_arch_optional':'open_connection'}:{leafCount:1,material:'wood'})};
+  }
+  for(const room of rooms){
+    if(['bedroom','primaryBedroom','guestBedroom','livingRoom','study','kitchen','dining'].includes(room.type)){
+      room.provisionalNaturalLightOpeningSqM=room.areaSqM*(room.type==='kitchen'?1/8:1/10);
+      room.provisionalVentilationOpeningSqM=room.areaSqM/16;
+      room.apertureRuleSource='NBC 206:2024 PDF page 17, hilly-region normal residential';
+      const window=[room.openingFace,'north','south',west?'east':'west'].map(face=>reserveWindow(room.box,slabs,face,
+        room.provisionalNaturalLightOpeningSqM)).find(Boolean);
+      if(window)room.windowReservation=window;else room.openingStatus='no_physical_exterior_window_reserved';
+    }
+  }
+  return {ok:true,levelId:level.id,occupancy:level.occupancy,rooms,corridor,parking:null,balcony:null,layout:'narrow',
+    attachedBathroomsPlaced:rooms.filter(r=>r.attachedTo).length,
+    circulationPortal:{...portal,status:'open_portal_reserved_no_door',openingStyle:'open_connection',from:'living-room',to:'unit-corridor'},
+    unitEntry:{from:'shared-floor-level-arrival',to:frontType==='livingRoom'?'living-room':'stair-lobby',
+      doorReservation:{...unitEntryDoor,leafCount:1,material:'wood'},landingAlignmentStatus:'plan_overlap_reserved_vertical_clearance_unverified'},
+    vastuFindings:vastuFindings(rooms,{bearingDegrees,domainBoxes:slabs}),
+    unresolved:['Narrow-plot layout: the front room is a pass-through to the side passage; side-wall windows on shared-wall plot edges are not allowed and need light from the front, rear or a lightwell.']};
+}
+// Narrow house with the stair set back mid-depth (Kathmandu row-house type):
+// one full-width room in front of the stair, a passage beside the stair (with a
+// bath at its far end when there is width), one full-width room behind it.
+// The stair landing opens onto the passage, so no room is a thoroughfare.
+function planMidStairFloor({level,footprint,core,bearingDegrees}){
+  const slabs=footprint.slabs.map(rect),b=rect(core.box);
+  if(slabs.length!==1)return {ok:false,reason:'Mid-stair layout needs a single rectangular floor.'};
+  const slab=slabs[0],west=core.side==='west',xmin=slab.x1,xmax=slab.x2,ymin=slab.y1,ymax=slab.y2;
+  const strip=west?xmax-b.x2:b.x1-xmin;
+  if(strip<1300)return {ok:false,reason:'Mid-stair layout: the passage beside the stair is under 1.3 m.'};
+  const {main}=roomTypes(level);
+  const mains=[...main].sort((a,c)=>(a==='livingRoom'?0:a==='kitchen'?1:2)-(c==='livingRoom'?0:c==='kitchen'?1:2));
+  const services=[...Array(Math.max(0,level.bathrooms)).fill('bathroom'),...(level.specialRooms||[]).filter(t=>SERVICE.has(t)||t==='puja')];
+  const cw=services.length&&strip-1500>=1300&&strip-1500<1500?strip-1500:Math.min(strip,1500);
+  const px1=west?b.x2:b.x1-cw,px2=px1+cw;
+  const sideX1=west?px2:xmin,sideX2=west?xmax:px1,sideW=sideX2-sideX1;// beside the stair, away from it
+  const stackX1=west?xmin:px2,stackX2=west?px1:xmax;// behind the stair, on the stair side of the passage
+  const front=ymin<b.y1-1?rect([xmin,ymin,xmax,b.y1]):null;
+  const rearDepth=ymax-b.y2;
+  const rooms=[];const add=(type,box,extra={})=>{rooms.push({id:`${level.id}-${type}-${rooms.length+1}`,levelId:level.id,type,box,areaSqM:areaSqM([box]),
+    entryFrom:'unit-corridor',suggestedByPlanner:false,openingStatus:'legal_exposure_unverified',
+    ...(type==='kitchen'&&!level.separateDiningRoom?{diningWithinKitchen:true}:{}),
+    ...(type==='puja'?{privacyIntent:'owner_only_behind_unit_entry'}:{}),...extra});};
+  const queue=[...mains];
+  if(front&&queue.length){const t=queue.shift();if(front.y2-front.y1<(minimumHeight[t]||2280))return {ok:false,reason:'Mid-stair layout: the room in front of the stair is too shallow.'};
+    add(t,front,{openingFace:'south'});}
+  // services beside the stair (bath at the far end, nearest the wet stack behind)
+  const svc=[...services];let sideY=b.y2;
+  while(svc.length&&sideW>=(svc[0]==='puja'?1900:1500)){
+    const t=svc[0],d=t==='puja'?1900:1600;if(sideY-d<b.y1+(rooms.some(r=>r.box.y1===b.y1)?0:0)-1)break;
+    if(sideY-d<b.y1)break;
+    add(t,rect([sideX1,sideY-d,sideX2,sideY]),{openingFace:west?'east':'west'});sideY-=d;svc.shift();
+    if(sideY-b.y1<1500)break;
+  }
+  if(sideW>=1000&&sideY-b.y1>=1200)add('lobby',rect([sideX1,b.y1,sideX2,sideY]),{openConnection:true,suggestedByPlanner:true,
+    useIntent:'stair_lobby_and_family_sitting',openingFace:west?'east':'west'});
+  // behind the stair
+  let corridor=rect([px1,b.y1,px2,b.y2]);
+  if(queue.length===1&&!svc.length){
+    if(rearDepth<(minimumHeight[queue[0]]||2280))return {ok:false,reason:'Mid-stair layout: the room behind the stair is too shallow.'};
+    add(queue.shift(),rect([xmin,b.y2,xmax,ymax]),{openingFace:'north'});
+  }else if(queue.length||svc.length){
+    // the passage carries on to the back; rooms stack along it
+    corridor=rect([px1,b.y1,px2,ymax]);
+    const farX1=west?px2:xmin,farX2=west?xmax:px1,farW=farX2-farX1;
+    const farSvc=farW>=1500?svc.filter(t=>t!=='puja'||farW>=1900):[];
+    const nearList=[...queue,...svc.filter(t=>!farSvc.includes(t))];
+    const minD=t=>t==='bathroom'?1500:t==='puja'?1900:SERVICE.has(t)?1500:(minimumHeight[t]||2280);
+    const need=nearList.reduce((n,t)=>n+minD(t),0);
+    if(stackX2-stackX1<1500)return {ok:false,reason:'Mid-stair layout: no width behind the stair for rooms.'};
+    if(need>rearDepth)return {ok:false,reason:`Mid-stair layout: the rooms need ${(need/1000).toFixed(1)} m behind the stair; ${(rearDepth/1000).toFixed(1)} m is available.`};
+    const mainsNear=nearList.filter(t=>!(t in serviceMin)).length||1,extra=rearDepth-need;let y=b.y2;
+    nearList.forEach((t,i)=>{let d=minD(t)+(t in serviceMin?0:Math.floor(extra/mainsNear));if(i===nearList.length-1)d=ymax-y;
+      add(t,rect([stackX1,y,stackX2,y+d]),{openingFace:i===nearList.length-1?'north':west?'west':'east'});y+=d;});
+    let fy=ymax;
+    for(const t of farSvc){const d=minD(t);if(fy-d<b.y2)return {ok:false,reason:'Mid-stair layout: service rooms do not fit behind the stair.'};
+      add(t,rect([farX1,fy-d,farX2,fy]),{openingFace:'north'});fy-=d;}
+  }
+  if(queue.length&&!rooms.some(r=>r.type===queue[0]))return {ok:false,reason:`Mid-stair layout: ${mains.length} main rooms do not fit.`};
+  const arrival=core.flights[0]?.arrivalLandings?.[0]?.box||core.entryPad;
+  const unitEntryDoor=arrival&&doorOnSharedEdge(rect([b.x1,b.y1,b.x2,arrival.y2]),corridor,{clearWidthMm:1000,endClearanceMm:50});
+  if(!unitEntryDoor)return {ok:false,reason:'Mid-stair layout: the landing cannot open onto the passage.'};
+  for(const room of rooms){
+    const openPortal=room.openConnection||room.type==='kitchen';
+    const door=doorOnSharedEdge(room.box,corridor,{clearWidthMm:openPortal?1200:room.type==='bathroom'?750:900,
+      endClearanceMm:openPortal||room.type==='bathroom'?50:150});
+    if(!door)return {ok:false,reason:`Mid-stair layout: ${room.id} has no door to the passage.`};
+    room.doorReservation={...door,from:'unit-corridor',to:room.id,
+      ...(openPortal?{status:'open_portal_reserved_no_door',openingStyle:'open_connection'}:{leafCount:1,material:'wood'})};
+    if(['bedroom','primaryBedroom','guestBedroom','livingRoom','study','kitchen','dining'].includes(room.type)){
+      room.provisionalNaturalLightOpeningSqM=room.areaSqM*(room.type==='kitchen'?1/8:1/10);
+      room.provisionalVentilationOpeningSqM=room.areaSqM/16;
+      room.apertureRuleSource='NBC 206:2024 PDF page 17, hilly-region normal residential';
+      const window=[room.openingFace,'south','north',west?'west':'east'].map(face=>reserveWindow(room.box,slabs,face,room.provisionalNaturalLightOpeningSqM)).find(Boolean);
+      if(window)room.windowReservation=window;else room.openingStatus='no_physical_exterior_window_reserved';
+    }
+  }
+  const attached=Math.min(level.attachedBathrooms||0,1);
+  return {ok:true,levelId:level.id,occupancy:level.occupancy,rooms,corridor,parking:null,balcony:null,layout:'narrow-mid-stair',
+    attachedBathroomsPlaced:0,circulationPortal:null,
+    unitEntry:{from:'shared-floor-level-arrival',to:'unit-corridor',doorReservation:{...unitEntryDoor,leafCount:1,material:'wood'},
+      landingAlignmentStatus:'plan_overlap_reserved_vertical_clearance_unverified'},
+    vastuFindings:vastuFindings(rooms,{bearingDegrees,domainBoxes:slabs}),
+    unresolved:['Mid-stair narrow layout: rooms take light from the front and rear walls; side walls on shared plot edges cannot have windows.',
+      ...(attached?['Attached bath requested: on this narrow floor the bath opens from the passage.']:[])]};
+}
+// Wide, shallow house (building depth 6–7.5 m): rooms cannot stack behind the
+// 4.6 m stair, so a 1.6 m gallery runs along the front from the stair landing
+// and the rooms stand side by side behind it, each opening off the gallery and
+// lit from the rear wall. Space behind the stair becomes a store/utility.
+function planShallowFloor({level,footprint,core,bearingDegrees}){
+  const slabs=footprint.slabs.map(rect),b=rect(core.box);
+  if(slabs.length!==1)return {ok:false,reason:'Shallow layout needs a single rectangular floor.'};
+  const slab=slabs[0],west=core.side==='west',xmin=slab.x1,xmax=slab.x2,ymin=slab.y1,ymax=slab.y2;
+  const gallery=1600,depth=ymax-ymin-gallery;// the depth of the stair landing, so its door clears the corner column
+  if(depth<2500)return {ok:false,reason:'Shallow layout: rooms behind the front gallery would be under 2.5 m deep.'};
+  const rx1=west?b.x2:xmin,rx2=west?xmax:b.x1;
+  const corridor=rect([rx1,ymin,rx2,ymin+gallery]);
+  const {main}=roomTypes(level);
+  const order=[...main].sort((a,c)=>(a==='livingRoom'?0:a==='kitchen'?1:2)-(c==='livingRoom'?0:c==='kitchen'?1:2));
+  const services=[...Array(Math.max(0,level.bathrooms)).fill('bathroom'),...(level.specialRooms||[]).filter(t=>SERVICE.has(t)||t==='puja')];
+  // living next to the stair, then kitchen with the wet rooms, then bedrooms
+  const kitchenAt=order.indexOf('kitchen');
+  const seq=kitchenAt>=0?[...order.slice(0,kitchenAt+1),...services,...order.slice(kitchenAt+1)]:[...order,...services];
+  const minW=t=>t==='bathroom'?1500:t==='puja'?1900:SERVICE.has(t)?1500:t==='livingRoom'?3000:2800;
+  const need=seq.reduce((n,t)=>n+minW(t),0),avail=rx2-rx1;
+  if(need>avail)return {ok:false,reason:`Shallow layout: the rooms need ${(need/1000).toFixed(1)} m of frontage beside the stair; ${(avail/1000).toFixed(1)} m is available.`};
+  const mains=seq.filter(t=>!(t in serviceMin)).length||1,extra=avail-need;
+  const rooms=[];let x=west?rx1:rx2;
+  seq.forEach((t,i)=>{let w=minW(t)+(t in serviceMin?0:Math.floor(extra/mains));if(i===seq.length-1)w=west?rx2-x:x-rx1;
+    const box=west?rect([x,ymin+gallery,x+w,ymax]):rect([x-w,ymin+gallery,x,ymax]);x=west?x+w:x-w;
+    rooms.push({id:`${level.id}-${t}-${i+1}`,levelId:level.id,type:t,box,areaSqM:areaSqM([box]),entryFrom:'unit-corridor',suggestedByPlanner:false,
+      openingFace:'north',openingStatus:'legal_exposure_unverified',...(t==='kitchen'&&!level.separateDiningRoom?{diningWithinKitchen:true}:{}),
+      ...(t==='puja'?{privacyIntent:'owner_only_behind_unit_entry'}:{})});});
+  // store behind the stair, reached from the living room or kitchen beside it
+  // (2 m deep so its door clears the two corner columns)
+  if(ymax-b.y2>=2000&&['livingRoom','kitchen'].includes(rooms[0]?.type)){const nb=rect([b.x1,b.y2,b.x2,ymax]);const nextTo=rooms[0];
+    rooms.push({id:`${level.id}-serviceNiche-rear`,levelId:level.id,type:'serviceNiche',box:nb,areaSqM:areaSqM([nb]),entryFrom:nextTo.type==='kitchen'?'kitchen':'living-room',
+      suggestedByPlanner:true,openingFace:'north',openingStatus:'legal_exposure_unverified',useIntent:'store_behind_stair'});}
+  const arrival=core.flights[0]?.arrivalLandings?.[0]?.box||core.entryPad;
+  const unitEntryDoor=arrival&&doorOnSharedEdge(rect([b.x1,b.y1,b.x2,arrival.y2]),corridor,{clearWidthMm:1000,endClearanceMm:50});
+  if(!unitEntryDoor)return {ok:false,reason:'Shallow layout: the stair landing cannot open onto the front gallery.'};
+  for(const room of rooms){
+    const entry=room.entryFrom==='kitchen'?rooms.find(r=>r.type==='kitchen'):room.entryFrom==='living-room'?rooms.find(r=>r.type==='livingRoom')||rooms[0]:null;
+    const openPortal=room.type==='kitchen';
+    const door=doorOnSharedEdge(room.box,entry?.box||corridor,{clearWidthMm:openPortal?1200:room.type==='bathroom'?750:900,endClearanceMm:50});
+    if(!door){if(room.type==='serviceNiche'){rooms.splice(rooms.indexOf(room),1);continue;}
+      return {ok:false,reason:`Shallow layout: ${room.id} has no door.`};}
+    room.doorReservation={...door,from:room.entryFrom,to:room.id,...(openPortal?{status:'open_portal_reserved_no_door',openingStyle:'decorative_arch_optional'}:{leafCount:1,material:'wood'})};
+    if(['bedroom','primaryBedroom','guestBedroom','livingRoom','study','kitchen','dining'].includes(room.type)){
+      room.provisionalNaturalLightOpeningSqM=room.areaSqM*(room.type==='kitchen'?1/8:1/10);
+      room.provisionalVentilationOpeningSqM=room.areaSqM/16;
+      room.apertureRuleSource='NBC 206:2024 PDF page 17, hilly-region normal residential';
+      const window=['north',west?'east':'west','south'].map(face=>reserveWindow(room.box,slabs,face,room.provisionalNaturalLightOpeningSqM)).find(Boolean);
+      if(window)room.windowReservation=window;else room.openingStatus='no_physical_exterior_window_reserved';
+    }
+  }
+  return {ok:true,levelId:level.id,occupancy:level.occupancy,rooms,corridor,parking:null,balcony:null,layout:'shallow-front-gallery',
+    attachedBathroomsPlaced:0,circulationPortal:null,
+    unitEntry:{from:'shared-floor-level-arrival',to:'unit-corridor',doorReservation:{...unitEntryDoor,leafCount:1,material:'wood'},
+      landingAlignmentStatus:'plan_overlap_reserved_vertical_clearance_unverified'},
+    vastuFindings:vastuFindings(rooms,{bearingDegrees,domainBoxes:slabs}),
+    unresolved:['Shallow-plot layout: a front gallery serves rooms side by side; rooms are lit from the rear wall, the gallery from the front.',
+      ...(level.attachedBathrooms?['Attached bath requested: on this shallow floor baths open from the gallery.']:[])]};
+}
+function planFloorRooms(args){
+  if(args.core.position!=='middle'&&(args.buildingDepthMm??Infinity)<7500)return planShallowFloor(args);
+  if(args.core.position==='middle')return planMidStairFloor(args);
+  const {footprint,core}=args,b=rect(core.box),slabs=footprint.slabs.map(rect);
+  const xmin=Math.min(...slabs.map(s=>s.x1)),xmax=Math.max(...slabs.map(s=>s.x2));
+  const strip=(core.side==='west'?xmax-b.x2:b.x1-xmin)-(CLEAR_CORRIDOR_MM+INTERIOR_WALL_MM);
+  // Narrow layouts are for narrow buildings; a partial top floor of a normal
+  // house keeps the strip planner (and its puja re-planning) even when small.
+  const narrowBuilding=(args.buildingWidthMm??xmax-xmin)<6500+INTERIOR_WALL_MM;
+  if(!narrowBuilding)return planStripFloor(args);
+  if(strip<2500)return planNarrowFloor(args);
+  const r=planStripFloor(args);
+  // Strip layout too tight (e.g. many rooms on a small floor): try the narrow
+  // stacked layout before giving up.
+  if(!r.ok&&strip<3500&&slabs.length===1&&!args.pujaInMainStrip){const n=planNarrowFloor(args);if(n.ok)return n;}
+  return r;
+}
+function planStripFloor({level,footprint,core,bearingDegrees,order='living-first',
   groundParking=null,pujaInMainStrip=false,toiletBoxesAdjacent=[],pujaBoxesBelow=[],avoidColumnBoxes=[]}) {
   if(level.occupancy==='owner'&&level.bedrooms===3&&level.bathrooms===1&&
     level.attachedBathrooms===1&&!level.livingRooms&&!level.kitchens){
@@ -600,4 +858,4 @@ function planFloorRooms({level,footprint,core,bearingDegrees,order='living-first
       landingAlignmentStatus:'plan_overlap_reserved_vertical_clearance_unverified'},vastuFindings:findings,
     unresolved:['Door swings, arrival-pad vertical clearance, clear routes and all exterior opening legality must be checked against drawn walls and municipal rules.']};
 }
-module.exports={roomTypes,planFloorRooms,PUJA_MAIN_STRIP_MIN_WIDTH_MM,overlapSqM};
+module.exports={roomTypes,planFloorRooms,planNarrowFloor,PUJA_MAIN_STRIP_MIN_WIDTH_MM,overlapSqM};

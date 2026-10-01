@@ -21,14 +21,18 @@ function largestRectangle(poly){
   const e=0.5,ok=Array.from({length:ny},(_,j)=>Array.from({length:nx},(_,i)=>{
     const cx=x0+i*CELL_MM,cy=y0+j*CELL_MM;
     return [[e,e],[CELL_MM-e,e],[e,CELL_MM-e],[CELL_MM-e,CELL_MM-e],[CELL_MM/2,CELL_MM/2]].every(([u,v])=>inside({x:cx+u,y:cy+v},poly));}));
-  const h=new Array(nx).fill(0);let best={area:0};
+  const h=new Array(nx).fill(0);let best={area:0,cls:-1};
   for(let j=0;j<ny;j++){
     for(let i=0;i<nx;i++)h[i]=ok[j][i]?h[i]+1:0;
     const st=[];
     for(let i=0;i<=nx;i++){const cur=i<nx?h[i]:0;
       while(st.length&&h[st.at(-1)]>=cur){const top=st.pop(),height=h[top],left=st.length?st.at(-1)+1:0,width=i-left;
-        // Prefer the larger area; on ties the rectangle nearer the road (lower y).
-        const area=height*width;if(area>best.area){best={area,i1:left,i2:i,j1:j-height+1,j2:j+1};}}
+        // Rank by plannability class, then area: a rectangle that leaves a normal
+        // (≥ 6.5 × 7.5 m) or at least a narrow/shallow (≥ 3.9 × 6 m) buildable area
+        // after 1 m setbacks beats a larger one that leaves neither.
+        const area=height*width,W=width*CELL_MM,H=height*CELL_MM;
+        const cls=W>=8500&&H>=9500?2:W>=5900&&H>=8000?1:0;
+        if(cls>(best.cls??-1)||cls===best.cls&&area>best.area){best={area,cls,i1:left,i2:i,j1:j-height+1,j2:j+1};}}
       st.push(i);}
   }
   if(!best.area)return null;

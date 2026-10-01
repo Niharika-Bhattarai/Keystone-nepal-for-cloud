@@ -37,7 +37,11 @@ function frameGrid(footprint,{targetSpanMm=3500,columnWidthMm=COLUMN_WIDTH_MM,
     const prior=anchorX[i-1],gap=value-prior;
     return gap>MAX_PLANNING_BAY_SPAN_MM?axis(prior,value).slice(1):[value];
   }):axis(x1+half,x2-half);
-  const yAnchors=stair?[y1+half,stair.y1+half,stair.y2-half,y2-half]
+  // Shallow building (front-gallery layout): outside the stair the middle row
+  // sits on the gallery wall instead of crossing the rooms behind it.
+  const shallow=stair&&y2-y1<7500&&stair.y1-y1<1;
+  const galleryRow=shallow?y1+1600:null;
+  const yAnchors=stair?[y1+half,stair.y1+half,...(shallow?[galleryRow]:[]),stair.y2-half,y2-half]
     .filter((n,i,all)=>i===0||n>all[i-1]):null;
   if(stair&&(stair.y1<y1||stair.y2>y2||stair.y2-stair.y1-columnWidthMm>
     MAX_STAIR_BAY_SPAN_MM))throw new Error('Dedicated stair bay exceeds its planning span');
@@ -48,7 +52,7 @@ function frameGrid(footprint,{targetSpanMm=3500,columnWidthMm=COLUMN_WIDTH_MM,
     return gap>MAX_PLANNING_BAY_SPAN_MM?axis(prior,value).slice(1):[value];
   }):axis(y1+half,y2-half);
   const fixedRows=new Set(stair?y.map((value,i)=>
-    [stair.y1+half,stair.y2-half].includes(value)?i:-1).filter(i=>i>0&&i<y.length-1):[]);
+    [stair.y1+half,stair.y2-half,galleryRow].includes(value)?i:-1).filter(i=>i>0&&i<y.length-1):[]);
   if(rowAxisTargetsMm){
     if(!Array.isArray(rowAxisTargetsMm)||rowAxisTargetsMm.length!==y.length-2||
       !rowAxisTargetsMm.every(Number.isSafeInteger))
@@ -82,6 +86,10 @@ function frameGrid(footprint,{targetSpanMm=3500,columnWidthMm=COLUMN_WIDTH_MM,
   for(let i=0;i<x.length;i++)for(let j=0;j<y.length;j++){
     const box=rect([Math.floor(x[i]-half),Math.floor(y[j]-half),
       Math.ceil(x[i]+half),Math.ceil(y[j]+half)]);
+    if(shallow){const atStair=x[i]>=stair.x1&&x[i]<=stair.x2;
+      if(y[j]===galleryRow&&atStair)continue;// the stair has its own corner columns
+      if(y[j]===stair.y2-half&&!atStair)continue;// keep the rooms behind the gallery clear
+    }
     if(areaSqM([box],slabs)<=1e-9) columns.push({id:`C-${i+1}-${j+1}`,
       xMm:x[i],yMm:y[j],widthMm:columnWidthMm});
   }

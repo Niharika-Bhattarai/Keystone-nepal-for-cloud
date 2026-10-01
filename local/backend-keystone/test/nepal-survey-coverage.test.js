@@ -36,11 +36,12 @@ test('large plots fit the footprint to the coverage cap instead of failing',()=>
 });
 
 test('a plot too small for the planner says why instead of returning nothing',()=>{
-  const s=survey({'site.rectangle':{width:{value:7,unit:'m'},depth:{value:10,unit:'m'}},
+  const s=survey({'site.rectangle':{width:{value:5.5,unit:'m'},depth:{value:7.5,unit:'m'}},
     'buildingProgram.levels':rental.buildingProgram.levels.map(l=>l.kind==='partial'?{...l,targetArea:{value:25,unit:'sq_m'}}:l)});
   const r=plan(s).result;
   assert.equal(r.candidates.length,0);
-  assert.match(r.attempts[0].reason,/below the planner's minimum 6\.5 × 7\.5 m/);
+  assert.match(r.attempts[0].reason,/below the planner's minimum 3\.9 × 6 m/);
+  assert.ok(r.attempts.some(a=>a.status==='hint'&&/0 m there adds 2\.0 m of width/.test(a.reason)));
 });
 
 test('single-storey homes and 3.3 m storeys are planned',()=>{
@@ -109,5 +110,32 @@ test('structure: bays too short for a frame beam are layout issues, not a reason
     assert.equal(r.summary.pass,true,JSON.stringify(r.summary));
     for(const b of r.beams){assert.ok(b.links.end>=75);
       if(b.layoutIssue)assert.ok(r.summary.layoutIssues.includes(b.id));}
+  }
+});
+
+test('narrow plots: shared-wall 6 m and 4 m wide houses get narrow or mid-stair layouts',()=>{
+  const sides0=[{neighbor:'road'},{neighbor:'building',proposedSetback:{value:0,unit:'m'}},{neighbor:'unknown'},{neighbor:'building',proposedSetback:{value:0,unit:'m'}}];
+  const six=plan(survey({'site.rectangle':{width:{value:6,unit:'m'},depth:{value:16,unit:'m'}},'site.boundaries':sides0}));
+  const cands=[...six.result.candidates,...(six.result.parkingProgramVariant?.candidates||[])];
+  assert.ok(cands.length>0,JSON.stringify(six.result.attempts.slice(0,3)));
+  const layouts=new Set(cands.flatMap(c=>c.levels.map(l=>l.rooms?.layout).filter(Boolean)));
+  assert.ok([...layouts].some(l=>/^narrow/.test(l)),[...layouts].join());
+  for(const c of cands)for(const l of c.levels)for(const r of l.rooms?.rooms||[])
+    assert.ok(r.doorReservation||r.entryFrom==='shared-floor-level-arrival',`${r.id} has no door`);
+  // A mid-depth stair puts a full-width room in front of it.
+  const mid=cands.find(c=>c.core.position==='middle');
+  if(mid){assert.ok(mid.core.box.y1>mid.levels[0].footprint.slabs[0].y1);
+    assert.equal(mid.levels[0].rooms.rooms.find(r=>r.box.y1===mid.levels[0].footprint.slabs[0].y1).box.x2-
+      mid.levels[0].rooms.rooms.find(r=>r.box.y1===mid.levels[0].footprint.slabs[0].y1).box.x1,
+      mid.levels[0].footprint.slabs[0].x2-mid.levels[0].footprint.slabs[0].x1);}
+});
+
+test('rooms that do not fit their floor are offered as a labelled program variant, never silently',()=>{
+  const sides0=[{neighbor:'road'},{neighbor:'building',proposedSetback:{value:0,unit:'m'}},{neighbor:'unknown'},{neighbor:'building',proposedSetback:{value:0,unit:'m'}}];
+  const r=plan(survey({'site.rectangle':{width:{value:8,unit:'m'},depth:{value:10,unit:'m'}},'site.boundaries':sides0})).result;
+  if(!r.candidates.length){
+    const v=r.parkingProgramVariant;assert.ok(v&&v.candidates.length>0);
+    assert.match(v.change.label,/^Program variant: /);assert.equal(v.change.status,'program_change_requires_household_confirmation');
+    for(const c of v.candidates)assert.ok(c.validation.blockers.some(b=>b.code==='PROGRAM_CHANGED_TO_FIT_OWNER_REVIEW'));
   }
 });
