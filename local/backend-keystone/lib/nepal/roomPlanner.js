@@ -74,7 +74,7 @@ function planCompactRental({level,footprint,core,bearingDegrees,groundParking=nu
     ...(type==='serviceNiche'?{suggestedByPlanner:true}:{}),
     openingFace:west?'east':'west',openingStatus:'legal_exposure_unverified'}));
   const living=rooms[0];
-  const arrival=core.flights[0]?.arrivalLandings?.[0]?.box;
+  const arrival=core.flights[0]?.arrivalLandings?.[0]?.box||core.entryPad;
   const unitEntryDoor=arrival&&doorOnSharedEdge(
     rect([b.x1,arrival.y1,b.x2,arrival.y2]),living.box,
     {clearWidthMm:1000,endClearanceMm:50});
@@ -221,7 +221,7 @@ function planOwnerBedroomFloor({level,footprint,core,bearingDegrees,pujaBoxesBel
       useIntent:'open_bedroom_alcove_not_an_assumed_closet'}:{}),
     ...(type==='primaryBedroom'&&vestibule?{openConnection:true}:{}),
     openingFace:west?'east':'west',openingStatus:'legal_exposure_unverified'}));
-  const arrival=core.flights[0]?.arrivalLandings?.[0]?.box;
+  const arrival=core.flights[0]?.arrivalLandings?.[0]?.box||core.entryPad;
   const unitEntryDoor=arrival&&doorOnSharedEdge(
     rect([b.x1,arrival.y1,b.x2,arrival.y2]),corridor,
     {clearWidthMm:1000,endClearanceMm:50});
@@ -296,7 +296,11 @@ function planFloorRooms({level,footprint,core,bearingDegrees,order='living-first
     const owner=planOwnerBedroomFloor({level,footprint,core,bearingDegrees,pujaBoxesBelow});
     if(owner)return owner;
   }
-  if(level.occupancy==='rental'&&(level.bedrooms===2||level.bedrooms===1&&groundParking?.bikes>0)&&
+  // A whole 2-bedroom home on one owner floor (e.g. a single-storey house) uses
+  // the same compact two-by-two flat as a rental floor; the single-strip planner
+  // below cannot stack living, kitchen and bedrooms along one frontage.
+  const ownerFlat=level.occupancy==='owner'&&level.bedrooms===2&&!level.attachedBathrooms;
+  if((level.occupancy==='rental'&&(level.bedrooms===2||level.bedrooms===1&&groundParking?.bikes>0)||ownerFlat)&&
     level.bathrooms===1&&level.livingRooms===1&&level.kitchens===1&&!level.specialRooms?.length&&
     order==='living-first'){
     const compact=planCompactRental({level,footprint,core,bearingDegrees,groundParking});
@@ -550,7 +554,7 @@ function planFloorRooms({level,footprint,core,bearingDegrees,order='living-first
     circulationPortal={...circulationPortal,status:'open_portal_reserved_no_door',
       openingStyle:'open_connection',from:'living-room',to:'unit-corridor'};
   }
-  const arrival=core.flights[0]?.arrivalLandings?.[0]?.box;
+  const arrival=core.flights[0]?.arrivalLandings?.[0]?.box||core.entryPad;
   const unitEntryDoor=arrival&&doorOnSharedEdge(
     rect([b.x1,arrival.y1,b.x2,arrival.y2]),directLiving?living.box:corridor,
     {clearWidthMm:1000,endClearanceMm:50});

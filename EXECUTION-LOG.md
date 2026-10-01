@@ -631,3 +631,38 @@ No implementation is claimed complete. Future agents should not mistake proposed
   1. Slab (IS 456 Annex D) and stair design.
   2. Point the rule catalog at `Codes/` originals.
   3. Optional 3D frame export (e.g. to ETABS/STAAD text) for the engineer's model.
+
+## 2026-10-01 — survey case matrix and coverage fixes
+
+- **Request.** Try different plot types and survey cases and report how they perform.
+- **Method.** `local/tools/nepal-survey-matrix.cjs` bundles the studio's `buildNepalSurvey` and runs each case through the real API handler. Each case goes through the survey check, review plans, JSON, A3 drawings, DXF and the structural calculation. There are 76 cases: rectangle sizes and proportions, road side, north bearing, storey counts, programs, parking, reservoir, floor heights, drawn plots, municipalities and 27 invalid inputs. The full report is in `SURVEY-CASE-MATRIX.md`.
+- **Before.** 18 cases planned. Only the default 11.25 m square-like plots worked.
+- **After.** 42 planned end to end, 24 refused with clear messages, 10 no plan with stated reasons, 0 crashes.
+- **Fixes.**
+  - *Shared-wall setbacks.* A 0 m proposed setback is accepted (`units.js`, `normalizeBrief.js`).
+  - *Coverage.* The footprint is fitted proportionally to the 70 % working coverage cap, road side kept. Previously every plot above ~11.5 m square failed (`candidateSearch.js` `fitCoverage`).
+  - *Too-small plots.* An explicit "buildable area below 6.5 × 7.5 m" reason is given.
+  - *Single storey.* The core bay is the entrance hall over the reservoir, reserved for a future stair (`corePlanner.js` `entryPad`). Whole 2-bed owner floors use the compact flat layout (`roomPlanner.js`).
+  - *Storey height.* The stair bay is sized from the storey height, up to NBC 205's 4.5 m bay, flagged against the 14 ft preference (`corePlanner.js`, `frameGrid.js`).
+  - *Drawn plots.* New `plotFit.js` plans the largest inner rectangle, turned so the road is at the bottom, with north turned too. The site plan and DXF (`C-PROP` polygon, `C-PROP-PLAN` rectangle) show the real boundary; area and FAR use the real plot area.
+  - *Municipality spellings.* Kathmandu/KMC/Pokhara spellings resolve. The refusal message names the supported cities, and the studio offers suggestions.
+  - *Partial floor.* A partial floor larger than 65 % of the plot is refused at survey time.
+  - *No-plan feedback.* The studio "no plan" message lists the top reasons (`rejectedReasons`).
+  - *Site plan.* The road is drawn on any frontage edge.
+  - *Structure.*
+    - Bays too short for a frame beam (depth ≤ ¼ clear span) are a "layout review" item instead of driving every member to 500 mm.
+    - Beam depth is limited to ¼ clear span.
+    - The Annex A 4.1.3(g) 75 mm spacing floor is applied correctly.
+    - 4-legged links are allowed on beams ≥ 300 mm wide.
+- **Tests.**
+  - `test/nepal-survey-coverage.test.js`: 7 new tests.
+  - The review-sheet coverage test is updated to the new fitted-footprint behaviour.
+  - Nepal suite 95/96; the only failure is still the missing-original-PDF catalog test.
+  - Frontend 36/39, the same 3 preview-config failures as before.
+- **Not covered yet.**
+  - Plots narrower than ~8.5 m with 1 m side setbacks, and 6 m plots even with 0 m sides (needs a narrow-plot layout family).
+  - Wide-shallow plots (8–9 m deep).
+  - L-shaped and triangular drawn plots.
+  - Large programs on small plots (needs two-row floor layouts).
+  - Corner plots (second road not planned for).
+  - Municipalities other than Kathmandu and Pokhara, pending reviewed bylaw profiles (owner decision).

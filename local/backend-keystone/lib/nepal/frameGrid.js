@@ -4,6 +4,9 @@ const {COLUMN_WIDTH_MM,INTERIOR_WALL_MM}=require('./constructionProfile');
 // Owner's preferred planning range, not a Nepal code span limit or member design.
 const PREFERRED_MIN_BAY_SPAN_MM=3048; // 10 ft
 const MAX_PLANNING_BAY_SPAN_MM=4267; // floor(14 ft = 4267.2 mm)
+// Storeys taller than 3 m need a longer stair bay; it may reach the NBC 205:2024
+// 4.5 m bay limit (cl 4.2) and is then reported against the 14 ft preference.
+const MAX_STAIR_BAY_SPAN_MM=4500;
 function frameGrid(footprint,{targetSpanMm=3500,columnWidthMm=COLUMN_WIDTH_MM,
   protectedCorridor=null,protectedCore=null,partitionLinesMm=[],rowAxisTargetsMm=null,
   engineerReviewed=false}={}) {
@@ -37,7 +40,8 @@ function frameGrid(footprint,{targetSpanMm=3500,columnWidthMm=COLUMN_WIDTH_MM,
   const yAnchors=stair?[y1+half,stair.y1+half,stair.y2-half,y2-half]
     .filter((n,i,all)=>i===0||n>all[i-1]):null;
   if(stair&&(stair.y1<y1||stair.y2>y2||stair.y2-stair.y1-columnWidthMm>
-    MAX_PLANNING_BAY_SPAN_MM))throw new Error('Dedicated stair bay exceeds its planning span');
+    MAX_STAIR_BAY_SPAN_MM))throw new Error('Dedicated stair bay exceeds its planning span');
+  const longStairBay=stair&&stair.y2-stair.y1-columnWidthMm>MAX_PLANNING_BAY_SPAN_MM;
   const y=yAnchors?yAnchors.flatMap((value,i)=>{
     if(!i)return [value];
     const prior=yAnchors[i-1],gap=value-prior;
@@ -88,7 +92,7 @@ function frameGrid(footprint,{targetSpanMm=3500,columnWidthMm=COLUMN_WIDTH_MM,
     status:engineerReviewed?'planning_grid_reviewed':'planning_reservation_only',
     protectedCorridor:c,protectedCore:stair,
     fixedRowAxisIndices:[...fixedRows],
-    warnings:['Some short bays follow from the narrow stair/corridor geometry; the 10 ft lower preference is not guaranteed.',
+    warnings:[...(longStairBay?[`The stair bay spans ${stair.y2-stair.y1-columnWidthMm} mm for the taller storey: above the 14 ft preference, within the NBC 205 4.5 m bay limit.`]:[]),'Some short bays follow from the narrow stair/corridor geometry; the 10 ft lower preference is not guaranteed.',
       'Member sizing, actual beam continuity at footprint voids, infill interaction, seismic analysis and foundation design require the structural engineer.']};
 }
 module.exports={frameGrid,PREFERRED_MIN_BAY_SPAN_MM,MAX_PLANNING_BAY_SPAN_MM};

@@ -64,7 +64,10 @@ function buildModel(candidate,brief,overrides={}){
     const beams=layout.beams.map(b=>{
       const a=b.axis==='x'?{x:b.from/1000,y:b.line/1000}:{x:b.line/1000,y:b.from/1000};
       const e=b.axis==='x'?{x:b.to/1000,y:b.line/1000}:{x:b.line/1000,y:b.to/1000};
-      return {axis:b.axis,a,e,L:Math.hypot(e.x-a.x,e.y-a.y),b:inp.beamWidthMm/1000,D:beamDepthOf(b),type:b.type};
+      // Annex A 4.1.1(c): D ≤ clear span/4. Short bays get a shallower beam (not
+      // below 300 mm); a bay too short even for that is reported as a layout issue.
+      const L=Math.hypot(e.x-a.x,e.y-a.y),maxD=Math.floor((L-colB)*1000/4/25)*25/1000;
+      return {axis:b.axis,a,e,L,b:inp.beamWidthMm/1000,D:Math.min(beamDepthOf(b),Math.max(maxD,0.3)),type:b.type};
     }).filter(b=>at.has(`${r3(b.a.x)},${r3(b.a.y)}`)&&at.has(`${r3(b.e.x)},${r3(b.e.y)}`)&&
       inAny({x:(b.a.x+b.e.x)/2,y:(b.a.y+b.e.y)/2},below.boxes,1e-3));
     beams.forEach((b,i)=>{b.id=`D${k}-B${i+1}`;});

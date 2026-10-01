@@ -72,22 +72,28 @@ function designBeam(model,beam,loads,E,{fck,fy}){
   const Van=Math.max(1.5*0.6*(wD+wL)*L,(0.6*(wD+0.3*wL)*L)+(E?.V||0));
   const Vu=Math.max(Vcap,Van);
   const tv=Vu*1e3/(b*d),tc=S.tauC(100*AsTop/(b*d),fck),tmax=S.tauCMax(fck);
-  const pick=dia=>{const Asv=2*S.area(dia),Vus=Math.max(Vu*1e3-tc*b*d,0);
+  const pick=(dia,legs=2)=>{const Asv=legs*S.area(dia),Vus=Math.max(Vu*1e3-tc*b*d,0);
     const sv=Vus>0?0.87*fy*Asv*d/Vus:Infinity,svMin=0.87*fy*Asv/(0.4*b);
-    const end=Math.min(d/4,8*12,100,sv,svMin),mid=Math.min(d/2,sv,svMin);
-    return {dia,end:Math.max(Math.floor(end/25)*25,0),mid:Math.floor(mid/25)*25,sv};};
-  let links=pick(8);if(links.end<75)links=pick(10);
+    // A 4.1.3(g): ≤ min(d/4, 8db, 100) but need not be less than 75 mm; the shear demand may still require closer links.
+    const end=Math.min(Math.max(Math.min(d/4,8*12,100),75),sv,svMin),mid=Math.min(d/2,sv,svMin);
+    return {dia,legs,end:Math.max(Math.floor(end/25)*25,0),mid:Math.floor(mid/25)*25,sv};};
+  // 2-legged 8/10/12 mm, then 4-legged (two overlapping hoops) on beams ≥ 300 mm wide.
+  const linkOptions=[[8,2],[10,2],[12,2],...(b>=300?[[10,4],[12,4]]:[])];
+  let links=null;for(const [dia,legs] of linkOptions){links=pick(dia,legs);if(links.end>=75)break;}
   const checks=[
     {id:'width',ok:b>=200,text:`b = ${b} mm ≥ 200 mm`,ref:'A 4.1.1(b)'},
     {id:'ratio',ok:b/D>=0.3,text:`b/D = ${(b/D).toFixed(2)} ≥ 0.3 (preferable)`,ref:'A 4.1.1(a)',advisory:true},
-    {id:'depth',ok:D<=Lc*1000/4,text:`D = ${D} mm ≤ clear span/4 = ${Math.round(Lc*250)} mm`,ref:'A 4.1.1(c)'},
+    {id:'depth',ok:D<=Lc*1000/4,layout:true,text:`D = ${D} mm ≤ clear span/4 = ${Math.round(Lc*250)} mm${D>Lc*1000/4?' — bay too short for a frame beam: omit this column line or have the engineer detail it':''}`,ref:'A 4.1.1(c)'},
     {id:'rhoMax',ok:Math.max(AsTop,AsBot)<=Amax,text:`ρ ≤ 0.025`,ref:'A 4.1.2(c)'},
     {id:'bars',ok:!!topBars&&!!botBars&&!top.doubly,text:top.doubly?'Mu > Mu,lim — increase depth':'bars fit in the width',ref:'IS 456 G-1.1'},
     {id:'shear',ok:tv<=tmax,text:`τv = ${tv.toFixed(2)} ≤ τc,max = ${tmax} MPa`,ref:'IS 456 40.2.3'},
-    {id:'links',ok:links.end>=75,text:`end-zone links ${links.dia}φ @ ${links.end} mm (≤ min(d/4, 8db, 100), ≥ 75)`,ref:'A 4.1.3(g)'},
+    {id:'links',ok:links.end>=75,text:`end-zone links ${links.legs}L-${links.dia}φ @ ${links.end} mm (≤ min(d/4, 8db, 100), ≥ 75)`,ref:'A 4.1.3(g)'},
   ];
   return {id:beam.id,axis:beam.axis,L,b,D,d,wD,wL,ME,hog,sagSpan,sagSupport,topReq,botReq,topBars,botBars,
-    Mh,Ms,Vg,Vcap,Van,Vu,tv,tc,links,ok:checks.every(c=>c.ok||c.advisory),checks,top:label(topBars),bottom:label(botBars),
+    // A bay too short for a frame beam is a grid problem: its shear/link failures
+    // follow from the short span and are reported with it, not fixed by sizing.
+    Mh,Ms,Vg,Vcap,Van,Vu,tv,tc,links,ok:checks.some(c=>c.layout&&!c.ok)||checks.every(c=>c.ok||c.advisory),
+    layoutIssue:checks.some(c=>c.layout&&!c.ok),checks,top:label(topBars),bottom:label(botBars),
     lengths:{endZone:Math.round(2*d)}};
 }
 

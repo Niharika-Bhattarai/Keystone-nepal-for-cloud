@@ -42,7 +42,7 @@ function reserveWindowGroup(box,slabs,face,requiredAreaSqM,avoidBoxes){
 function coordinateOpenings(level,core,grid,site){
   const columns=grid.columns.map(column=>{const h=column.widthMm/2;
     return rect([column.xMm-h,column.yMm-h,column.xMm+h,column.yMm+h]);});
-  const arrival=core.flights[0].arrivalLandings[0].box,b=rect(core.box);
+  const arrival=core.flights[0]?.arrivalLandings[0].box||core.entryPad,b=rect(core.box);
   const living=level.rooms.rooms.find(r=>r.entryFrom==='shared-floor-level-arrival');
   const entry=doorOnSharedEdge(rect([b.x1,arrival.y1,b.x2,arrival.y2]),
     living?.box||level.rooms.corridor,{clearWidthMm:1000,endClearanceMm:50,avoidBoxes:columns});
@@ -197,6 +197,28 @@ function searchConcepts(brief,options={}) {
   }
   return result;
 }
+// The working coverage cap limits the ground footprint. On plots where the
+// buildable area (plot minus setbacks) is larger than the cap allows, the
+// footprint keeps the road-side setback and shrinks proportionally (the extra
+// open space goes to the rear and sides) — so larger plots still get a plan
+// instead of a coverage failure.
+const MIN_BUILDABLE_MM=[6500,7500];
+function fitCoverage(envelope,cap,roadEdge){
+  if(cap==null)return envelope;
+  const b=envelope.buildable,site=envelope.site,siteArea=(site.x2-site.x1)*(site.y2-site.y1);
+  const limit=cap*siteArea*0.995;let w=b.x2-b.x1,h=b.y2-b.y1;
+  if(w*h<=limit)return envelope;
+  // Both sides shrink by the same factor, which keeps the plan proportions the
+  // room planner was given; the road-side edge stays where it is.
+  const k=Math.sqrt(limit/(w*h));
+  const nw=Math.max(Math.min(w,MIN_BUILDABLE_MM[0]),Math.floor(w*k/100)*100);
+  const nh=Math.max(Math.min(h,MIN_BUILDABLE_MM[1]),Math.floor(Math.min(h*k,limit/nw)/100)*100);
+  const x1=roadEdge===1?b.x2-nw:roadEdge===3?b.x1:b.x1+Math.floor((w-nw)/200)*100;
+  const y1=roadEdge===2?b.y2-nh:roadEdge===0?b.y1:b.y1+Math.floor((h-nh)/200)*100;
+  const buildable=rect([x1,y1,x1+nw,y1+nh]);
+  return {...envelope,buildable,coverageFit:{from:b,capRatio:cap,
+    note:`Footprint reduced from ${(w/1000).toFixed(2)} × ${(h/1000).toFixed(2)} m to ${(nw/1000).toFixed(2)} × ${(nh/1000).toFixed(2)} m to stay within the ${Math.round(cap*100)} % working coverage cap; the extra open space is at the rear and sides.`}};
+}
 function searchProgram(brief,{provisionalSetbacksMm,workingCoverageLimit=null,
   partialTopMaxShare=0.65,
   tankLitres=brief.buildingProgram.services?.groundReservoirLitres||8000,
@@ -204,8 +226,12 @@ function searchProgram(brief,{provisionalSetbacksMm,workingCoverageLimit=null,
   if(!Number.isSafeInteger(maxCandidates)||maxCandidates<1||maxCandidates>24)
     throw new RangeError('Review candidate count must be between 1 and 24');
   const rulePack=resolveRulePack(brief);
-  const envelope=siteEnvelope(brief,{setbacksMm:provisionalSetbacksMm,reviewed:false});
+  const envelope=fitCoverage(siteEnvelope(brief,{setbacksMm:provisionalSetbacksMm,reviewed:false}),
+    workingCoverageLimit,brief.site.frontageEdges?.[0]?.edgeIndex??0);
   const attempts=[],candidates=[],levels=brief.buildingProgram.levels;
+  const bw=envelope.buildable.x2-envelope.buildable.x1,bh=envelope.buildable.y2-envelope.buildable.y1;
+  if(bw<MIN_BUILDABLE_MM[0]||bh<MIN_BUILDABLE_MM[1])attempts.push({id:'site-envelope',status:'rejected',
+    reason:`Buildable area ${(bw/1000).toFixed(2)} × ${(bh/1000).toFixed(2)} m (plot minus setbacks) is below the planner's minimum ${MIN_BUILDABLE_MM[0]/1000} × ${MIN_BUILDABLE_MM[1]/1000} m for a stair core and rooms. On shared-wall sides enter a 0 m proposed setback; narrow-plot layouts are not yet available.`});
   for(const footprint of footprints(envelope,{compactRectangle:
     !brief.buildingProgram.rental?.intended&&
     envelope.buildable.x2-envelope.buildable.x1>=9000}))for(const side of ['west','east'])for(const order of

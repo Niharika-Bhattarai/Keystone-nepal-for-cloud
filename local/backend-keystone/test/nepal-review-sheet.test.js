@@ -22,11 +22,17 @@ test('working assumptions enable local review without claiming an adopted munici
   assert.match(html,/clearance unverified/);
   assert.match(html,/not permit or construction drawings/);
 });
-test('coverage beyond the owner working cap rejects concepts and user text is escaped in review HTML',()=>{
+test('a buildable area beyond the working coverage cap is reduced to fit it and user text is escaped in review HTML',()=>{
   const brief=normalizeBrief(fixture).brief;
-  const rejected=searchConcepts(brief,{provisionalSetbacksMm:[0,0,0,0],workingCoverageLimit:0.7});
-  assert.equal(rejected.candidates.length,0);
-  assert.ok(rejected.attempts.some(a=>a.reason?.includes('working concept cap')));
+  // Zero setbacks would cover 100 % of the plot: the footprint gives up rear depth instead of failing.
+  const fitted=searchConcepts(brief,{provisionalSetbacksMm:[0,0,0,0],workingCoverageLimit:0.7});
+  assert.ok(fitted.candidates.length>0);
+  for(const c of fitted.candidates){
+    assert.ok(c.ledger.groundCoverageRatio<=0.7+1e-9);
+    assert.match(c.envelope.coverageFit.note,/70 % working coverage cap/);
+    assert.equal(c.envelope.buildable.y1,c.envelope.site.y1);// road (bottom) side kept
+    assert.ok(c.envelope.buildable.x2-c.envelope.buildable.x1<11250);
+  }
   const copy=structuredClone(brief);
   copy.site.north.evidence='<img src=x onerror=alert(1)>';
   const html=renderReviewDocument([buildReviewCase('review',copy)]);

@@ -119,7 +119,9 @@ export function NepalBrief() {
         body: JSON.stringify({ surveyData: buildNepalSurvey(form), format: 'json' }) });
       const data = await res.json();
       if (!res.ok || !data.candidates?.length) {
-        setReport(prev => ({ ...prev, message: data.message || 'No study massing could be built for this brief.' })); return;
+        setReport(prev => ({ ...prev, message: data.message || (data.rejectedReasons?.length
+          ? `No plan fits this brief yet. Main reasons: ${data.rejectedReasons.join(' · ')}`
+          : 'No study massing could be built for this brief.') })); return;
       }
       setMassing(data.candidates); setMassingIndex(0);
     } catch {
@@ -175,8 +177,10 @@ export function NepalBrief() {
   }
   return <div style={{ padding: 16, color: 'var(--ink)' }}>
     <div className="studio-item-title">Nepal site brief</div>
-    <p className="studio-empty-note">Enter a rectangular plot, or draw the plot side by side with lengths and angles. The house itself can have a rectangular, stepped L or courtyard shape. Check the brief before design.</p>
-    <Field label="Municipality" value={form.municipality} onChange={set('municipality')}/>
+    <p className="studio-empty-note">Enter a rectangular plot, or draw the plot side by side with lengths and angles. The house itself can have a rectangular, stepped L or courtyard shape. On a side shared with a neighbour's wall, enter a 0 m proposed setback (plot edges section). Check the brief before design.</p>
+    <Field label="Municipality" value={form.municipality} onChange={set('municipality')} list="nepal-municipalities"/>
+    <datalist id="nepal-municipalities"><option value="Kathmandu Metropolitan City"/><option value="Pokhara Metropolitan City"/></datalist>
+    <p className="studio-empty-note">Plans are available for Kathmandu and Pokhara Metropolitan Cities while other municipalities' bylaws are reviewed.</p>
     <Field label="Ward" value={form.ward} onChange={set('ward')} placeholder="Ward number"/>
     <label style={{ display: 'grid', gap: 5, fontSize: 12, marginBottom: 10 }}>Plot shape
       <select value={form.shape === 'surveyedPolygon' ? 'surveyedPolygon' : 'rectangle'} onChange={e => set('shape')(e.target.value)}>
@@ -189,7 +193,7 @@ export function NepalBrief() {
         onApply={({ vertices, sides, mode, unit }) => { setForm(prev => ({ ...prev, plotVertices: vertices, plotSketch: { sides, mode, unit },
           roadEdge: Number(prev.roadEdge) < vertices.length ? prev.roadEdge : '0' })); setReport(null); setMassing(null); }}/>
       <p className="studio-empty-note">{drawnPlot(form)
-        ? `Plot in the brief: ${form.plotVertices.length} corners. Floor plans are generated for rectangular plots only for now; a drawn plot is kept in the brief for review and for the irregular-plot planner.`
+        ? `Plot in the brief: ${form.plotVertices.length} corners. Plans use the largest rectangle that fits inside the drawn plot, turned so the road side is at the bottom; the drawings show the real boundary.`
         : 'Draw and close the plot, then press “Use this plot in the brief”.'}</p>
     </> : <>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>

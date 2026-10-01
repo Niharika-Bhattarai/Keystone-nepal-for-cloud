@@ -3,6 +3,16 @@ const { lengthMm, areaSqM } = require('./units');
 const allowedStoreys = new Set([1, 2, 2.5, 3, 3.5]);
 const allowedMunicipalities = new Set(['Kathmandu Metropolitan City', 'Pokhara Metropolitan City']);
 const issue = (code, field, message) => ({ code, field, message });
+// Common spellings of the supported municipalities map to their profile name;
+// anything else is kept as typed (and reported as not yet reviewed).
+const MUNICIPALITY_ALIASES = [
+  [/^(kathmandu|kmc|kathmandu metropolitan( city)?|kathmandu mahanagar ?palika)$/, 'Kathmandu Metropolitan City'],
+  [/^(pokhara|pokhara lekhnath|pokhara metropolitan( city)?|pokhara (lekhnath )?mahanagar ?palika)$/, 'Pokhara Metropolitan City']];
+function canonicalMunicipality(value) {
+  const typed = String(value || '').trim().replace(/\s+/g, ' ');
+  const key = typed.toLowerCase().replace(/[.,]/g, '');
+  return MUNICIPALITY_ALIASES.find(([re]) => re.test(key))?.[1] || typed;
+}
 const finite = n => Number.isFinite(n);
 const distance = (a, b) => Math.hypot(b.xMm - a.xMm, b.yMm - a.yMm);
 const cross = (a, b, c) => (b.xMm - a.xMm) * (c.yMm - a.yMm) - (b.yMm - a.yMm) * (c.xMm - a.xMm);
@@ -23,17 +33,17 @@ function normalizeBrief(raw) {
   const missing = [], invalid = [], unsupported = [];
   const need = (condition, field, message) => { if (!condition) missing.push(issue('REQUIRED', field, message)); return condition; };
   const bad = (condition, field, message) => { if (condition) invalid.push(issue('INVALID', field, message)); };
-  const readLength = (input, field) => { try { return lengthMm(input, field); } catch (e) { invalid.push(issue('INVALID_UNIT', field, e.message)); return null; } };
+  const readLength = (input, field, options) => { try { return lengthMm(input, field, options); } catch (e) { invalid.push(issue('INVALID_UNIT', field, e.message)); return null; } };
   const readArea = (input, field) => { try { return areaSqM(input, field); } catch (e) { invalid.push(issue('INVALID_UNIT', field, e.message)); return null; } };
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return { brief: null,
     missing: [issue('REQUIRED', 'surveyData', 'A Nepal survey is required.')], invalid, unsupported };
   const jurisdiction = raw.jurisdiction || {};
   need(jurisdiction.country === 'NP', 'jurisdiction.country', 'Choose Nepal as the country.');
-  const municipality = String(jurisdiction.municipality || '').trim();
+  const municipality = canonicalMunicipality(jurisdiction.municipality);
   need(municipality, 'jurisdiction.municipality', 'Choose the municipality for the plot.');
   need(String(jurisdiction.ward ?? '').trim(), 'jurisdiction.ward', 'Enter the plot ward number.');
   if (municipality && !allowedMunicipalities.has(municipality)) unsupported.push(issue('MUNICIPALITY_NOT_REVIEWED',
-    'jurisdiction.municipality', 'This municipality needs a reviewed local rule profile before generation.'));
+    'jurisdiction.municipality', `This municipality needs a reviewed local rule profile before generation. Available now: ${[...allowedMunicipalities].join(', ')}.`));
 
   const site = raw.site || {};
   const shape = site.shape;
@@ -129,8 +139,9 @@ function normalizeBrief(raw) {
     const neighbor = boundary?.neighbor || 'unknown';
     if (!['unknown', 'open', 'building', 'road'].includes(neighbor))
       invalid.push(issue('BOUNDARY_CONTEXT', `site.boundaries.${i}.neighbor`, 'Boundary neighbor must be unknown, open, building or road.'));
+    // 0 is a valid proposal on a shared-wall side; legality is checked at municipality review.
     const setbackMm = boundary?.proposedSetback ? readLength(boundary.proposedSetback,
-      `site.boundaries.${i}.proposedSetback`) : null;
+      `site.boundaries.${i}.proposedSetback`, { allowZero: true }) : null;
     const neighborHeightMm = boundary?.neighborHeight ? readLength(boundary.neighborHeight,
       `site.boundaries.${i}.neighborHeight`) : null;
     return { edgeIndex: i, neighbor, neighborHeightMm, neighborHasWindows: boundary?.neighborHasWindows ?? null,
@@ -148,6 +159,7 @@ function normalizeBrief(raw) {
     roadAccess: String(site.roadAccess || 'unknown').trim(),
   };
 
+  const measuredPlotAreaSqM = vertices && !invalid.length ? polygonArea(vertices) : null;
   const program = raw.buildingProgram || {};
   const storeys = Number(program.storeys);
   if (need(program.storeys !== undefined && program.storeys !== '', 'buildingProgram.storeys', 'Choose the storey count.'))
@@ -181,6 +193,10 @@ function normalizeBrief(raw) {
       let targetAreaSqM = null;
       if (expectedKind === 'partial' && need(level?.targetArea, `buildingProgram.levels.${i}.targetArea`, 'Enter the target area of the partial top floor.'))
         targetAreaSqM = readArea(level.targetArea, `buildingProgram.levels.${i}.targetArea`);
+      // A partial floor is at most 65 % of a full floor, and a full floor is smaller than the plot.
+      if (targetAreaSqM && measuredPlotAreaSqM && targetAreaSqM > 0.65 * measuredPlotAreaSqM)
+        invalid.push(issue('PARTIAL_AREA_TOO_LARGE', `buildingProgram.levels.${i}.targetArea`,
+          `The partial top floor cannot exceed 65 % of a full floor; on this ${Math.round(measuredPlotAreaSqM)} m² plot that is well under ${Math.floor(0.65 * measuredPlotAreaSqM)} m².`));
       need(String(level?.use || '').trim(), `buildingProgram.levels.${i}.use`, 'Describe this floor’s use.');
       const counts = {};
       for (const key of ['bedrooms', 'bathrooms', 'kitchens', 'livingRooms', 'attachedBathrooms']) {

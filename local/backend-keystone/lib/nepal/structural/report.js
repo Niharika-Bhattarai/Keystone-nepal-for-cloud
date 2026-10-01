@@ -35,6 +35,7 @@ function renderStructuralReport(r,{option='Option 1',date=new Date().toISOString
       columns <b>${inp.columnMm} × ${inp.columnMm} mm</b>, beams <b>${inp.beamWidthMm} × ${inp.beamDepthMm||'layout'} mm</b>,
       slab ${inp.slabMm} mm, M${r.fck} concrete, Fe${r.fy} steel.</p>`+
     table(['Check','Result'],checks.map(([t,ok])=>[esc(t),badge(ok)]))+
+    (sm.layoutIssues?.length?`<p>${badge(false,{warn:true,text:'LAYOUT REVIEW'})} ${sm.layoutIssues.length} beam(s) span a bay too short for a ductile frame beam (NBC 105 Annex A 4.1.1(c), depth ≤ ¼ clear span): ${esc(sm.layoutIssues.slice(0,8).join(', '))}${sm.layoutIssues.length>8?'…':''}. Larger members cannot fix this; the column grid needs the engineer's review.</p>`:'')+
     `<p>Seismic weight W = <b>${f(an.Wt,0)} kN</b>; Z = ${hz.Z}; soil ${G.x.soil}; T = ${f(G.x.T,3)} s; C<sub>d</sub>(T) = ${f(G.x.Cd,4)};
       base shear V = <b>${f(G.x.V,1)} kN</b> (X) / <b>${f(G.y.V,1)} kN</b> (Y).</p>`+
     `<h3>Size trials</h3>`+table(['Column','Beam b × D','Max ULS drift','Max SLS drift','Drift','Beams','Full check'],
@@ -172,10 +173,10 @@ function renderStructuralReport(r,{option='Option 1',date=new Date().toISOString
       {title:'Capacity design shear',formula:'V<sub>u</sub> = V<sup>D+0.5L</sup> + 1.4 (M<sub>u</sub><sup>s</sup> + M<sub>u</sub><sup>h</sup>)/L<sub>clear</sub>',
         sub:`${f(wb.Vg,1)} + 1.4 (${f(wb.Ms,1)} + ${f(wb.Mh,1)}) / ${f(wb.L-model.colB)}`,result:`V<sub>u</sub> = ${f(wb.Vcap,1)} kN (analysis ${f(wb.Van,1)} kN) → ${f(wb.Vu,1)} kN`,ref:ANNEX_A.beamShear},
       {title:'Stirrups',formula:'τ<sub>v</sub> = V<sub>u</sub>/(bd); s = 0.87 f<sub>y</sub> A<sub>sv</sub> d / (V<sub>u</sub> − τ<sub>c</sub>bd); ends ≤ min(d/4, 8d<sub>b</sub>, 100), ≥ 75; elsewhere ≤ d/2',
-        sub:`τ<sub>v</sub> = ${f(wb.tv)} MPa, τ<sub>c</sub> = ${f(wb.tc)} MPa`,result:`<b>${wb.links.dia}φ 2-legged @ ${wb.links.end} mm</b> over ${wb.lengths.endZone} mm from each face, @ ${wb.links.mid} mm elsewhere; first link ≤ 50 mm from the face`,ref:ANNEX_A.beamLinks},
+        sub:`τ<sub>v</sub> = ${f(wb.tv)} MPa, τ<sub>c</sub> = ${f(wb.tc)} MPa`,result:`<b>${wb.links.dia}φ ${wb.links.legs}-legged @ ${wb.links.end} mm</b> over ${wb.lengths.endZone} mm from each face, @ ${wb.links.mid} mm elsewhere; first link ≤ 50 mm from the face`,ref:ANNEX_A.beamLinks},
     ])+`<details><summary><b>Beam schedule</b> (${r.beams.length} beams)</summary>`+table(['Beam','Level','Dir','Span (m)','b × D','w<sub>D</sub> / w<sub>L</sub> (kN/m)','M<sub>E</sub>','M<sub>u</sub> hog / sag (kNm)','Top','Bottom','V<sub>u</sub> (kN)','Links end / mid',''],
       r.beams.map(b=>[esc(b.id),esc(b.level),b.axis.toUpperCase(),f(b.L),`${b.b} × ${b.D}`,`${f(b.wD,1)} / ${f(b.wL,1)}`,f(b.ME,1),`${f(b.hog,1)} / ${f(b.sagSpan,1)}`,
-        esc(b.top),esc(b.bottom),f(b.Vu,1),`${b.links.dia}φ @ ${b.links.end} / ${b.links.mid}`,badge(b.ok,{text:b.ok?'OK':b.checks.filter(c=>!c.ok&&!c.advisory).map(c=>c.id).join(', ')})]),'small')+'</details>');
+        esc(b.top),esc(b.bottom),f(b.Vu,1),`${b.links.legs}L-${b.links.dia}φ @ ${b.links.end} / ${b.links.mid}`,badge(b.ok&&!b.layoutIssue,{warn:b.ok&&b.layoutIssue,text:b.layoutIssue&&b.ok?'short bay':b.ok?'OK':b.checks.filter(c=>!c.ok&&!c.advisory&&!c.layout).map(c=>c.id).join(', ')})]),'small')+'</details>');
 
   // 12 Columns
   const wc=r.columns.reduce((a,b)=>(b.worst?.ratio||0)>(a.worst?.ratio||0)?b:a);

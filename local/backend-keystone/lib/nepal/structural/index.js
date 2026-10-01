@@ -147,6 +147,7 @@ function design(candidate,brief,overrides={},{quick=false}={}){
     extremeTorsion:irr.some(i=>i.extreme),irregular:irr.some(i=>i.irregular),
     floating:td.floating.length>0,esmOk:an.esm.ok||!irr.some(i=>i.irregular),stabilityOk:stability.every(s=>s.ok),
   };
+  summary.layoutIssues=beams.filter(b=>b.layoutIssue).map(b=>b.id);
   summary.pass=summary.driftOk&&summary.columnsOk&&summary.beamsOk&&summary.scwbOk&&!summary.extremeTorsion&&summary.stabilityOk&&!summary.floating;
   return {model,grav,an,td,beams,columns,joints,details,footings,tieForce,stability,roofDisp,irr,elig,drifts,summary,sbc,fck,fy};
 }

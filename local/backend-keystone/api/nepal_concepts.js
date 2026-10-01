@@ -20,7 +20,7 @@ module.exports=async(req,res)=>{
     if(req.body?.format==='dxf'){
       // AutoCAD DXF (R2010, mm) for one hypothesis, same indexing as the drawing set.
       const {buildNepalDxf}=require('../lib/nepal/dxfExport');
-      const all=[...review.result.candidates.map(c=>[c,preflight.normalizedBrief,'']),
+      const all=[...review.result.candidates.map(c=>[c,review.brief,'']),
         ...(variant?variant.candidates.map(c=>[c,variant.brief,' (parking variant)']):[])];
       const index=Number.isSafeInteger(req.body.candidateIndex)?req.body.candidateIndex:0;
       if(!all[index])return res.status(404).json({success:false,message:'No such hypothesis.'});
@@ -33,7 +33,7 @@ module.exports=async(req,res)=>{
       // Preliminary NBC 105:2025 structural calculation for one hypothesis.
       const {designStructure}=require('../lib/nepal/structural');
       const {renderStructuralReport}=require('../lib/nepal/structural/report');
-      const all=[...review.result.candidates.map(c=>[c,preflight.normalizedBrief,'']),
+      const all=[...review.result.candidates.map(c=>[c,review.brief,'']),
         ...(variant?variant.candidates.map(c=>[c,variant.brief,' (parking variant)']):[])];
       const index=Number.isSafeInteger(req.body.candidateIndex)?req.body.candidateIndex:0;
       if(!all[index])return res.status(404).json({success:false,message:'No such hypothesis.'});
@@ -61,7 +61,7 @@ module.exports=async(req,res)=>{
       // A3 review drawing set for one hypothesis: index into the listed candidates,
       // then the parking-variant candidates (same order as the JSON format).
       const {renderDrawingSet}=require('../lib/nepal/drawingSet');
-      const all=[...review.result.candidates.map(c=>[c,preflight.normalizedBrief,'']),
+      const all=[...review.result.candidates.map(c=>[c,review.brief,'']),
         ...(variant?variant.candidates.map(c=>[c,variant.brief,' (parking variant)']):[])];
       const index=Number.isSafeInteger(req.body.candidateIndex)?req.body.candidateIndex:0;
       if(!all[index])return res.status(404).json({success:false,message:'No such hypothesis.'});
@@ -71,10 +71,14 @@ module.exports=async(req,res)=>{
     if(req.body?.format==='json'){
       const {exportCandidateGeometry}=require('../lib/nepal/geometryExport');
       return res.status(200).json({success:true,status:'unverified_concepts_only',generationAvailable:false,
-        candidates:[...review.result.candidates.map(c=>exportCandidateGeometry(c,preflight.normalizedBrief)),
+        candidates:[...review.result.candidates.map(c=>exportCandidateGeometry(c,review.brief)),
           ...(variant?variant.candidates.map(c=>({...exportCandidateGeometry(c,variant.brief),
             id:`${c.id} (parking variant)`,programChange:variant.change})):[])],
-        attempts:review.result.attempts.filter(a=>a.status==='rejected').length});
+        attempts:review.result.attempts.filter(a=>a.status==='rejected').length,
+        // Why nothing fits, most frequent first (numbers vary per attempt).
+        rejectedReasons:review.result.candidates.length?[]:Object.entries(review.result.attempts.filter(a=>a.status==='rejected')
+          .reduce((m,a)=>{const k=a.reason.replace(/^[\w-]+: /,'');m[k]=(m[k]||0)+1;return m;},{})).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([k])=>k),
+        planningFit:review.brief.site?.planningFit||null});
     }
     if(req.body?.spatialStudy===true){
       if(!review.result.candidates.length)return res.status(422).json({success:false,
