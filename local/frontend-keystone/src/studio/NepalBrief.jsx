@@ -1,4 +1,6 @@
 import React, { lazy, Suspense, useEffect, useState } from 'react';
+import PlotSketcher from './PlotSketcher.jsx';
+import { surveyedPolygon } from './plotSketch.js';
 
 const NepalModel3D = lazy(() => import('./NepalModel3D.jsx'));
 
@@ -27,8 +29,9 @@ const INITIAL = {
 };
 const decimal = value => value === '' ? '' : Number(value);
 const rooms = value => String(value || '').split(',').map(s => s.trim()).filter(Boolean);
+const drawnPlot = form => form.shape === 'surveyedPolygon' && Array.isArray(form.plotVertices) && form.plotVertices.length >= 3;
 export function buildNepalSurvey(form) {
-  const edgeCount = 4;
+  const edgeCount = drawnPlot(form) ? form.plotVertices.length : 4;
   const levels = Array.from({ length: Math.ceil(Number(form.storeys)) }, (_, i) => ({
     id: `level-${i + 1}`, kind: i === Math.ceil(Number(form.storeys)) - 1 && Number(form.storeys) % 1 ? 'partial' : 'full',
     elevation: { value: i * decimal(form.floorHeight), unit: 'm' },
@@ -46,8 +49,10 @@ export function buildNepalSurvey(form) {
     .map(key=>[key,ownerLevels.reduce((sum,level)=>sum+Number(level[key]||0),0)]));
   const ownerSpecialRooms=ownerLevels.flatMap(level=>level.specialRooms);
   const site = {
-    shape: 'rectangle', rectangle: { width: { value: decimal(form.width), unit: 'm' },
-      depth: { value: decimal(form.depth), unit: 'm' } },
+    // A plot drawn in the sketcher is sent as surveyed corner coordinates (metres).
+    ...(drawnPlot(form) ? surveyedPolygon(form.plotVertices) : {
+      shape: 'rectangle', rectangle: { width: { value: decimal(form.width), unit: 'm' },
+        depth: { value: decimal(form.depth), unit: 'm' } } }),
     ...(form.declaredArea !== '' ? { declaredArea: { value: decimal(form.declaredArea), unit: form.areaUnit } } : {}),
     north: { bearingDegrees: decimal(form.north), evidence: form.northEvidence },
     frontageEdges: [{ edgeIndex: decimal(form.roadEdge), roadWidth: { value: decimal(form.roadWidth), unit: 'm' } }],
@@ -83,7 +88,7 @@ function Field({ label, value, onChange, type = 'text', ...props }) {
 }
 export function NepalBrief() {
   const [form, setForm] = useState(() => {
-    try { return { ...INITIAL, ...JSON.parse(localStorage.getItem(DRAFT_KEY) || '{}'), shape: 'rectangle' }; }
+    try { return { ...INITIAL, ...JSON.parse(localStorage.getItem(DRAFT_KEY) || '{}') }; }
     catch { return INITIAL; }
   });
   const [report, setReport] = useState(null);
@@ -159,14 +164,29 @@ export function NepalBrief() {
   }
   return <div style={{ padding: 16, color: 'var(--ink)' }}>
     <div className="studio-item-title">Nepal site brief</div>
-    <p className="studio-empty-note">Start with a rectangular plot. The house itself can have a rectangular, stepped L or courtyard shape. Check the brief before design.</p>
+    <p className="studio-empty-note">Enter a rectangular plot, or draw the plot side by side with lengths and angles. The house itself can have a rectangular, stepped L or courtyard shape. Check the brief before design.</p>
     <Field label="Municipality" value={form.municipality} onChange={set('municipality')}/>
     <Field label="Ward" value={form.ward} onChange={set('ward')} placeholder="Ward number"/>
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-      <Field label="Plot width (m)" type="number" step="any" value={form.width} onChange={set('width')}/>
-      <Field label="Plot depth (m)" type="number" step="any" value={form.depth} onChange={set('depth')}/>
-    </div>
-    <p className="studio-empty-note">Use the survey orientation: width runs left-right and depth runs bottom-top.</p>
+    <label style={{ display: 'grid', gap: 5, fontSize: 12, marginBottom: 10 }}>Plot shape
+      <select value={form.shape === 'surveyedPolygon' ? 'surveyedPolygon' : 'rectangle'} onChange={e => set('shape')(e.target.value)}>
+        <option value="rectangle">Rectangle (width × depth)</option>
+        <option value="surveyedPolygon">Draw the plot (lines, lengths and angles)</option>
+      </select>
+    </label>
+    {form.shape === 'surveyedPolygon' ? <>
+      <PlotSketcher initial={form.plotSketch} northBearing={Number(form.north)}
+        onApply={({ vertices, sides, mode, unit }) => { setForm(prev => ({ ...prev, plotVertices: vertices, plotSketch: { sides, mode, unit },
+          roadEdge: Number(prev.roadEdge) < vertices.length ? prev.roadEdge : '0' })); setReport(null); setMassing(null); }}/>
+      <p className="studio-empty-note">{drawnPlot(form)
+        ? `Plot in the brief: ${form.plotVertices.length} corners. Floor plans are generated for rectangular plots only for now; a drawn plot is kept in the brief for review and for the irregular-plot planner.`
+        : 'Draw and close the plot, then press “Use this plot in the brief”.'}</p>
+    </> : <>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+        <Field label="Plot width (m)" type="number" step="any" value={form.width} onChange={set('width')}/>
+        <Field label="Plot depth (m)" type="number" step="any" value={form.depth} onChange={set('depth')}/>
+      </div>
+      <p className="studio-empty-note">Use the survey orientation: width runs left-right and depth runs bottom-top.</p>
+    </>}
     <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 8 }}>
       <Field label="Recorded plot area (optional)" type="number" step="any" value={form.declaredArea} onChange={set('declaredArea')}/>
       <label style={{ display: 'grid', gap: 5, fontSize: 12, marginBottom: 10 }}>Area unit
@@ -180,8 +200,10 @@ export function NepalBrief() {
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
       <label style={{ display: 'grid', gap: 5, fontSize: 12, marginBottom: 10 }}>Road-facing plot side on the survey
         <select value={form.roadEdge} onChange={e => set('roadEdge')(e.target.value)}>
-          <option value="0">Bottom edge</option><option value="1">Right edge</option>
-          <option value="2">Top edge</option><option value="3">Left edge</option>
+          {drawnPlot(form)
+            ? form.plotVertices.map((_, i) => <option key={i} value={String(i)}>Side {i + 1} ({'ABCDEFGHIJKLMNOP'[i]}–{'ABCDEFGHIJKLMNOP'[(i + 1) % form.plotVertices.length]})</option>)
+            : <><option value="0">Bottom edge</option><option value="1">Right edge</option>
+              <option value="2">Top edge</option><option value="3">Left edge</option></>}
         </select>
       </label>
       <Field label="Road width (m)" type="number" step="any" value={form.roadWidth} onChange={set('roadWidth')}/>
@@ -189,7 +211,7 @@ export function NepalBrief() {
     <details style={{ marginBottom: 14 }}><summary>Plot edges and site notes for professional review</summary>
     <Field label="Survey drawing revision or date" value={form.surveyRevision} onChange={set('surveyRevision')} placeholder="For later permit review"/>
     <p className="studio-empty-note">Plot edges follow the corner order. Enter neighboring buildings and setbacks where known. Proposed setbacks are recorded here; adopted legal setbacks will be checked after municipality review.</p>
-    {Array.from({ length: 4 }, (_, i) =>
+    {Array.from({ length: drawnPlot(form) ? form.plotVertices.length : 4 }, (_, i) =>
       <div key={i} style={{ borderTop: '1px solid var(--control-edge)', paddingTop: 8 }}>
         <strong>Plot edge {i}</strong>
         <label style={{ display: 'grid', gap: 5, fontSize: 12, marginBottom: 10 }}>Neighbor

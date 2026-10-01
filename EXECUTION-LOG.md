@@ -511,3 +511,57 @@ No implementation is claimed complete. Future agents should not mistake proposed
   4. Roof plan sheet.
   5. Furniture in plans.
   6. DXF export of the same geometry for the architect.
+
+## 2026-10-01 — furniture, sanitary and roof sheets, AutoCAD DXF, plot sketcher
+
+- **Owner request.** AutoCAD export, furniture placement, sanitary plans, roof plan, and a CAD-like plot drawing in the survey. Structural engineering is to be studied next.
+- **Furniture (`furniture.js`).** Every room is furnished in its clear box.
+  - *Items:*
+    - bedrooms: beds and side tables, wardrobe in the primary bedroom (others on request);
+    - living room: corner sofa, or a 3-seat sofa where it doesn't fit, plus TV and coffee table;
+    - kitchen: stove, sink, 1,000 mm-high counter, fridge, and dining table with chairs;
+    - bathrooms: WC, basin and shower;
+    - puja room: altar;
+    - other rooms: desk and washer.
+  - *Placement constraints.* Items back onto solid walls and stay out of door and portal swing zones and projecting frame columns. Tall items and bed headboards never stand at windows, and clearance is kept in front of each item.
+  - *Vaastu wall choice.* Rules choose the wall and are reported per item: V22, V24, V25, V34, V35, V36. V26 flags a beam over a bed. V27 records a departure when only a window wall remains.
+  - *Fallbacks.* A 4'-6" double bed is tried before giving up a solid headboard. Misfits are reported, never dropped.
+  - *Result.* All 12 fixture candidates are fully furnished. Tests check containment, door zones, columns, overlaps and headboards.
+- **Sanitary (`sanitary.js`, sheets SN-01 and SN-02).**
+  - *Stacks.* Soil (SP) and waste (WP) stacks go on the exterior wall nearest the main fixture; an internal duct, when needed, is flagged. Stacks merge across floors.
+  - *Other elements.* Floor traps and branch runs, and an inspection chamber at every stack base.
+  - *Drain routing.* Drains run round the setback ring, never under rooms or across the underground water reservoir.
+  - *Septic tank.* Under the open bike bay when there is one, which keeps its manholes accessible. Otherwise it is flagged.
+  - *Soak pit.* At the corner farthest from the reservoir.
+  - *Separations.* Sewage-to-reservoir distances are measured and reported as engineer review items: owner fixture 1.28 m tank-to-reservoir; rental parking variant 4.24 m.
+  - *Not designed here.* Sizes, falls and vents stay with NBC 208 / IS 2470 and the engineer. The municipal sewer is preferred where available.
+- **Roof plan (AR sheet).** It shows:
+  - each level's uncovered slab as roof or terrace;
+  - parapet lines;
+  - a stair cover (mumty) with the overhead tank;
+  - the solar heater and tulsi muth;
+  - rainwater outlets clear of the stair cover, with short fall arrows;
+  - roof notes.
+  
+  Tests check that the roof regions equal the uncovered slab exactly.
+- **Updated drawing set.** AR-00 site plan; AR-01… floor plans (furnished); roof; elevations; section and opening schedule; SN-01 ground drainage; SN-02 floor sanitary; ST-01.
+- **AutoCAD DXF (`dxfExport.js` + `scripts/export/build_nepal_dxf.py`).**
+  - *Format and library.* R2010, millimetres (`$INSUNITS`=4), using the already-pinned ezdxf 1.4.4.
+  - *Layout.* Site and ground drainage, every floor plan, roof plan and the preliminary structural layout sit side by side in model space.
+  - *Layers.* AIA-style: walls with solid hatch, doors and swings, glazing, furniture, fixtures, sanitary pipes, drains and equipment, grid, columns, beams, real DIMENSION entities, tags, room labels, roof, property line.
+  - *Verified.* Zero ezdxf audit errors. Rendered with ezdxf's drawing add-on and inspected. Available through API `format:'dxf'` and a studio download button.
+- **Plot sketcher (`PlotSketcher.jsx`, `plotSketch.js`).**
+  - *Input.* Plot shape "Draw the plot": sides by length (m or ft) with the inside corner angle or the side direction, or corners placed by clicking (0.1 m snap). "Close the plot" computes the last side.
+  - *Live feedback.* A live sketch with corner letters, side lengths and north. It also shows closure gap, area (m², sq ft, ropani-aana-paisa-daam) and self-crossing.
+  - *Output.* The plot goes into the brief as `surveyedPolygon` corner coordinates. The road-edge and boundary lists follow the drawn sides.
+  - *Verified in the running studio:* a 5-sided plot closes (150.60 m²) and the backend preflight accepts it ("Survey inputs complete"). Click-to-place works.
+  - *Limit.* **Floor-plan generation still requires a rectangular plot**, so a drawn plot is stored and validated but does not yet get plans.
+- **Tests.**
+  - *Backend.* Nepal suite **77/78**; the only failure is still the missing-original-PDF test.
+  - *Python.* 10/10.
+  - *Frontend.* 36/39. The 3 failures (conversion and preview config) fail identically without these changes: the config deliberately disables preview builds ("Nepal workspace is local-only").
+- **Next.**
+  1. Structural engineering study (owner request).
+  2. Irregular-plot floor-plan generation from the drawn polygon.
+  3. Door hinge and swing optimisation.
+  4. Sanitary pipe sizing once the engineer's method is chosen.
