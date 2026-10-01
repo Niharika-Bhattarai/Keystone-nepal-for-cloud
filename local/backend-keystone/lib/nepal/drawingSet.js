@@ -9,6 +9,7 @@
 const {exportCandidateGeometry}=require('./geometryExport');
 const {AREA_SQFT}=require('./units');
 const {furnishLevel}=require('./furniture');
+const {sanitaryPlan}=require('./sanitary');
 
 const SHEET_W=420,SHEET_H=297,STRIP=26,MARGIN=10,BIND=20;
 const DRAW={x1:BIND,y1:MARGIN+8,x2:SHEET_W-MARGIN,y2:SHEET_H-MARGIN-STRIP-2};
@@ -387,6 +388,46 @@ function furnitureSvg(v,items){
   return s;
 }
 
+// ---------- roof ----------
+// Roof regions are each level's slab not covered by the level above.
+function subtractBox(a,b){
+  if(!(Math.min(a.x2,b.x2)>Math.max(a.x1,b.x1)&&Math.min(a.y2,b.y2)>Math.max(a.y1,b.y1)))return [a];
+  const out=[];
+  if(b.y1>a.y1)out.push({x1:a.x1,y1:a.y1,x2:a.x2,y2:b.y1});
+  if(b.y2<a.y2)out.push({x1:a.x1,y1:b.y2,x2:a.x2,y2:a.y2});
+  const y1=Math.max(a.y1,b.y1),y2=Math.min(a.y2,b.y2);
+  if(b.x1>a.x1)out.push({x1:a.x1,y1,x2:b.x1,y2});
+  if(b.x2<a.x2)out.push({x1:b.x2,y1,x2:a.x2,y2});
+  return out.filter(r=>r.x2-r.x1>1&&r.y2-r.y1>1);
+}
+function roofPlan(candidate,geometry){
+  const levels=candidate.levels,regions=[];
+  levels.forEach((level,i)=>{
+    let boxes=level.footprint.slabs.map(s=>({...s}));
+    for(const up of levels[i+1]?.footprint.slabs||[])boxes=boxes.flatMap(b=>subtractBox(b,up));
+    if(!boxes.length)return;
+    const top=i===levels.length-1,levelMm=geometry.levels[i].elevationMm+geometry.levels[i].storeyHeightMm;
+    const big=[...boxes].sort((a,b)=>(b.x2-b.x1)*(b.y2-b.y1)-(a.x2-a.x1)*(a.y2-a.y1))[0];
+    const label={x:(big.x1+big.x2)/2,y:(big.y1+big.y2)/2};
+    // Outlet at the first slab corner not under the stair cover; short (1.5 m)
+    // fall arrows from each region's centre toward it.
+    const core=candidate.core.box,underCore=p=>p.x>core.x1&&p.x<core.x2&&p.y>core.y1&&p.y<core.y2;
+    const outletOf=b=>[{x:b.x1+400,y:b.y1+400},{x:b.x2-400,y:b.y1+400},{x:b.x1+400,y:b.y2-400},{x:b.x2-400,y:b.y2-400}].find(p=>!underCore(p))||{x:b.x1+400,y:b.y1+400};
+    const slopes=boxes.map(b=>{const f={x:(b.x1+b.x2)/2,y:(b.y1+b.y2)/2},o=outletOf(b);
+      const L=Math.hypot(o.x-f.x,o.y-f.y),k=Math.min(1,1500/L);
+      return {from:{x:f.x+(o.x-f.x)*0.15,y:f.y+(o.y-f.y)*0.15},to:{x:f.x+(o.x-f.x)*(0.15+k),y:f.y+(o.y-f.y)*(0.15+k)}};});
+    regions.push({levelId:level.id,top,levelMm,boxes,label,slopes,outlets:boxes.map(outletOf),name:top?'ROOF':'OPEN TERRACE'});
+  });
+  const core=candidate.core.box,stairCover={...core};
+  const tank={x:(core.x1+core.x2)/2,y:(core.y1+core.y2)/2-600,r:550};
+  const topBoxes=regions.find(r=>r.top)?.boxes||regions.at(-1).boxes;
+  const terrace=regions.filter(r=>!r.top).flatMap(r=>r.boxes).concat(topBoxes).sort((a,b)=>(b.x2-b.x1)*(b.y2-b.y1)-(a.x2-a.x1)*(a.y2-a.y1))[0];
+  const solar={x1:terrace.x2-2300,y1:terrace.y2-1600,x2:terrace.x2-300,y2:terrace.y2-400};
+  const tulsi={x:terrace.x1+800,y:terrace.y2-800};
+  let n=0;const outlets=regions.flatMap(r=>r.outlets.map(o=>({...o,n:++n})));
+  return {regions,stairCover,tank,solar,tulsi,outlets};
+}
+
 // ---------- the set ----------
 function renderDrawingSet(candidate,brief,{option='Option 1',date=new Date().toISOString().slice(0,10)}={}){
   const geometry=exportCandidateGeometry(candidate,brief);
@@ -425,7 +466,9 @@ function renderDrawingSet(candidate,brief,{option='Option 1',date=new Date().toI
     const t1=table(240,DRAW.y1+6,[['SN',9],['DESCRIPTION',52],['M²',26],['SQ FT',24],['R-A-P-D',24]],rowsA,{title:'AREA STATEMENT'});
     s+=t1.svg;
     const list=[['AR-00','Site plan, area statement, drawing list'],...candidate.levels.map((lv,i)=>[`AR-0${i+1}`,`${lv.id} floor plan`]),
-      [`AR-0${candidate.levels.length+1}`,'Elevations'],[`AR-0${candidate.levels.length+2}`,'Section X-X and opening schedule'],
+      [`AR-0${candidate.levels.length+1}`,'Roof plan'],[`AR-0${candidate.levels.length+2}`,'Elevations'],
+      [`AR-0${candidate.levels.length+3}`,'Section X-X and opening schedule'],
+      ['SN-01','Ground drainage: stacks, chambers, septic tank, soak pit'],['SN-02','Floor sanitary plans'],
       ['ST-01','Column and beam layout, preliminary sizes, notes']];
     const t2=table(240,t1.bottom+8,[['SHEET',18],['DRAWING',117]],list,{title:'DRAWING LIST'});s+=t2.svg;
     s+=text(240,t2.bottom+7,'LOCATION PLAN (NOT TO SCALE): to be added from the survey / ward map.',2.2);
@@ -445,6 +488,32 @@ function renderDrawingSet(candidate,brief,{option='Option 1',date=new Date().toI
     add(`AR-0${i+1}`,`${level.id.toUpperCase()} FLOOR PLAN`,scale,s);
   });
 
+  // roof plan
+  {const area={x1:DRAW.x1,y1:DRAW.y1+4,x2:250,y2:DRAW.y2-8},all=candidate.levels.flatMap(l=>l.footprint.slabs),b=outerBounds(all);
+    const scale=fitScale({x1:0,y1:0,x2:b.x2-b.x1+5200,y2:b.y2-b.y1+5200},area);
+    const v=viewport({x1:b.x1-2600,y1:b.y1-2600,x2:b.x2+2600,y2:b.y2+2600},area,scale),roof=roofPlan(candidate,geometry);
+    let s='';
+    for(const r of roof.regions){for(const box of r.boxes){s+=rectSvg(v,box,`fill="${r.top?'#f3f1ea':'#e8efe6'}" stroke="#111" stroke-width="0.35"`);
+      s+=rectSvg(v,{x1:box.x1+229,y1:box.y1+229,x2:box.x2-229,y2:box.y2-229},'fill="none" stroke="#111" stroke-width="0.15"');}
+      const c=r.label;s+=text(v.x(c.x),v.y(c.y),r.name,2.4,'text-anchor="middle" font-weight="700"')+text(v.x(c.x),v.y(c.y)+3,`TOP OF SLAB +${ftin(r.levelMm)}`,1.8,'text-anchor="middle"');
+      for(const a of r.slopes)s+=`<line x1="${v.x(a.from.x)}" y1="${v.y(a.from.y)}" x2="${v.x(a.to.x)}" y2="${v.y(a.to.y)}" stroke="#2a5d8f" stroke-width="0.25" marker-end="url(#arr)"/>`;}
+    s+=rectSvg(v,roof.stairCover,'fill="#ddd" stroke="#111" stroke-width="0.35"')+text(v.x((roof.stairCover.x1+roof.stairCover.x2)/2),v.y((roof.stairCover.y1+roof.stairCover.y2)/2),'STAIR COVER (MUMTY)',2,'text-anchor="middle" font-weight="700"');
+    s+=`<circle cx="${v.x(roof.tank.x)}" cy="${v.y(roof.tank.y)}" r="${roof.tank.r*v.k}" fill="#fff" stroke="#111" stroke-width="0.3"/>`+text(v.x(roof.tank.x),v.y(roof.tank.y)+0.7,'OHT',1.9,'text-anchor="middle"');
+    s+=rectSvg(v,roof.solar,'fill="none" stroke="#111" stroke-width="0.25" stroke-dasharray="1 0.5"')+text(v.x((roof.solar.x1+roof.solar.x2)/2),v.y((roof.solar.y1+roof.solar.y2)/2)+0.7,'SOLAR W/H',1.7,'text-anchor="middle"');
+    if(roof.tulsi)s+=`<rect x="${v.x(roof.tulsi.x)-1.6}" y="${v.y(roof.tulsi.y)-1.6}" width="3.2" height="3.2" fill="#e8f0d8" stroke="#111" stroke-width="0.2"/>`+text(v.x(roof.tulsi.x),v.y(roof.tulsi.y)+4,'TULSI MUTH',1.6,'text-anchor="middle"');
+    for(const o of roof.outlets)s+=`<circle cx="${v.x(o.x)}" cy="${v.y(o.y)}" r="1.1" fill="#2a5d8f"/>`+text(v.x(o.x)+1.6,v.y(o.y)-1,`RWP${o.n}`,1.6,'fill="#2a5d8f"');
+    s+=northArrow(area.x2-10,area.y1+12,bearing);
+    s+=text((area.x1+area.x2)/2,DRAW.y2-1,`ROOF PLAN — 1:${scale}`,3,'text-anchor="middle" font-weight="700" text-decoration="underline"');
+    s+=notes(262,DRAW.y1+8,'ROOF NOTES',[
+      '9" (229 mm) parapet 3\'-3" (1000 mm) high on all open roof and terrace edges; guard design to be confirmed.',
+      'Roof and terrace slabs fall to rainwater outlets (RWP) at about 1:100 with waterproofing; falls by engineer.',
+      'Overhead tank (OHT) on the stair cover roof; tank load, support and access ladder by the structural engineer.',
+      'Solar water heater on the sunniest open terrace; frame anchorage by the engineer.',
+      'Rainwater downpipes discharge to a recharge pit or storm drain, never to the septic tank.',
+      'Tulsi muth on the topmost safe terrace (owner convention).',
+      'Stair cover headroom above the top landing to be verified (stair headroom unverified).'],{width:140}).svg;
+    add(`AR-0${candidate.levels.length+1}`,'ROOF PLAN',scale,s);}
+
   // elevations: four on one sheet
   {const cells=[{x1:DRAW.x1,y1:DRAW.y1+4,x2:(DRAW.x1+DRAW.x2)/2-4,y2:(DRAW.y1+DRAW.y2)/2-4},
       {x1:(DRAW.x1+DRAW.x2)/2+4,y1:DRAW.y1+4,x2:DRAW.x2,y2:(DRAW.y1+DRAW.y2)/2-4},
@@ -456,7 +525,7 @@ function renderDrawingSet(candidate,brief,{option='Option 1',date=new Date().toI
     const scale=fitScale({x1:0,y1:0,x2:span,y2:zTop+1100},{...cells[0],y2:cells[0].y2-6});
     let s='';faces.forEach((f,i)=>{const e=elevationDrawing(candidate,geometry,f,{...cells[i],y2:cells[i].y2-6},scale);
       s+=e.svg+text((cells[i].x1+cells[i].x2)/2,cells[i].y2,`${e.title} (plan ${f} face) — 1:${scale}`,2.8,'text-anchor="middle" font-weight="700" text-decoration="underline"');});
-    add(`AR-0${candidate.levels.length+1}`,'ELEVATIONS',scale,s);}
+    add(`AR-0${candidate.levels.length+2}`,'ELEVATIONS',scale,s);}
 
   // section X-X and opening schedule
   {const area={x1:DRAW.x1,y1:DRAW.y1+4,x2:215,y2:DRAW.y2-8};
@@ -473,7 +542,54 @@ function renderDrawingSet(candidate,brief,{option='Option 1',date=new Date().toI
       `Open portals without a door leaf (${schedule.portals}) are not scheduled.`,
       'Door swings, hinge sides, glazing type and egress widths are unverified.',
       'Living-room balcony connection: closable glazing (owner decision 2026-09-30).'],{width:130}).svg;
-    add(`AR-0${candidate.levels.length+2}`,'SECTION X-X & OPENING SCHEDULE',scale,s);}
+    add(`AR-0${candidate.levels.length+3}`,'SECTION X-X & OPENING SCHEDULE',scale,s);}
+
+  // SN-01 ground drainage and SN-02 floor sanitary plans
+  {const san=sanitaryPlan(candidate,furnish),site=candidate.envelope.site;
+    const area={x1:DRAW.x1,y1:DRAW.y1+4,x2:250,y2:DRAW.y2-8};
+    const scale=fitScale({x1:0,y1:0,x2:site.x2-site.x1+3000,y2:site.y2-site.y1+3000},area);
+    const v=viewport({x1:site.x1-1500,y1:site.y1-1500,x2:site.x2+1500,y2:site.y2+1500},area,scale);
+    let s=rectSvg(v,site,'fill="none" stroke="#111" stroke-width="0.4" stroke-dasharray="4 1"');
+    for(const sl of candidate.levels[0].footprint.slabs)s+=rectSvg(v,sl,'fill="#f4f4f4" stroke="#111" stroke-width="0.35"');
+    if(candidate.core.reservoir?.innerPlanBox){const rb=candidate.core.reservoir.innerPlanBox;s+=rectSvg(v,rb,'fill="#dbe9f5" stroke="#2a5d8f" stroke-width="0.3"')+
+      text(v.x((rb.x1+rb.x2)/2),v.y((rb.y1+rb.y2)/2),'UG WATER RESERVOIR',1.8,'text-anchor="middle" fill="#2a5d8f"');}
+    for(const r of san.runs)s+=`<polyline points="${r.points.map(p=>`${v.x(p.x)},${v.y(p.y)}`).join(' ')}" fill="none" stroke="#7a2e12" stroke-width="0.35" stroke-dasharray="2 0.8"/>`;
+    for(const ch of san.chambers)s+=rectSvg(v,ch.box,'fill="#fff" stroke="#111" stroke-width="0.3"')+text(v.x(ch.point.x)+2,v.y(ch.point.y)-1.5,ch.id,1.8);
+    for(const st of san.stacks)s+=`<circle cx="${v.x(st.point.x)}" cy="${v.y(st.point.y)}" r="1.2" fill="${st.kind==='SP'?'#7a2e12':'#2a5d8f'}"/>`+text(v.x(st.point.x)+1.6,v.y(st.point.y)+2.6,st.id,1.7);
+    s+=rectSvg(v,san.tank.box,'fill="#fff" stroke="#111" stroke-width="0.35"')+text(v.x((san.tank.box.x1+san.tank.box.x2)/2),v.y((san.tank.box.y1+san.tank.box.y2)/2)+0.7,'SEPTIC TANK (indicative)',1.8,'text-anchor="middle"');
+    s+=`<circle cx="${v.x(san.pit.centre.x)}" cy="${v.y(san.pit.centre.y)}" r="${san.pit.diameterMm/2*v.k}" fill="#fff" stroke="#111" stroke-width="0.35"/>`+text(v.x(san.pit.centre.x),v.y(san.pit.centre.y)+0.7,'SOAK PIT',1.7,'text-anchor="middle"');
+    s+=northArrow(area.x2-10,area.y1+12,bearing);
+    s+=text((area.x1+area.x2)/2,DRAW.y2-1,`GROUND DRAINAGE PLAN — 1:${scale}`,3,'text-anchor="middle" font-weight="700" text-decoration="underline"');
+    const t=table(262,DRAW.y1+6,[['STACK',16],['TYPE',18],['FLOORS SERVED',62],['ROUTE',44]],san.stacks.map(st=>[st.id,st.kind==='SP'?'Soil':'Waste',
+      st.levels.join(', '),st.status==='external_stack_to_ground'?'external, on wall':'duct: review']),{title:'STACK SCHEDULE',size:1.9});
+    s+=t.svg;
+    const legend=table(262,t.bottom+5,[['SYMBOL',20],['MEANING',120]],[['SP / WP','Soil pipe (WC) / waste pipe (kitchen, basin) stack'],
+      ['IC','Inspection chamber 600 x 600 (indicative)'],['FT','Floor trap'],['- - -','Underground drain run (falls by engineer)']],{title:'LEGEND',size:1.9});
+    s+=legend.svg;
+    const sep=san.separations;
+    s+=notes(262,legend.bottom+7,'SANITARY NOTES',[...san.notes,
+      ...(sep?[`Measured clear distance septic tank to UG water reservoir: ${(sep.tankToReservoirMm/1000).toFixed(2)} m; soak pit to reservoir: ${(sep.pitToReservoirMm/1000).toFixed(2)} m. Engineer to confirm against the adopted code.`]:[]),
+      ...san.findings.filter(f=>f.code!=='SEWAGE_RESERVOIR_SEPARATION_REVIEW').map(f=>`Review: ${f.code.replace(/_/g,' ').toLowerCase()}${f.note?` — ${f.note}`:''}.`)],{width:140,size:1.9}).svg;
+    add('SN-01','GROUND DRAINAGE PLAN',scale,s);
+    // SN-02: every floor's wet rooms with fixtures, stacks, traps and branches
+    const n=candidate.levels.length,cols=n>2?2:n,rows=Math.ceil(n/cols);
+    const cw=(DRAW.x2-DRAW.x1)/cols,chh=(DRAW.y2-DRAW.y1-6)/rows;
+    const fb=outerBounds(candidate.levels.flatMap(l=>l.footprint.slabs));
+    const sc=fitScale({x1:0,y1:0,x2:fb.x2-fb.x1+1800,y2:fb.y2-fb.y1+1800},{x1:0,y1:0,x2:cw-8,y2:chh-12});
+    let s2='';
+    candidate.levels.forEach((level,i)=>{const cell={x1:DRAW.x1+(i%cols)*cw+4,y1:DRAW.y1+4+Math.floor(i/cols)*chh,x2:DRAW.x1+(i%cols+1)*cw-4,y2:DRAW.y1+4+(Math.floor(i/cols)+1)*chh-10};
+      const vv=viewport({x1:fb.x1-900,y1:fb.y1-900,x2:fb.x2+900,y2:fb.y2+900},cell,sc),floor=san.floors.find(f=>f.levelId===level.id);
+      for(const sl of level.footprint.slabs)s2+=rectSvg(vv,sl,'fill="#fff" stroke="#999" stroke-width="0.2"');
+      for(const w of level.walls?.walls||[])for(const sb of w.solidBoxes)s2+=rectSvg(vv,sb,'fill="#999" stroke="none"');
+      for(const r of level.rooms?.rooms||[])if(['bathroom','kitchen','laundry'].includes(r.type))s2+=rectSvg(vv,r.clearBox||r.box,'fill="#eef3f6" stroke="none"');
+      s2+=furnitureSvg(vv,floor.fixtures);
+      for(const br of floor.branches)s2+=`<line x1="${vv.x(br.from.x)}" y1="${vv.y(br.from.y)}" x2="${vv.x(br.to.x)}" y2="${vv.y(br.to.y)}" stroke="${br.stackId.startsWith('SP')?'#7a2e12':'#2a5d8f'}" stroke-width="0.3"/>`;
+      for(const tr of floor.traps)s2+=`<circle cx="${vv.x(tr.point.x)}" cy="${vv.y(tr.point.y)}" r="0.9" fill="none" stroke="#111" stroke-width="0.25"/>`+text(vv.x(tr.point.x)+1.2,vv.y(tr.point.y)-0.8,'FT',1.4);
+      for(const st of san.stacks.filter(st=>st.levels.includes(level.id)||st.dropsThroughLevelIds.includes(level.id)||
+        candidate.levels.findIndex(l=>l.id===level.id)<candidate.levels.findIndex(l=>l.id===st.levels[0])))
+        s2+=`<circle cx="${vv.x(st.point.x)}" cy="${vv.y(st.point.y)}" r="1.1" fill="${st.kind==='SP'?'#7a2e12':'#2a5d8f'}"/>`+text(vv.x(st.point.x)+1.4,vv.y(st.point.y)+2.4,st.id,1.5);
+      s2+=text((cell.x1+cell.x2)/2,cell.y2+5,`${level.id.toUpperCase()} FLOOR — SANITARY — 1:${sc}`,2.4,'text-anchor="middle" font-weight="700"');});
+    add('SN-02','FLOOR SANITARY PLANS',sc,s2);}
 
   // ST-01 structural layout
   {const ground=candidate.levels[0],area={x1:DRAW.x1,y1:DRAW.y1+4,x2:230,y2:DRAW.y2-8};
@@ -504,4 +620,4 @@ function renderDrawingSet(candidate,brief,{option='Option 1',date=new Date().toI
   return {html,sheets:sheets.map(({no,title})=>({no,title})),openingSchedule:schedule.rows,structure,
     furniture:candidate.levels.map(l=>furnish(l))};
 }
-module.exports={renderDrawingSet,buildOpeningSchedule,structuralLayout,ftin,rapd};
+module.exports={renderDrawingSet,buildOpeningSchedule,structuralLayout,roofPlan,ftin,rapd};

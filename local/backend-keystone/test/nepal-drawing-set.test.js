@@ -18,8 +18,10 @@ test('unit conversions match the sample drawings conventions',()=>{
 test('drawing set follows the sample sheet list and never fills professional fields',()=>{
   const {brief,candidate}=top('rental-3_5');
   const set=renderDrawingSet(candidate,brief,{option:'Option 1',date:'2026-10-01'});
-  assert.deepEqual(set.sheets.map(s=>s.no),['AR-00','AR-01','AR-02','AR-03','AR-04','AR-05','AR-06','ST-01']);
+  assert.deepEqual(set.sheets.map(s=>s.no),['AR-00','AR-01','AR-02','AR-03','AR-04','AR-05','AR-06','AR-07',
+    'SN-01','SN-02','ST-01']);
   for(const title of ['SITE PLAN','AREA STATEMENT','DRAWING LIST','OPENING SCHEDULE','SECTION AT X-X','ELEVATION',
+    'ROOF PLAN','STAIR COVER (MUMTY)','GROUND DRAINAGE PLAN','SEPTIC TANK','SOAK PIT','STACK SCHEDULE','SANITARY — 1:',
     'COLUMN &amp; BEAM LAYOUT','STRUCTURE NOTES','PROFESSIONAL REVIEW REQUIRED'])assert.ok(set.html.includes(title),title);
   assert.equal((set.html.match(/FOR REVIEW ONLY — NOT FOR CONSTRUCTION OR PERMIT/g)||[]).length,set.sheets.length);
   assert.equal((set.html.match(/CHECKED BY: —/g)||[]).length,set.sheets.length);
