@@ -17,6 +17,17 @@ module.exports=async(req,res)=>{
       brief:variant.brief,assumptions:review.assumptions,
       result:{candidates:variant.candidates,attempts:variant.attempts,variations:[],
         status:'unverified_concepts_only',generationAvailable:false}}:null;
+    if(req.body?.format==='drawings'){
+      // A3 review drawing set for one hypothesis: index into the listed candidates,
+      // then the parking-variant candidates (same order as the JSON format).
+      const {renderDrawingSet}=require('../lib/nepal/drawingSet');
+      const all=[...review.result.candidates.map(c=>[c,preflight.normalizedBrief,'']),
+        ...(variant?variant.candidates.map(c=>[c,variant.brief,' (parking variant)']):[])];
+      const index=Number.isSafeInteger(req.body.candidateIndex)?req.body.candidateIndex:0;
+      if(!all[index])return res.status(404).json({success:false,message:'No such hypothesis.'});
+      const [c,b,label]=all[index];
+      return res.status(200).type('html').send(renderDrawingSet(c,b,{option:`Option ${index+1}${label}`}).html);
+    }
     if(req.body?.format==='json'){
       const {exportCandidateGeometry}=require('../lib/nepal/geometryExport');
       return res.status(200).json({success:true,status:'unverified_concepts_only',generationAvailable:false,

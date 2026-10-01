@@ -120,6 +120,16 @@ export function NepalBrief() {
       setReport(prev => ({ ...prev, message: 'Could not reach the local review-plan server.' }));
     } finally { setPreviewing(false); }
   }
+  async function openDrawingSet(candidateIndex) {
+    const tab = window.open('about:blank', '_blank');
+    try {
+      const res = await fetch('/api/nepal/concepts', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ surveyData: buildNepalSurvey(form), format: 'drawings', candidateIndex }) });
+      if (!res.ok) { tab?.close(); const e = await res.json().catch(() => ({})); setReport(prev => ({ ...prev, message: e.message || 'Could not create the drawing set.' })); return; }
+      const url = URL.createObjectURL(new Blob([await res.text()], { type: 'text/html' }));
+      if (tab) tab.location.href = url; else window.location.href = url;
+    } catch { tab?.close(); setReport(prev => ({ ...prev, message: 'Could not reach the local review-plan server.' })); }
+  }
   async function openWorkingPlans(spatialStudy=false) {
     const tab=window.open('about:blank','_blank');
     setPreviewing(true);
@@ -296,6 +306,9 @@ export function NepalBrief() {
             {massing.map((c, i) => <option key={c.id} value={i}>{i + 1}. {c.id}</option>)}
           </select>
         </label>}
+        <button type="button" className="studio-btn" onClick={() => openDrawingSet(massingIndex)}>
+          Open A3 review drawing set (plans, elevations, section, schedules, structural layout)
+        </button>
         <Suspense fallback={<p className="studio-empty-note">Loading 3D view…</p>}>
           <NepalModel3D key={massing[massingIndex].id} geometry={massing[massingIndex]}/>
         </Suspense>
