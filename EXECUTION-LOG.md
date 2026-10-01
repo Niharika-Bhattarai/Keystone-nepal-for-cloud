@@ -565,3 +565,144 @@ No implementation is claimed complete. Future agents should not mistake proposed
   2. Irregular-plot floor-plan generation from the drawn polygon.
   3. Door hinge and swing optimisation.
   4. Sanitary pipe sizing once the engineer's method is chosen.
+
+## 2026-10-01 — structural load and seismic calculation (NBC 105:2025)
+
+- **Request.** Read the supplied codes in `Codes/` and calculate the structural loads of a residential building step by step in the backend.
+- **Codes read.**
+  - *NBC 105:2025* (`Codes/NBC 2025.pdf`, sha256 2ecc2200…, same file as manifest `nbc105-2025`): chapters 3–6, Annex A (ductile RC detailing) and Annex C (zoning factors). The equations are images in the PDF, so they were rendered and read page by page.
+  - *NBC 205:2024 ready-to-use guideline*: layout restrictions, soil bearing table, design basis.
+  - *IS 1893 (Part 1):2016* (`Codes/Seismic design code/kupdf.net_is-1893-2016.pdf`, sha256 1dc6ee67…, a scan read by OCR) and its amendments 1 and 2. Used only as a cross-check; NBC 105 governs.
+  - *Excluded.* The NBC 105:2019 draft commentary was not used, per AGENTS.md.
+  - *Not supplied.* IS 456 and IS 875 (or NBC 102/103) are referred to by NBC 205 but are not in the repo. Their clause values are used, and every one is marked "IS 456:2000*" / "not supplied — verify" in the report.
+- **Engine (`local/backend-keystone/lib/nepal/structural/`).**
+  - `codeData.js`: every constant with source id, clause and physical PDF page, plus the source hashes.
+  - `data/nbc105-2025-annex-c.json`: all 753 Annex C rows (district, local unit, PGA, page). The rows were cross-checked between two independent text parses.
+  - `hazard.js`: Z lookup that accepts English or Nepali names and spelling variants. Renamed units are matched (Pokhara → Pokhara Lekhnath). It also handles Table 4-3 soil D wards and Ch(T) with Ta = 0 for the ESM.
+  - `model.js`: storeys, slab levels, columns and beams from the plan geometry and drawing-set layout. Walls are weighed wall by wall from the plan, with openings deducted. Also stair waist, parapets on exposed roof edges and the overhead tank. Slabs are split into 0.1 m cells, each assigned to the nearest column (tributary) and nearest beam (45° share).
+  - `seismic.js`:
+    - seismic weight (0.3 LL, roof nil);
+    - period: 1.25 × 0.075 H^0.75 against the Rayleigh period, lesser adopted;
+    - C = Ch Z I; Cd = C/(Rμ Ωu) for ULS and 0.2C/Ωs for SLS; V = Cd W;
+    - force distribution with the k exponent;
+    - storey stiffness by the D-value (Muto) method with Table 3-1 cracked factors;
+    - drifts × Rμ × kd against 0.025 / 0.006;
+    - torsion: centre of mass vs centre of rigidity, ±0.05b, Δmax/Δmin;
+    - column shears and moments, beam seismic moments and frame axial forces;
+    - IS 1893 cross-check of the period and Ah.
+  - `sections.js`: IS 456 limit-state formulas:
+    - Mu,lim and Ast;
+    - τc from the Table 19 formula (reproduces the table to ±0.01);
+    - strain-compatibility column interaction and the biaxial αn check.
+  - `members.js`:
+    - *Takedown.* Gravity takedown with an equilibrium check.
+    - *Beams.* Coefficients, NBC combinations, ρmin = 0.24√fck/fy, Annex A bottom/top rules, capacity shear 1.4(Ms+Mh)/L and link spacing.
+    - *Columns.* All combinations with minimum eccentricity, 1–4 % and ≥ 8 bars, plus confinement lo, s and Ash.
+    - *Footings.* Bearing with +50 % seismic, punching, one-way shear and bending.
+  - `index.js`:
+    - irregularities: soft, mass, vertical geometric, torsion, re-entrant, diaphragm opening and floating columns;
+    - ESM applicability;
+    - strong column – weak beam (1.2) and joint shear (Ajh where needed);
+    - ldh at exterior joints;
+    - overturning; tie-beam force; separation;
+    - NBC 205 eligibility.
+    
+    **Sizing.** Frame sizes are stepped up from the layout (350 mm columns, 230 × 355 beams) until every check passes. Each trial is reported. `lockSizes` reports a failing frame instead of enlarging it.
+  - `report.js`: step-by-step HTML calculation. Each line carries the formula, substituted numbers, result and citation (e.g. "NBC 105:2025 6.1.1 eq 6.1(1), PDF p.60"). Worked beam and column examples and full schedules are included. Professional fields stay blank.
+- **Website.** API `format:'structure'` (HTML) and `format:'structure-json'`, with optional inputs: soil type, SBC, Z, starting sizes, concrete grade. The studio has a "Structural calculation inputs" panel and an "Open structural load calculation" button.
+- **Result for the rental 3.5-storey Kathmandu fixture.**
+  - *Seismic inputs.* Z = 0.35 (S.N. 345); soil D (KMC ward 10, Table 4-3).
+  - *Period.* T = 0.604 s (Rayleigh 0.64 s).
+  - *Base shear.* Cd = 0.1313 and W ≈ 4,620 kN, giving V ≈ 607 kN.
+  - *Sizing.* 350 mm columns fail on drift, beams or strong column. **400 × 400 columns with 300 × 450 beams pass.**
+  - *NBC 205.* Not eligible (panel 14.1 m² > 13.5 m²; third floor 47 % > 25 %), so the house must be designed to NBC 105.
+- **Tests.**
+  - *`test/nepal-structure.test.js`.* 10 tests, all passing: Annex C, soil, spectrum branches, distribution, IS 456 table checks, equilibrium, ESM values, adopted sizes, citations, locked sizes, unknown soil (C and D enveloped), second fixture.
+  - *Nepal suite.* 88/89. The only failure is the existing missing-original-PDF catalog test: the originals live in `Codes/`, not `Design Files/`, and the Vastu books are absent.
+  - *Frontend.* Builds.
+- **Limitations.**
+  - *Not a stamped design.* This is a preliminary aid for a licensed engineer.
+  - *Analysis method.* D-value and tributary methods, not a 3D FE model. NBC 205 cl 6.4 expects a 3D bare-frame model; run one and compare.
+  - *Unverified values.* IS 456 / IS 875 values must be checked against official copies.
+  - *Site data.* Soil type and SBC need a soil test.
+  - *Not designed.* Slabs, stair reinforcement, the underground reservoir and parapet anchorage.
+  - *Plot shape.* Irregular plots are still not planned.
+- **Next.**
+  1. Slab (IS 456 Annex D) and stair design.
+  2. Point the rule catalog at `Codes/` originals.
+  3. Optional 3D frame export (e.g. to ETABS/STAAD text) for the engineer's model.
+
+## 2026-10-01 — survey case matrix and coverage fixes
+
+- **Request.** Try different plot types and survey cases and report how they perform.
+- **Method.** `local/tools/nepal-survey-matrix.cjs` bundles the studio's `buildNepalSurvey` and runs each case through the real API handler. Each case goes through the survey check, review plans, JSON, A3 drawings, DXF and the structural calculation. There are 76 cases: rectangle sizes and proportions, road side, north bearing, storey counts, programs, parking, reservoir, floor heights, drawn plots, municipalities and 27 invalid inputs. The full report is in `SURVEY-CASE-MATRIX.md`.
+- **Before.** 18 cases planned. Only the default 11.25 m square-like plots worked.
+- **After.** 42 planned end to end, 24 refused with clear messages, 10 no plan with stated reasons, 0 crashes.
+- **Fixes.**
+  - *Shared-wall setbacks.* A 0 m proposed setback is accepted (`units.js`, `normalizeBrief.js`).
+  - *Coverage.* The footprint is fitted proportionally to the 70 % working coverage cap, road side kept. Previously every plot above ~11.5 m square failed (`candidateSearch.js` `fitCoverage`).
+  - *Too-small plots.* An explicit "buildable area below 6.5 × 7.5 m" reason is given.
+  - *Single storey.* The core bay is the entrance hall over the reservoir, reserved for a future stair (`corePlanner.js` `entryPad`). Whole 2-bed owner floors use the compact flat layout (`roomPlanner.js`).
+  - *Storey height.* The stair bay is sized from the storey height, up to NBC 205's 4.5 m bay, flagged against the 14 ft preference (`corePlanner.js`, `frameGrid.js`).
+  - *Drawn plots.* New `plotFit.js` plans the largest inner rectangle, turned so the road is at the bottom, with north turned too. The site plan and DXF (`C-PROP` polygon, `C-PROP-PLAN` rectangle) show the real boundary; area and FAR use the real plot area.
+  - *Municipality spellings.* Kathmandu/KMC/Pokhara spellings resolve. The refusal message names the supported cities, and the studio offers suggestions.
+  - *Partial floor.* A partial floor larger than 65 % of the plot is refused at survey time.
+  - *No-plan feedback.* The studio "no plan" message lists the top reasons (`rejectedReasons`).
+  - *Site plan.* The road is drawn on any frontage edge.
+  - *Structure.*
+    - Bays too short for a frame beam (depth ≤ ¼ clear span) are a "layout review" item instead of driving every member to 500 mm.
+    - Beam depth is limited to ¼ clear span.
+    - The Annex A 4.1.3(g) 75 mm spacing floor is applied correctly.
+    - 4-legged links are allowed on beams ≥ 300 mm wide.
+- **Tests.**
+  - `test/nepal-survey-coverage.test.js`: 7 new tests.
+  - The review-sheet coverage test is updated to the new fitted-footprint behaviour.
+  - Nepal suite 95/96; the only failure is still the missing-original-PDF catalog test.
+  - Frontend 36/39, the same 3 preview-config failures as before.
+- **Not covered yet.**
+  - Plots narrower than ~8.5 m with 1 m side setbacks, and 6 m plots even with 0 m sides (needs a narrow-plot layout family).
+  - Wide-shallow plots (8–9 m deep).
+  - L-shaped and triangular drawn plots.
+  - Large programs on small plots (needs two-row floor layouts).
+  - Corner plots (second road not planned for).
+  - Municipalities other than Kathmandu and Pokhara, pending reviewed bylaw profiles (owner decision).
+
+## 2026-10-01 — road orientation, municipalities, narrow/shallow layouts, program variants, east-road study, 3D colours
+
+- **Owner decisions applied.**
+  - Other municipalities are allowed with generic assumptions.
+  - Build the narrow-plot layouts.
+  - Decide the east-road entrance after inspecting plans.
+  - Add exterior and interior colour schemes with a visual gallery.
+  - Write a handover document (`HANDOVER.md`).
+- **Bug found and fixed: the planner ignored the road side.** The entrance was always on the survey's bottom edge. `plotFit.js` now turns rectangles by quarter turns so the road edge is the front, with north, setbacks and boundary notes turned too. Corner plots are planned once per road and labelled.
+- **Municipalities.** `normalizeBrief.js` accepts any NBC 105 Annex C local unit (fuzzy match, English names). Unreviewed ones carry `jurisdiction.profile.status='generic_working_assumptions_bylaws_unreviewed'`; the review sheet and site plan say so. Unknown names get "did you mean".
+- **Narrow layouts (`roomPlanner.js`).**
+  - `planNarrowFloor`: front stair, pass-through front room, side passage, rows behind the stair.
+  - `planMidStairFloor`: stair set back 3.0/3.6 m (`corePlanner.js` `offsetMm`), full-width front room, passage and bath beside the stair, rooms stacked behind. Only for owner-only narrow houses.
+  - Narrow mode is decided by the building width, not the floor width, so normal houses' partial top floors are unchanged.
+- **Shallow layout.** `planShallowFloor` puts a 1.6 m front gallery from the stair landing, with rooms side by side behind it. `frameGrid.js` puts the middle column row on the gallery wall. `drawingSet.structuralLayout` now joins each column to the next column on its line.
+- **Envelope.** The minimum buildable area is now 3.9 × 6.0 m. Narrow plots keep their width in the coverage fit. Depth is never cut below 7.5 m when it started above. Partial floors are clamped to the building width (narrow) or take the full depth (shallow); the extra length applies only to narrowed floors (the 8 m² over-constrained test still rejects).
+- **Program variants (`programVariants.js`).** `redistributionVariants` tries, in order:
+  1. a balanced spread (puja to the top owner floor; at most 2–3 main rooms per full floor and 1 on a partial floor);
+  2. moves from the failing floors to the emptiest floors;
+  3. adding a floor.
+  
+  Up to 24 variants are searched. Each is labelled and blocked with `PROGRAM_CHANGED_TO_FIT_OWNER_REVIEW`.
+- **Drawn plots.** `largestRectangle` now ranks by plannability class before area, so the triangle gets 7.65 × 8.05 m, not 9 × 7.
+- **East-road study.** Rendered and compared on an 11.25 m east-road plot. Decision: the default stays entrance-into-living; the top plan has the stair south-east, living east and the north-east open as parking. `searchConcepts({vastuAlternatives:true})`, used by the review path, appends the best plan with its kitchen ≥ 50 % in south-east/east when no shown plan has one, labelled "Vaastu alternative (kitchen SE/E)".
+- **3D colours.**
+  - `colourSchemes.js`: 8 exterior and 6 interior schemes.
+  - `NepalModel3D.jsx` additions:
+    - painted walls, floor bands, window frames and glass, plinth, parapets and terrace roofs;
+    - room paint strips with opening gaps;
+    - a dolls'-house "look inside" view;
+    - galleries that render the current house in every scheme as thumbnails;
+    - the choice is remembered in localStorage.
+  - Preview: `docs/handover/colour-schemes.png`. The "Vaastu colour guidance" scheme is labelled as not sourced from the supplied library (the library DB is absent here).
+- **Tests.**
+  - Backend 96/97; the only failure is the missing-original-PDF catalog test.
+  - `nepal-survey-coverage.test.js` has 9 tests, including narrow layouts and variants.
+  - Frontend 39/42, with `colour-schemes.test.mjs` added; the same 3 preview-config failures as before.
+  - Survey matrix: 51 planned / 23 refused / 2 no plan / 0 crashes.
+- **Next.** See `HANDOVER.md` §4.

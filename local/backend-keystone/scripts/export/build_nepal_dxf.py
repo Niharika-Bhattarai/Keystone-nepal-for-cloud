@@ -18,7 +18,7 @@ LAYERS = [  # name, ACI colour, lineweight (1/100 mm)
     ('A-ANNO-TAGS', 2, 18), ('A-ANNO-DIMS', 4, 13), ('A-STAIR', 7, 18), ('A-ROOF', 7, 35),
     ('A-ROOF-OTLN', 7, 18), ('A-PRKG', 8, 13), ('P-FIXT', 6, 13), ('P-SANR-PIPE', 30, 25),
     ('P-SANR-DRAN', 30, 35), ('P-SANR-EQPM', 30, 25), ('S-GRID', 8, 13), ('S-COLS', 7, 35),
-    ('S-BEAM', 1, 25), ('C-PROP', 3, 35), ('C-BLDG', 7, 25), ('P-WATR', 5, 25),
+    ('S-BEAM', 1, 25), ('C-PROP', 3, 35), ('C-PROP-PLAN', 8, 13), ('C-BLDG', 7, 25), ('P-WATR', 5, 25),
 ]
 GAP = 9000  # mm between drawings in model space
 
@@ -100,7 +100,12 @@ def build(data):
 
     # 1. Site and ground drainage
     dx = 0
-    rect(site, 'C-PROP', dx)
+    if data.get('plotPolygon'):
+        # drawn plot boundary; the rectangle is the planning frame inside it
+        msp.add_lwpolyline([(x + dx, y) for x, y in data['plotPolygon']], close=True, dxfattribs={'layer': 'C-PROP'})
+        rect(site, 'C-PROP-PLAN', dx)
+    else:
+        rect(site, 'C-PROP', dx)
     for slab in data['levels'][0]['slabs']:
         rect(slab, 'C-BLDG', dx)
     dr = data['drainage']

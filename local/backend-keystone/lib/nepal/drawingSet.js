@@ -41,7 +41,7 @@ const boxArea=b=>(b.x2-b.x1)*(b.y2-b.y1)/1e6;
 const ROOM_NAMES={livingRoom:'LIVING',kitchen:'KITCHEN + DINING',primaryBedroom:'MASTER BEDROOM',
   bedroom:'BEDROOM',guestBedroom:'GUEST BEDROOM',bathroom:'TOILET/BATH',puja:'PUJA',
   primaryAlcove:'BEDROOM ALCOVE',livingAnnex:'LIVING ANNEX',diningAnnex:'DINING',
-  utilityFlex:'UTILITY',serviceNiche:'STORE/UTILITY',study:'STUDY',store:'STORE',laundry:'LAUNDRY'};
+  utilityFlex:'UTILITY',serviceNiche:'STORE/UTILITY',lobby:'LOBBY / SITTING',study:'STUDY',store:'STORE',laundry:'LAUNDRY'};
 const roomName=r=>r.useIntent?.startsWith('bedroom_entry_vestibule')?'VESTIBULE':ROOM_NAMES[r.type]||r.type.toUpperCase();
 
 // ---------- geometry helpers ----------
@@ -110,14 +110,14 @@ function structuralLayout(candidate){
   const at=new Set(cols.map(c=>`${c.xMm},${c.yMm}`));
   const beams=[];
   const depth=span=>Math.max(300,Math.ceil(span/12/25)*25);
-  for(const y of g.yAxesMm)for(let i=0;i+1<g.xAxesMm.length;i++){
-    const [a,b]=[g.xAxesMm[i],g.xAxesMm[i+1]];
-    if(at.has(`${a},${y}`)&&at.has(`${b},${y}`)&&inSlab((a+b)/2,y))beams.push({axis:'x',line:y,from:a,to:b,spanMm:b-a});
-  }
-  for(const x of g.xAxesMm)for(let i=0;i+1<g.yAxesMm.length;i++){
-    const [a,b]=[g.yAxesMm[i],g.yAxesMm[i+1]];
-    if(at.has(`${x},${a}`)&&at.has(`${x},${b}`)&&inSlab(x,(a+b)/2))beams.push({axis:'y',line:x,from:a,to:b,spanMm:b-a});
-  }
+  // A beam joins each column to the next column on the same line (axes without
+  // a column there, e.g. the shallow-plan stair row, are skipped).
+  for(const y of g.yAxesMm){const xs=g.xAxesMm.filter(x=>at.has(`${x},${y}`));
+    for(let i=0;i+1<xs.length;i++){const [a,b]=[xs[i],xs[i+1]];
+      if(inSlab((a+b)/2,y))beams.push({axis:'x',line:y,from:a,to:b,spanMm:b-a});}}
+  for(const x of g.xAxesMm){const ys=g.yAxesMm.filter(y=>at.has(`${x},${y}`));
+    for(let i=0;i+1<ys.length;i++){const [a,b]=[ys[i],ys[i+1]];
+      if(inSlab(x,(a+b)/2))beams.push({axis:'y',line:x,from:a,to:b,spanMm:b-a});}}
   const beamTypes=new Map();
   for(const b of beams){const d=depth(b.spanMm);const key=`230x${d}`;
     if(!beamTypes.has(key))beamTypes.set(key,{id:`B${beamTypes.size+1}`,widthMm:230,depthMm:d,maxSpanMm:0,count:0});
@@ -432,7 +432,9 @@ function roofPlan(candidate,geometry){
 function renderDrawingSet(candidate,brief,{option='Option 1',date=new Date().toISOString().slice(0,10)}={}){
   const geometry=exportCandidateGeometry(candidate,brief);
   const schedule=buildOpeningSchedule(candidate),structure=structuralLayout(candidate);
-  const j=brief.jurisdiction||{},siteArea=candidate.ledger.siteAreaSqM;
+  // A drawn plot is planned on its inscribed rectangle; area and boundary are the real plot's.
+  const poly=brief.site?.plotPolygonMm;
+  const j=brief.jurisdiction||{},siteArea=brief.site?.plotAreaSqM||candidate.ledger.siteAreaSqM;
   const project={title:'PROPOSED RESIDENTIAL BUILDING',location:`${j.municipality||'Municipality ?'}, Ward ${j.ward||'?'}`,
     plot:`${r1(siteArea)} m² (${rapd(siteArea)} R-A-P-D)`,option:`${option} · ${candidate.id}`,
     kind:no=>no.startsWith('ST')?'STRUCTURAL LAYOUT (PRELIMINARY)':'ARCHITECTURAL DRAWING'};
@@ -444,24 +446,36 @@ function renderDrawingSet(candidate,brief,{option='Option 1',date=new Date().toI
 
   // AR-00 site plan, area statement and drawing list
   {const site=candidate.envelope.site,area={x1:DRAW.x1,y1:DRAW.y1+6,x2:230,y2:DRAW.y2};
-    const bounds={x1:site.x1-3500,y1:site.y1-6000,x2:site.x2+3500,y2:site.y2+3500};
+    const ext=poly?{x1:Math.min(site.x1,...poly.map(p=>p.xMm)),y1:Math.min(site.y1,...poly.map(p=>p.yMm)),
+      x2:Math.max(site.x2,...poly.map(p=>p.xMm)),y2:Math.max(site.y2,...poly.map(p=>p.yMm))}:site;
+    const bounds={x1:ext.x1-3500,y1:ext.y1-6000,x2:ext.x2+3500,y2:ext.y2+3500};
     const scale=fitScale(bounds,area),v=viewport(bounds,area,scale);
-    let s=rectSvg(v,site,'fill="none" stroke="#111" stroke-width="0.45" stroke-dasharray="4 1"');
+    let s=poly?`<polygon points="${poly.map(p=>`${v.x(p.xMm)},${v.y(p.yMm)}`).join(' ')}" fill="none" stroke="#111" stroke-width="0.45" stroke-dasharray="4 1"/>`+
+      rectSvg(v,site,'fill="none" stroke="#555" stroke-width="0.25" stroke-dasharray="2 1"'):
+      rectSvg(v,site,'fill="none" stroke="#111" stroke-width="0.45" stroke-dasharray="4 1"');
     s+=rectSvg(v,candidate.envelope.buildable,'fill="none" stroke="#888" stroke-width="0.2" stroke-dasharray="1 1"');
     for(const sl of candidate.levels[0].footprint.slabs)s+=rectSvg(v,sl,'fill="url(#hatch)" stroke="#111" stroke-width="0.35"');
     s+=text(v.x((site.x1+site.x2)/2),v.y((site.y1+site.y2)/2),'PROPOSED BUILDING',3,'text-anchor="middle" font-weight="700"');
     const fr=brief.site?.frontageEdges?.[0];
-    if(fr&&fr.edgeIndex===0){s+=`<rect x="${v.x(site.x1-3000)}" y="${v.y(site.y1)}" width="${(site.x2-site.x1+6000)*v.k}" height="${(fr.roadWidth?.value||4)*1000*v.k}" fill="#e6e6e6"/>`;
-      s+=text(v.x((site.x1+site.x2)/2),v.y(site.y1)+(fr.roadWidth?.value||4)*1000*v.k/2+1,`${fr.roadWidth?.value||'?'} ${fr.roadWidth?.unit||'m'} WIDE ROAD`,2.8,'text-anchor="middle"');}
+    if(fr&&[0,1,2,3].includes(fr.edgeIndex)){const rw=(fr.roadWidth?.value||4)*1000,e=fr.edgeIndex;
+      // road strip outside the frontage edge (0 bottom, 1 right, 2 top, 3 left)
+      const road=e===0?{x1:site.x1-3000,y1:site.y1-rw,x2:site.x2+3000,y2:site.y1}:e===2?{x1:site.x1-3000,y1:site.y2,x2:site.x2+3000,y2:site.y2+rw}:
+        e===1?{x1:site.x2,y1:site.y1-3000,x2:site.x2+rw,y2:site.y2+3000}:{x1:site.x1-rw,y1:site.y1-3000,x2:site.x1,y2:site.y2+3000};
+      s+=rectSvg(v,road,'fill="#e6e6e6" stroke="none"');
+      s+=text(v.x((road.x1+road.x2)/2),v.y((road.y1+road.y2)/2)+1,`${fr.roadWidth?.value||'?'} ${fr.roadWidth?.unit||'m'} WIDE ROAD`,2.8,
+        `text-anchor="middle"${e%2?` transform="rotate(-90 ${v.x((road.x1+road.x2)/2)} ${v.y((road.y1+road.y2)/2)+1})"`:''}`);}
     s+=chain(v,'x',[site.x1,site.x2],v.y(site.y2)-4,'top')+chain(v,'y',[site.y1,site.y2],v.x(site.x1)-4,'left');
     const sb=candidate.envelope.setbacksMm||[];
-    s+=text(area.x1,area.y2-2,`Working setbacks ${sb.map(m=>ftin(m)).join(' / ')} — provisional; adopted municipal setbacks to be applied.`,2);
+    s+=text(area.x1,area.y2-2,`Working setbacks ${sb.map(m=>ftin(m)).join(' / ')} — provisional; adopted municipal setbacks to be applied.${brief.jurisdiction?.profile?.status==='generic_working_assumptions_bylaws_unreviewed'?' Bylaws of this municipality not yet reviewed in Keystone.':''}`,2);
+    const fit=brief.site?.planningFit;
+    if(fit?.rectangleMm)s+=text(area.x1,area.y2-6,`Drawn plot (heavy dashed) planned on its largest inner rectangle ${(fit.rectangleMm[0]/1000).toFixed(2)} × ${(fit.rectangleMm[1]/1000).toFixed(2)} m (light dashed), turned ${Math.round(fit.rotationDegrees)}° so the road is at the bottom; setbacks from the rectangle.`,1.8);
+    if(candidate.envelope.coverageFit)s+=text(area.x1,area.y2-(fit?.rectangleMm?10:6),candidate.envelope.coverageFit.note.slice(0,190),1.8);
     s+=text(v.x(site.x1),v.y(site.y1)+(fr?.roadWidth?.value||4)*1000*v.k+6,`SITE PLAN  (scale 1:${scale})`,3.2,'font-weight="700" text-decoration="underline"');
     s+=northArrow(area.x2-10,area.y1+12,bearing);
     const l=candidate.ledger,rowsA=[['1','Plot area (measured)',`${r1(siteArea)} m²`,`${Math.round(sqft(siteArea))} sq ft`,rapd(siteArea)],
       ...l.floors.map((f,i)=>[String(i+2),`${f.id} floor area`,`${r1(f.grossSqM)} m²`,`${Math.round(sqft(f.grossSqM))} sq ft`,'']),
       [String(l.floors.length+2),'Total built (sum of floors)',`${r1(l.grossBuiltSqM)} m²`,`${Math.round(sqft(l.grossBuiltSqM))} sq ft`,''],
-      [String(l.floors.length+3),'Ground coverage',`${r1(l.groundCoverageRatio*100)} %`,'',''],
+      [String(l.floors.length+3),'Ground coverage',`${r1(l.groundCoverageRatio*l.siteAreaSqM/siteArea*100)} %`,'',''],
       [String(l.floors.length+4),'FAR (built / plot)',String(Math.round(l.grossBuiltSqM/siteArea*100)/100),'','']];
     const t1=table(240,DRAW.y1+6,[['SN',9],['DESCRIPTION',52],['M²',26],['SQ FT',24],['R-A-P-D',24]],rowsA,{title:'AREA STATEMENT'});
     s+=t1.svg;

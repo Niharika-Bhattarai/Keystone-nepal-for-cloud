@@ -1,0 +1,109 @@
+'use strict';
+// Planning frame for a surveyed (drawn) plot. The footprint search works on an
+// axis-aligned rectangle, so a polygon plot is turned until its road edge runs
+// along +x at the bottom, and the largest rectangle that fits inside the
+// boundary becomes the planning site. The real boundary, its area and the
+// rotation are kept on the brief so drawings show the actual plot. Setbacks are
+// applied from the rectangle, so every distance to the real boundary is at
+// least the working setback.
+const CELL_MM=50;
+
+function signedArea(p){let a=0;for(let i=0;i<p.length;i++){const q=p[(i+1)%p.length];a+=p[i].xMm*q.yMm-q.xMm*p[i].yMm;}return a/2;}
+function inside(pt,poly){let c=false;
+  for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j];
+    if((a.yMm>pt.y)!==(b.yMm>pt.y)&&pt.x<(b.xMm-a.xMm)*(pt.y-a.yMm)/(b.yMm-a.yMm)+a.xMm)c=!c;}
+  return c;}
+
+// Largest axis-aligned rectangle of fully-inside cells (histogram method).
+function largestRectangle(poly){
+  const xs=poly.map(p=>p.xMm),ys=poly.map(p=>p.yMm);
+  const x0=Math.min(...xs),y0=Math.min(...ys),nx=Math.ceil((Math.max(...xs)-x0)/CELL_MM),ny=Math.ceil((Math.max(...ys)-y0)/CELL_MM);
+  const e=0.5,ok=Array.from({length:ny},(_,j)=>Array.from({length:nx},(_,i)=>{
+    const cx=x0+i*CELL_MM,cy=y0+j*CELL_MM;
+    return [[e,e],[CELL_MM-e,e],[e,CELL_MM-e],[CELL_MM-e,CELL_MM-e],[CELL_MM/2,CELL_MM/2]].every(([u,v])=>inside({x:cx+u,y:cy+v},poly));}));
+  const h=new Array(nx).fill(0);let best={area:0,cls:-1};
+  for(let j=0;j<ny;j++){
+    for(let i=0;i<nx;i++)h[i]=ok[j][i]?h[i]+1:0;
+    const st=[];
+    for(let i=0;i<=nx;i++){const cur=i<nx?h[i]:0;
+      while(st.length&&h[st.at(-1)]>=cur){const top=st.pop(),height=h[top],left=st.length?st.at(-1)+1:0,width=i-left;
+        // Rank by plannability class, then area: a rectangle that leaves a normal
+        // (≥ 6.5 × 7.5 m) or at least a narrow/shallow (≥ 3.9 × 6 m) buildable area
+        // after 1 m setbacks beats a larger one that leaves neither.
+        const area=height*width,W=width*CELL_MM,H=height*CELL_MM;
+        const cls=W>=8500&&H>=9500?2:W>=5900&&H>=8000?1:0;
+        if(cls>(best.cls??-1)||cls===best.cls&&area>best.area){best={area,cls,i1:left,i2:i,j1:j-height+1,j2:j+1};}}
+      st.push(i);}
+  }
+  if(!best.area)return null;
+  return {x1:x0+best.i1*CELL_MM,y1:y0+best.j1*CELL_MM,x2:x0+best.i2*CELL_MM,y2:y0+best.j2*CELL_MM};
+}
+
+// Compass side a plan edge faces, from the north bearing (CCW from plan +x).
+function facing(edgeIndex,bearingDeg){
+  const out=[270,0,90,180][edgeIndex]??270;// outward normal of bottom/right/top/left
+  const rel=((out-bearingDeg)%360+360)%360;// angle from north, counter-clockwise
+  return ['north','north-west','west','south-west','south','south-east','east','north-east'][Math.round(rel/45)%8];
+}
+// A rectangle whose road is not on the bottom edge is turned by quarter turns so
+// it is: the planner always puts the entrance on the bottom (front) edge. North,
+// setbacks and boundary notes turn with it.
+function turnRectangle(brief,front){
+  const site=brief.site,e=front.edgeIndex;
+  const [w,d]=[site.verticesMm[2].xMm-site.verticesMm[0].xMm,site.verticesMm[2].yMm-site.verticesMm[0].yMm];
+  const [nw,nd]=e%2?[d,w]:[w,d];
+  const boundaries=[0,1,2,3].map(k=>{const b=site.boundaries?.[(k+e)%4];return b?{...b,edgeIndex:k}:undefined;}).filter(Boolean);
+  return {...brief,site:{...site,verticesMm:[{xMm:0,yMm:0},{xMm:nw,yMm:0},{xMm:nw,yMm:nd},{xMm:0,yMm:nd}],
+    measuredAreaSqM:nw*nd/1e6,north:{...site.north,bearingDegrees:((site.north.bearingDegrees-90*e)%360+360)%360},
+    frontageEdges:[{...front,edgeIndex:0}],otherRoadEdges:(site.frontageEdges||[]).filter(f=>f!==front).map(f=>({...f,edgeIndex:(f.edgeIndex-e+4)%4})),
+    boundaries:boundaries.length===4?boundaries:site.boundaries,
+    entrance:{surveyEdgeIndex:e,faces:facing(e,site.north.bearingDegrees),turnedDegrees:e?-90*e:0},
+    planningFit:e?{status:'turned_rectangle',rotationDegrees:90*e,
+      note:`Plan turned ${90*e}° so the road side (survey ${['bottom','right','top','left'][e]} edge, facing ${facing(e,site.north.bearingDegrees)}) is at the front; the north arrow shows true north.`}:null}};
+}
+// One planning brief per road frontage (a corner plot gets one per road).
+function planningBriefs(brief){
+  const fronts=brief?.site?.frontageEdges?.length?brief.site.frontageEdges:[{edgeIndex:0}];
+  const uniq=fronts.filter((f,i)=>fronts.findIndex(g=>g.edgeIndex===f.edgeIndex)===i);
+  return uniq.map(front=>planningBrief({...brief,site:{...brief.site,frontageEdges:[front,...uniq.filter(f=>f!==front)]}}));
+}
+function planningBrief(brief){
+  const site=brief?.site;
+  if(site?.shape==='rectangle'&&Array.isArray(site.verticesMm)&&site.verticesMm.length===4){
+    const front=site.frontageEdges?.[0]||{edgeIndex:0};
+    const turned=turnRectangle(brief,front);
+    return turned;
+  }
+  if(site?.shape!=='surveyedPolygon'||!Array.isArray(site.verticesMm)||site.verticesMm.length<3)return brief;
+  let poly=site.verticesMm.map(v=>({xMm:v.xMm,yMm:v.yMm}));
+  const front=site.frontageEdges?.[0]||{edgeIndex:0};
+  let road=front.edgeIndex,n=poly.length;
+  // Counter-clockwise order keeps the plot on the left of each edge.
+  if(signedArea(poly)<0){poly=poly.slice().reverse();road=(n-2-road+n)%n;}
+  const a=poly[road],b=poly[(road+1)%n],theta=Math.atan2(b.yMm-a.yMm,b.xMm-a.xMm);
+  const c=Math.cos(-theta),s=Math.sin(-theta);
+  let rot=poly.map(p=>({xMm:(p.xMm-a.xMm)*c-(p.yMm-a.yMm)*s,yMm:(p.xMm-a.xMm)*s+(p.yMm-a.yMm)*c}));
+  const r=largestRectangle(rot);
+  const thetaDeg=theta*180/Math.PI;
+  const plotAreaSqM=Math.abs(signedArea(poly))/1e6;
+  if(!r)return {...brief,site:{...site,planningFit:{status:'no_rectangle_fits',plotAreaSqM}}};
+  // Rectangle at the origin, rounded inward to 10 mm.
+  const w=Math.floor((r.x2-r.x1)/10)*10,d=Math.floor((r.y2-r.y1)/10)*10;
+  rot=rot.map(p=>({xMm:Math.round(p.xMm-r.x1),yMm:Math.round(p.yMm-r.y1)}));
+  const verticesMm=[{xMm:0,yMm:0},{xMm:w,yMm:0},{xMm:w,yMm:d},{xMm:0,yMm:d}];
+  const bearing=((site.north.bearingDegrees-thetaDeg)%360+360)%360;
+  const roadBoundary=site.boundaries?.[front.edgeIndex];
+  const touchesRoad=r.y1<=CELL_MM*2;
+  return {...brief,site:{...site,shape:'rectangle',verticesMm,measuredAreaSqM:w*d/1e6,
+    north:{...site.north,bearingDegrees:Math.round(bearing*100)/100},
+    frontageEdges:[{...front,edgeIndex:0}],
+    boundaries:[0,1,2,3].map(i=>({edgeIndex:i,neighbor:i===0?(roadBoundary?.neighbor||'road'):'unknown',neighborHeightMm:null,
+      neighborHasWindows:null,proposedSetbackMm:i===0?roadBoundary?.proposedSetbackMm??null:null,note:''})),
+    plotPolygonMm:rot,plotAreaSqM,otherRoadEdges:[],
+    entrance:{surveyEdgeIndex:front.edgeIndex,faces:facing(0,Math.round(bearing*100)/100)},
+    planningFit:{status:'largest_inscribed_rectangle',rotationDegrees:Math.round(thetaDeg*100)/100,
+      rectangleMm:[w,d],rectangleAreaSqM:w*d/1e6,plotAreaSqM,usedShare:w*d/1e6/plotAreaSqM,touchesRoadEdge:touchesRoad,
+      note:`Planned on the largest rectangle inside the drawn plot (${(w/1000).toFixed(2)} × ${(d/1000).toFixed(2)} m, ${Math.round(w*d/1e6/plotAreaSqM*100)} % of ${plotAreaSqM.toFixed(1)} m²), turned ${Math.round(thetaDeg)}° so the road edge is at the bottom. Setbacks are measured from this rectangle; coverage is reported against the rectangle (conservative).`}}};
+}
+
+module.exports={planningBrief,planningBriefs,largestRectangle,facing};

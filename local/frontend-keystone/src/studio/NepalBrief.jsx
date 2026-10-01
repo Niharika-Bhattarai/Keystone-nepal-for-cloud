@@ -55,7 +55,10 @@ export function buildNepalSurvey(form) {
         depth: { value: decimal(form.depth), unit: 'm' } } }),
     ...(form.declaredArea !== '' ? { declaredArea: { value: decimal(form.declaredArea), unit: form.areaUnit } } : {}),
     north: { bearingDegrees: decimal(form.north), evidence: form.northEvidence },
-    frontageEdges: [{ edgeIndex: decimal(form.roadEdge), roadWidth: { value: decimal(form.roadWidth), unit: 'm' } }],
+    // The chosen road side first; any other edge marked "road" makes a corner plot.
+    frontageEdges: [{ edgeIndex: decimal(form.roadEdge), roadWidth: { value: decimal(form.roadWidth), unit: 'm' } },
+      ...Array.from({ length: edgeCount }, (_, i) => i).filter(i => i !== Number(form.roadEdge) && form.boundaryNeighbors?.[i] === 'road')
+        .map(i => ({ edgeIndex: i, roadWidth: { value: decimal(form.boundaryRoadWidths?.[i] || form.roadWidth), unit: 'm' } }))],
     boundaries: Array.from({ length: edgeCount }, (_, i) => ({
       neighbor: form.boundaryNeighbors?.[i] || 'unknown',
       ...(form.boundaryHeights?.[i] ? { neighborHeight: { value: decimal(form.boundaryHeights[i]), unit: 'm' } } : {}),
@@ -96,6 +99,7 @@ export function NepalBrief() {
   const [previewing, setPreviewing] = useState(false);
   const [massing, setMassing] = useState(null);
   const [massingIndex, setMassingIndex] = useState(0);
+  const [structureInputs, setStructureInputs] = useState({ soil: '', sbc: '', columnMm: '', fck: '' });
   useEffect(() => { try { localStorage.setItem(DRAFT_KEY, JSON.stringify(form)); } catch { /* private browser */ } }, [form]);
   const set = key => value => { setForm(prev => ({ ...prev, [key]: value })); setReport(null); setMassing(null); };
   const setLevel = (key, index) => value => { setForm(prev => {
@@ -118,7 +122,9 @@ export function NepalBrief() {
         body: JSON.stringify({ surveyData: buildNepalSurvey(form), format: 'json' }) });
       const data = await res.json();
       if (!res.ok || !data.candidates?.length) {
-        setReport(prev => ({ ...prev, message: data.message || 'No study massing could be built for this brief.' })); return;
+        setReport(prev => ({ ...prev, message: data.message || (data.rejectedReasons?.length
+          ? `No plan fits this brief yet. Main reasons: ${data.rejectedReasons.join(' · ')}`
+          : 'No study massing could be built for this brief.') })); return;
       }
       setMassing(data.candidates); setMassingIndex(0);
     } catch {
@@ -131,6 +137,16 @@ export function NepalBrief() {
       const res = await fetch('/api/nepal/concepts', { method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ surveyData: buildNepalSurvey(form), format: 'drawings', candidateIndex }) });
       if (!res.ok) { tab?.close(); const e = await res.json().catch(() => ({})); setReport(prev => ({ ...prev, message: e.message || 'Could not create the drawing set.' })); return; }
+      const url = URL.createObjectURL(new Blob([await res.text()], { type: 'text/html' }));
+      if (tab) tab.location.href = url; else window.location.href = url;
+    } catch { tab?.close(); setReport(prev => ({ ...prev, message: 'Could not reach the local review-plan server.' })); }
+  }
+  async function openStructure(candidateIndex) {
+    const tab = window.open('about:blank', '_blank');
+    try {
+      const res = await fetch('/api/nepal/concepts', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ surveyData: buildNepalSurvey(form), format: 'structure', candidateIndex, structure: structureInputs }) });
+      if (!res.ok) { tab?.close(); const e = await res.json().catch(() => ({})); setReport(prev => ({ ...prev, message: e.message || 'Could not run the structural calculation.' })); return; }
       const url = URL.createObjectURL(new Blob([await res.text()], { type: 'text/html' }));
       if (tab) tab.location.href = url; else window.location.href = url;
     } catch { tab?.close(); setReport(prev => ({ ...prev, message: 'Could not reach the local review-plan server.' })); }
@@ -164,8 +180,10 @@ export function NepalBrief() {
   }
   return <div style={{ padding: 16, color: 'var(--ink)' }}>
     <div className="studio-item-title">Nepal site brief</div>
-    <p className="studio-empty-note">Enter a rectangular plot, or draw the plot side by side with lengths and angles. The house itself can have a rectangular, stepped L or courtyard shape. Check the brief before design.</p>
-    <Field label="Municipality" value={form.municipality} onChange={set('municipality')}/>
+    <p className="studio-empty-note">Enter a rectangular plot, or draw the plot side by side with lengths and angles. The house itself can have a rectangular, stepped L or courtyard shape. On a side shared with a neighbour's wall, enter a 0 m proposed setback (plot edges section). Check the brief before design.</p>
+    <Field label="Municipality" value={form.municipality} onChange={set('municipality')} list="nepal-municipalities"/>
+    <datalist id="nepal-municipalities"><option value="Kathmandu Metropolitan City"/><option value="Lalitpur Metropolitan City"/><option value="Bhaktapur Municipality"/><option value="Madhyapur Thimi Municipality"/><option value="Kirtipur Municipality"/><option value="Tokha Municipality"/><option value="Budhanilakantha Municipality"/><option value="Tarakeshwar Municipality"/><option value="Nagarjun Municipality"/><option value="Chandragiri Municipality"/><option value="Kageshwori Manohara Municipality"/><option value="Gokarneshwor Municipality"/><option value="Shankharapur Municipality"/><option value="Dakshinkali Municipality"/><option value="Godawari Municipality"/><option value="Mahalaxmi Municipality"/><option value="Suryabinayak Municipality"/><option value="Changunarayan Municipality"/><option value="Pokhara Metropolitan City"/><option value="Bharatpur Metropolitan City"/><option value="Biratnagar Metropolitan City"/><option value="Birgunj Metropolitan City"/><option value="Dharan Sub-Metropolitan City"/><option value="Butwal Sub-Metropolitan City"/><option value="Hetauda Sub-Metropolitan City"/><option value="Itahari Sub-Metropolitan City"/><option value="Dhangadhi Sub-Metropolitan City"/><option value="Nepalgunj Sub-Metropolitan City"/><option value="Banepa Municipality"/><option value="Dhulikhel Municipality"/></datalist>
+    <p className="studio-empty-note">Any municipality or rural municipality in Nepal can be entered. Kathmandu has a reviewed bylaw profile; elsewhere plans use generic working setbacks and coverage until that municipality's bylaws are reviewed.</p>
     <Field label="Ward" value={form.ward} onChange={set('ward')} placeholder="Ward number"/>
     <label style={{ display: 'grid', gap: 5, fontSize: 12, marginBottom: 10 }}>Plot shape
       <select value={form.shape === 'surveyedPolygon' ? 'surveyedPolygon' : 'rectangle'} onChange={e => set('shape')(e.target.value)}>
@@ -178,7 +196,7 @@ export function NepalBrief() {
         onApply={({ vertices, sides, mode, unit }) => { setForm(prev => ({ ...prev, plotVertices: vertices, plotSketch: { sides, mode, unit },
           roadEdge: Number(prev.roadEdge) < vertices.length ? prev.roadEdge : '0' })); setReport(null); setMassing(null); }}/>
       <p className="studio-empty-note">{drawnPlot(form)
-        ? `Plot in the brief: ${form.plotVertices.length} corners. Floor plans are generated for rectangular plots only for now; a drawn plot is kept in the brief for review and for the irregular-plot planner.`
+        ? `Plot in the brief: ${form.plotVertices.length} corners. Plans use the largest rectangle that fits inside the drawn plot, turned so the road side is at the bottom; the drawings show the real boundary.`
         : 'Draw and close the plot, then press “Use this plot in the brief”.'}</p>
     </> : <>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
@@ -219,6 +237,9 @@ export function NepalBrief() {
             {['unknown', 'open', 'building', 'road'].map(v => <option key={v}>{v}</option>)}
           </select>
         </label>
+        {form.boundaryNeighbors?.[i] === 'road' && i !== Number(form.roadEdge) &&
+          <Field label="Second road on this edge: road width (m) — the plot is treated as a corner plot" type="number" step="any"
+            value={form.boundaryRoadWidths?.[i] || ''} onChange={setLevel('boundaryRoadWidths', i)} placeholder={form.roadWidth}/>}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
           <Field label="Neighbor height (m, if known)" type="number" step="any" value={form.boundaryHeights?.[i] || ''} onChange={setLevel('boundaryHeights', i)}/>
           <Field label="Proposed setback (m, if known)" type="number" step="any" value={form.boundarySetbacks?.[i] || ''} onChange={setLevel('boundarySetbacks', i)}/>
@@ -335,7 +356,7 @@ export function NepalBrief() {
       {massing && <>
         {massing.length > 1 && <label style={{ display: 'grid', gap: 5, fontSize: 12, marginTop: 10 }}>Hypothesis
           <select value={massingIndex} onChange={e => setMassingIndex(Number(e.target.value))}>
-            {massing.map((c, i) => <option key={c.id} value={i}>{i + 1}. {c.id}</option>)}
+            {massing.map((c, i) => <option key={c.id} value={i}>{i + 1}. {c.id}{c.entrance?.faces ? ` — entrance from the ${c.entrance.faces} road` : ''}{c.alternative ? ' — Vaastu alternative (kitchen SE/E)' : ''}</option>)}
           </select>
         </label>}
         <button type="button" className="studio-btn" onClick={() => openDrawingSet(massingIndex)}>
@@ -343,6 +364,30 @@ export function NepalBrief() {
         </button>
         <button type="button" className="studio-btn" onClick={() => downloadDxf(massingIndex)}>
           Download AutoCAD drawing (.dxf, millimetres)
+        </button>
+        <details style={{ margin: '10px 0', fontSize: 12 }}>
+          <summary>Structural calculation inputs (optional)</summary>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 8 }}>
+            <label style={{ display: 'grid', gap: 4 }}>Soil type (NBC 105 Table 4-2)
+              <select value={structureInputs.soil} onChange={e => setStructureInputs(v => ({ ...v, soil: e.target.value }))}>
+                <option value="">Not tested — use code default</option>
+                <option value="A">A — rock</option><option value="B">B — very dense / very stiff</option>
+                <option value="C">C — dense / medium dense, stiff</option><option value="D">D — loose / soft</option>
+              </select></label>
+            <label style={{ display: 'grid', gap: 4 }}>Safe bearing capacity (kN/m²)
+              <input type="number" min="50" step="5" placeholder="100 if unknown" value={structureInputs.sbc}
+                onChange={e => setStructureInputs(v => ({ ...v, sbc: e.target.value }))}/></label>
+            <label style={{ display: 'grid', gap: 4 }}>Column size (mm, starting trial)
+              <input type="number" min="300" step="25" placeholder="from layout" value={structureInputs.columnMm}
+                onChange={e => setStructureInputs(v => ({ ...v, columnMm: e.target.value }))}/></label>
+            <label style={{ display: 'grid', gap: 4 }}>Concrete grade (MPa)
+              <select value={structureInputs.fck} onChange={e => setStructureInputs(v => ({ ...v, fck: e.target.value }))}>
+                <option value="">Code minimum (M20; M25 above 12 m)</option><option value="20">M20</option><option value="25">M25</option><option value="30">M30</option>
+              </select></label>
+          </div>
+        </details>
+        <button type="button" className="studio-btn" onClick={() => openStructure(massingIndex)}>
+          Open structural load calculation (NBC 105:2025, step by step)
         </button>
         <Suspense fallback={<p className="studio-empty-note">Loading 3D view…</p>}>
           <NepalModel3D key={massing[massingIndex].id} geometry={massing[massingIndex]}/>

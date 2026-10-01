@@ -34,6 +34,7 @@ function prepareNepalDxf(candidate,brief,{option='Option 1'}={}){
   return {version:'keystone-nepal-dxf-v1',units:'mm',option:`${option} · ${candidate.id}`,
     location:`${j.municipality||''}, Ward ${j.ward||''}`,northBearingDegrees:bearing,
     site:candidate.envelope.site,buildable:candidate.envelope.buildable,
+    plotPolygon:brief.site?.plotPolygonMm?.map(p=>[p.xMm,p.yMm])||null,
     grid:{xAxesMm:candidate.grid.xAxesMm,yAxesMm:candidate.grid.yAxesMm},
     structure:{beams:structure.beams.map(b=>({axis:b.axis,line:b.line,from:b.from,to:b.to,type:b.type})),
       beamTypes:structure.beamTypes,slabThicknessMm:structure.slabThicknessMm},
