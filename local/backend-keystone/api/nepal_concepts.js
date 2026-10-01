@@ -17,6 +17,18 @@ module.exports=async(req,res)=>{
       brief:variant.brief,assumptions:review.assumptions,
       result:{candidates:variant.candidates,attempts:variant.attempts,variations:[],
         status:'unverified_concepts_only',generationAvailable:false}}:null;
+    if(req.body?.format==='dxf'){
+      // AutoCAD DXF (R2010, mm) for one hypothesis, same indexing as the drawing set.
+      const {buildNepalDxf}=require('../lib/nepal/dxfExport');
+      const all=[...review.result.candidates.map(c=>[c,preflight.normalizedBrief,'']),
+        ...(variant?variant.candidates.map(c=>[c,variant.brief,' (parking variant)']):[])];
+      const index=Number.isSafeInteger(req.body.candidateIndex)?req.body.candidateIndex:0;
+      if(!all[index])return res.status(404).json({success:false,message:'No such hypothesis.'});
+      const [c,b,label]=all[index];
+      const {dxf}=buildNepalDxf(c,b,{option:`Option ${index+1}${label}`});
+      res.setHeader('Content-Disposition',`attachment; filename="keystone-nepal-option-${index+1}.dxf"`);
+      return res.status(200).type('application/dxf').send(dxf);
+    }
     if(req.body?.format==='drawings'){
       // A3 review drawing set for one hypothesis: index into the listed candidates,
       // then the parking-variant candidates (same order as the JSON format).

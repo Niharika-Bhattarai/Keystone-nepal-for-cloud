@@ -130,6 +130,16 @@ export function NepalBrief() {
       if (tab) tab.location.href = url; else window.location.href = url;
     } catch { tab?.close(); setReport(prev => ({ ...prev, message: 'Could not reach the local review-plan server.' })); }
   }
+  async function downloadDxf(candidateIndex) {
+    try {
+      const res = await fetch('/api/nepal/concepts', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ surveyData: buildNepalSurvey(form), format: 'dxf', candidateIndex }) });
+      if (!res.ok) { const e = await res.json().catch(() => ({})); setReport(prev => ({ ...prev, message: e.message || 'Could not create the AutoCAD file.' })); return; }
+      const url = URL.createObjectURL(await res.blob());
+      const a = document.createElement('a'); a.href = url; a.download = `keystone-nepal-option-${candidateIndex + 1}.dxf`;
+      document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch { setReport(prev => ({ ...prev, message: 'Could not reach the local review-plan server.' })); }
+  }
   async function openWorkingPlans(spatialStudy=false) {
     const tab=window.open('about:blank','_blank');
     setPreviewing(true);
@@ -307,7 +317,10 @@ export function NepalBrief() {
           </select>
         </label>}
         <button type="button" className="studio-btn" onClick={() => openDrawingSet(massingIndex)}>
-          Open A3 review drawing set (plans, elevations, section, schedules, structural layout)
+          Open A3 review drawing set (plans, elevations, section, schedules, sanitary, roof, structural layout)
+        </button>
+        <button type="button" className="studio-btn" onClick={() => downloadDxf(massingIndex)}>
+          Download AutoCAD drawing (.dxf, millimetres)
         </button>
         <Suspense fallback={<p className="studio-empty-note">Loading 3D view…</p>}>
           <NepalModel3D key={massing[massingIndex].id} geometry={massing[massingIndex]}/>

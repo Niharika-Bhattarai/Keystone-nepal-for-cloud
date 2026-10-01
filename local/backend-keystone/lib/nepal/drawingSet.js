@@ -620,4 +620,4 @@ function renderDrawingSet(candidate,brief,{option='Option 1',date=new Date().toI
   return {html,sheets:sheets.map(({no,title})=>({no,title})),openingSchedule:schedule.rows,structure,
     furniture:candidate.levels.map(l=>furnish(l))};
 }
-module.exports={renderDrawingSet,buildOpeningSchedule,structuralLayout,roofPlan,ftin,rapd};
+module.exports={renderDrawingSet,buildOpeningSchedule,structuralLayout,roofPlan,openingKind,ftin,rapd,ROOM_NAMES,roomName};
