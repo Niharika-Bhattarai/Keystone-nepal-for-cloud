@@ -209,7 +209,7 @@ function searchProgram(brief,{provisionalSetbacksMm,workingCoverageLimit=null,
   for(const footprint of footprints(envelope,{compactRectangle:
     !brief.buildingProgram.rental?.intended&&
     envelope.buildable.x2-envelope.buildable.x1>=9000}))for(const side of ['west','east'])for(const order of
-    ['living-first','kitchen-south','bedrooms-south']) {
+    ['living-first','kitchen-south','bedrooms-south','vastu-zones','vastu-zones-entry']) {
     const id=`${footprint.family}-${side}-${order}`;
     try {
       const core=reserveCore({footprint,levels,side,tankLitres});

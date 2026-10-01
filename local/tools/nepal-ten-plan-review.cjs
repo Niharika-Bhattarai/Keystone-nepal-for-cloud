@@ -28,6 +28,8 @@ function corpus(label,file){
 }
 const owner=corpus('2.5-storey owner home','rectangle-2_5.json');
 const rental=corpus('3.5-storey rental plus owner home','rental-3_5.json');
+// Numbered set: the top 4 owner and top 6 rental hypotheses by ranking.
+owner.result.candidates=owner.result.candidates.slice(0,4);
 if(owner.result.candidates.length!==4||rental.result.candidates.length!==6)
   throw new Error(`Expected 4 + 6 distinct concepts; received ${owner.result.candidates.length} + ${rental.result.candidates.length}`);
 const plans=[...owner.result.candidates.map(candidate=>({base:owner,candidate})),

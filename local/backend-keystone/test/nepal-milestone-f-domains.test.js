@@ -50,6 +50,7 @@ test('overconstrained partial top rejects all candidates with reasons instead of
   const brief=normalizeBrief(raw).brief;
   const result=searchConcepts(brief,{provisionalSetbacksMm:[1000,1000,1000,1000]});
   assert.equal(result.candidates.length,0);
-  assert.equal(result.attempts.length,24);
+  // 4 footprint families x 2 core sides x 5 room orders (incl. two zone-first orders).
+  assert.equal(result.attempts.length,40);
   assert.ok(result.attempts.every(a=>a.status==='rejected'&&a.reason));
 });

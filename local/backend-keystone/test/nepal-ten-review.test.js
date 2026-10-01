@@ -17,7 +17,8 @@ function concepts(file){
 }
 
 test('numbered review set contains ten measured layouts with top owner puja and honest column findings',()=>{
-  const owner=concepts('rectangle-2_5'),rental=concepts('rental-3_5');
+  // The numbered set is the top 4 owner and top 6 rental hypotheses by ranking.
+  const owner=concepts('rectangle-2_5').slice(0,4),rental=concepts('rental-3_5');
   assert.equal(owner.length,4);
   assert.equal(rental.length,6);
   assert.equal(new Set([...owner,...rental].map(c=>c.geometryHash)).size,10);
@@ -87,7 +88,7 @@ test('owner bedroom floor moves its attached bath off the ground puja below (V06
   const raw=structuredClone(require('./fixtures/nepal/rectangle-2_5.json'));
   const candidates=searchConcepts(normalizeBrief(raw).brief,{provisionalSetbacksMm:[1000,1000,1000,1000],
     workingCoverageLimit:0.7,maxCandidates:6}).candidates;
-  assert.equal(candidates.length,4);
+  assert.equal(candidates.length,6);
   for(const candidate of candidates){
     const [ground,first]=candidate.levels,replan=first.rooms.bathReplan;
     const puja=ground.rooms.rooms.find(r=>r.type==='puja');
@@ -241,4 +242,26 @@ test('rental parking: one ground bedroom moves up so the requested bikes fit at 
   const owner=searchConcepts(normalizeBrief(require('./fixtures/nepal/rectangle-2_5.json')).brief,
     {provisionalSetbacksMm:[1000,1000,1000,1000],workingCoverageLimit:0.7,maxCandidates:6});
   assert.equal(owner.parkingProgramVariant,undefined);
+});
+
+test('zone-first order places each room in the strip slot that best fits its Vaastu zone, for any bearing',()=>{
+  const at=bearing=>{
+    const raw=structuredClone(require('./fixtures/nepal/rental-3_5.json'));raw.site.north.bearingDegrees=bearing;
+    return searchConcepts(normalizeBrief(raw).brief,{provisionalSetbacksMm:[1000,1000,1000,1000],
+      workingCoverageLimit:0.7,maxCandidates:24}).candidates;
+  };
+  const share=(c,type)=>Math.min(...c.levels.flatMap(l=>(l.rooms?.vastuFindings||[]).filter(f=>f.type===type)
+    .map(f=>f.preferredShare)));
+  for(const bearing of [0,90]){
+    const cs=at(bearing);
+    for(const side of ['west','east']){
+      const zone=cs.find(c=>c.id===`rectangle-${side}-vastu-zones`);
+      const fixed=cs.filter(c=>c.coreSide===side&&['kitchen-south','bedrooms-south'].includes(c.order));
+      if(!zone)continue;
+      // Without the entry pin, the zone order is never worse on core Vaastu than the fixed orders on the same core side.
+      for(const other of fixed)assert.ok(zone.score[0]>=other.score[0]-1e-9,`${bearing} ${side} ${other.id}`);
+    }
+  }
+  const east=at(0).find(c=>c.id==='rectangle-east-vastu-zones');
+  assert.equal(share(east,'kitchen'),1);assert.equal(share(east,'primaryBedroom'),1);
 });

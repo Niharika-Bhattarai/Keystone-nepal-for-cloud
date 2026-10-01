@@ -1,6 +1,6 @@
 'use strict';
 const {rect,areaSqM}=require('./areaLedger');
-const {vastuFindings}=require('./vastuAllocator');
+const {vastuFindings,FAVOR}=require('./vastuAllocator');
 const {doorOnSharedEdge,reserveWindow}=require('./spatialReservations');
 const {INTERIOR_WALL_MM,EXTERIOR_WALL_MM,CLEAR_CORRIDOR_MM}=require('./constructionProfile');
 // 1,800 mm clear puja plus one exterior wall and half a partition to the corridor.
@@ -264,6 +264,31 @@ function planOwnerBedroomFloor({level,footprint,core,bearingDegrees,pujaBoxesBel
     vastuFindings:vastuFindings(rooms,{bearingDegrees,domainBoxes:slabs}),
     unresolved:['Family landing furniture fit, balcony guard and bath detailing remain unverified.']};
 }
+// Zone-first sequence (DESIGN-PRINCIPLES §4 "reserve scarce zones before packing
+// rooms"): each strip slot is scored for each room's own Vaastu preference on this
+// floor's true-north domain. Rooms whose preference varies most along the strip
+// (the most to lose) choose first; rooms without a directional rule fill the rest
+// in the default living/kitchen/bedroom priority. Works for any bearing.
+function zoneFirstOrder(types,{mainX1,mainX2,ymin,ymax,slabs,bearingDegrees}){
+  const n=types.length;if(n<2)return types;
+  const slot=i=>rect([mainX1,ymin+Math.floor((ymax-ymin)*i/n),mainX2,ymin+Math.floor((ymax-ymin)*(i+1)/n)]);
+  const share=(type,i)=>vastuFindings([{id:'z',type,box:slot(i)}],{bearingDegrees,domainBoxes:slabs})[0].preferredShare;
+  const scored=types.map((type,index)=>{
+    const shares=Array.from({length:n},(_,i)=>FAVOR[type]?share(type,i):0);
+    return {type,index,shares,spread:Math.max(...shares)-Math.min(...shares)};
+  });
+  const order=Array(n).fill(null),taken=new Set();
+  // A primary bedroom outranks secondary rooms with the same spread (core Vaastu tier).
+  const core=t=>['puja','kitchen','primaryBedroom'].includes(t)?1:0;
+  for(const item of [...scored].filter(s=>s.spread>1e-9)
+    .sort((a,b)=>core(b.type)-core(a.type)||b.spread-a.spread||a.index-b.index)){
+    const free=item.shares.map((v,i)=>[v,i]).filter(([,i])=>!order[i]);
+    const [,best]=free.sort((a,b)=>b[0]-a[0]||a[1]-b[1])[0];
+    order[best]=item.type;taken.add(item.index);
+  }
+  const rest=scored.filter(s=>!taken.has(s.index)).map(s=>s.type);
+  return order.map(t=>t??rest.shift());
+}
 function planFloorRooms({level,footprint,core,bearingDegrees,order='living-first',
   groundParking=null,pujaInMainStrip=false,toiletBoxesAdjacent=[],pujaBoxesBelow=[],avoidColumnBoxes=[]}) {
   if(level.occupancy==='owner'&&level.bedrooms===3&&level.bathrooms===1&&
@@ -306,8 +331,16 @@ function planFloorRooms({level,footprint,core,bearingDegrees,order='living-first
   const priority=order==='bedrooms-south'?{bedroom:0,guestBedroom:0,primaryBedroom:0,kitchen:1,dining:2,livingRoom:3,study:4}:
     order==='kitchen-south'?{kitchen:0,dining:1,livingRoom:2,bedroom:3,guestBedroom:3,primaryBedroom:3,study:4}:
       {livingRoom:0,kitchen:1,dining:2,bedroom:3,guestBedroom:3,primaryBedroom:3,study:4};
-  const types=main.map((type,index)=>({type,index})).sort((a,b)=>
+  let types=main.map((type,index)=>({type,index})).sort((a,b)=>
     (priority[a.type]??4)-(priority[b.type]??4)||a.index-b.index).map(item=>item.type);
+  if(order==='vastu-zones')types=zoneFirstOrder(types,{mainX1,mainX2,ymin,ymax,slabs,bearingDegrees});
+  // Owner convention: the unit entrance opens into living. Keep living in the slot
+  // at the stair arrival and zone-order only the remaining rooms.
+  if(order==='vastu-zones-entry'&&types.includes('livingRoom')){
+    const rest=types.filter((t,i)=>i!==types.indexOf('livingRoom'));
+    const first=Math.floor((ymax-ymin)/types.length);
+    types=['livingRoom',...zoneFirstOrder(rest,{mainX1,mainX2,ymin:ymin+first,ymax,slabs,bearingDegrees})];
+  }
   // Kitchen and dining are one space by default. A distinct dining room is
   // attempted only when the owner explicitly asks for one on this level.
   const minimum=types.reduce((s,t)=>s+(minimumHeight[t]||2000),0);
@@ -487,7 +520,7 @@ function planFloorRooms({level,footprint,core,bearingDegrees,order='living-first
   // The first occupied room absorbs the entry-side strip. The residual route
   // begins beyond living, with a real open connection between the two zones.
   const living=rooms.find(r=>r.type==='livingRoom');
-  const directLiving=order==='living-first'&&living&&living.box.y1===ymin&&
+  const directLiving=(order==='living-first'||order==='vastu-zones-entry')&&living&&living.box.y1===ymin&&
     living.box.y2<ymax&&
     !rooms.some(r=>r.type==='puja'&&r.entryFrom==='living-room');
   let circulationPortal=null;

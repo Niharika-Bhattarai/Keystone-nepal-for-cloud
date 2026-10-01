@@ -71,12 +71,17 @@ test('narrow frontage keeps a puja room in the service bay without inventing a w
 
 test('living-first rental entries face a living doorway across the reserved corridor',()=>{
   const candidates=options(require('./fixtures/nepal/rental-3_5.json'));
-  for(const candidate of candidates.filter(c=>c.order==='living-first')){
+  // The zone-first order that pins living at the arrival keeps the same entry convention.
+  for(const candidate of candidates.filter(c=>['living-first','vastu-zones-entry'].includes(c.order))){
     for(const level of candidate.levels.filter(l=>l.rooms))
       assert.ok(level.rooms.entryLivingFacingOverlapMm>=800);
     assert.ok(!candidate.validation.blockers.some(b=>b.code==='ENTRY_NOT_FACING_LIVING'));
   }
-  assert.ok(candidates.some(c=>c.order==='bedrooms-south'&&
+  // Other orders that move living away from the arrival still report it (wider set:
+  // the default top three now all keep the living-room entry).
+  const all=searchConcepts(normalizeBrief(require('./fixtures/nepal/rental-3_5.json')).brief,
+    {provisionalSetbacksMm:[1000,1000,1000,1000],workingCoverageLimit:0.7,maxCandidates:24}).candidates;
+  assert.ok(all.some(c=>!['living-first','vastu-zones-entry'].includes(c.order)&&
     c.validation.blockers.some(b=>b.code==='ENTRY_NOT_FACING_LIVING')));
 });
 

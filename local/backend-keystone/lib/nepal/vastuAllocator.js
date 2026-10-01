@@ -14,4 +14,4 @@ function vastuFindings(rooms,{bearingDegrees,domainBoxes,profile='Jain-led'}={})
       status:preferred.length?'preference_measured_consultant_review_required':'no_directional_rule'};
   });
 }
-module.exports={vastuFindings};
+module.exports={vastuFindings,FAVOR};
