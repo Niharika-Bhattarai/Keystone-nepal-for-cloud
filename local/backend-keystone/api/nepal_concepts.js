@@ -29,6 +29,34 @@ module.exports=async(req,res)=>{
       res.setHeader('Content-Disposition',`attachment; filename="keystone-nepal-option-${index+1}.dxf"`);
       return res.status(200).type('application/dxf').send(dxf);
     }
+    if(req.body?.format==='structure'||req.body?.format==='structure-json'){
+      // Preliminary NBC 105:2025 structural calculation for one hypothesis.
+      const {designStructure}=require('../lib/nepal/structural');
+      const {renderStructuralReport}=require('../lib/nepal/structural/report');
+      const all=[...review.result.candidates.map(c=>[c,preflight.normalizedBrief,'']),
+        ...(variant?variant.candidates.map(c=>[c,variant.brief,' (parking variant)']):[])];
+      const index=Number.isSafeInteger(req.body.candidateIndex)?req.body.candidateIndex:0;
+      if(!all[index])return res.status(404).json({success:false,message:'No such hypothesis.'});
+      const [c,b,label]=all[index];
+      const raw=req.body.structure||{},num=v=>Number.isFinite(Number(v))&&v!==''&&v!=null?Number(v):undefined;
+      const overrides={soil:['A','B','C','D'].includes(raw.soil)?raw.soil:undefined,sbc:num(raw.sbc),Z:num(raw.Z),
+        columnMm:num(raw.columnMm),beamWidthMm:num(raw.beamWidthMm),beamDepthMm:num(raw.beamDepthMm),fck:num(raw.fck),
+        lockSizes:raw.lockSizes===true};
+      let result;
+      try{result=designStructure(c,b,overrides);}
+      catch(error){return res.status(422).json({success:false,code:error.code||'STRUCTURE_UNAVAILABLE',message:error.message,
+        candidates:error.candidates});}
+      if(req.body.format==='structure-json'){
+        const {summary,trials,an,beams,columns,footings,elig,irr}=result;
+        return res.status(200).json({success:true,status:result.status,option:index+1,summary,trials,
+          seismic:{Z:an.hz.Z,soil:an.dirs.x.gov.soil,T:an.dirs.x.gov.T,Cd:an.dirs.x.gov.Cd,W:an.Wt,Vx:an.dirs.x.gov.V,Vy:an.dirs.y.gov.V},
+          sizes:{columnMm:result.model.inputs.columnMm,beam:[result.model.inputs.beamWidthMm,result.model.inputs.beamDepthMm]},
+          columns:columns.map(x=>({storey:x.storey,id:x.id,bars:x.label,ok:x.ok})),
+          beams:beams.map(x=>({id:x.id,level:x.level,top:x.top,bottom:x.bottom,ok:x.ok})),
+          footings:footings.map(x=>({id:x.id,B:x.B,D:x.D,bar:x.bar})),nbc205:elig,irregularities:irr.filter(i=>i.irregular)});
+      }
+      return res.status(200).type('html').send(renderStructuralReport(result,{option:`Option ${index+1}${label}`}));
+    }
     if(req.body?.format==='drawings'){
       // A3 review drawing set for one hypothesis: index into the listed candidates,
       // then the parking-variant candidates (same order as the JSON format).

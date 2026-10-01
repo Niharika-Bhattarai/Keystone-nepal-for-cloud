@@ -565,3 +565,69 @@ No implementation is claimed complete. Future agents should not mistake proposed
   2. Irregular-plot floor-plan generation from the drawn polygon.
   3. Door hinge and swing optimisation.
   4. Sanitary pipe sizing once the engineer's method is chosen.
+
+## 2026-10-01 — structural load and seismic calculation (NBC 105:2025)
+
+- **Request.** Read the supplied codes in `Codes/` and calculate the structural loads of a residential building step by step in the backend.
+- **Codes read.**
+  - *NBC 105:2025* (`Codes/NBC 2025.pdf`, sha256 2ecc2200…, same file as manifest `nbc105-2025`): chapters 3–6, Annex A (ductile RC detailing) and Annex C (zoning factors). The equations are images in the PDF, so they were rendered and read page by page.
+  - *NBC 205:2024 ready-to-use guideline*: layout restrictions, soil bearing table, design basis.
+  - *IS 1893 (Part 1):2016* (`Codes/Seismic design code/kupdf.net_is-1893-2016.pdf`, sha256 1dc6ee67…, a scan read by OCR) and its amendments 1 and 2. Used only as a cross-check; NBC 105 governs.
+  - *Excluded.* The NBC 105:2019 draft commentary was not used, per AGENTS.md.
+  - *Not supplied.* IS 456 and IS 875 (or NBC 102/103) are referred to by NBC 205 but are not in the repo. Their clause values are used, and every one is marked "IS 456:2000*" / "not supplied — verify" in the report.
+- **Engine (`local/backend-keystone/lib/nepal/structural/`).**
+  - `codeData.js`: every constant with source id, clause and physical PDF page, plus the source hashes.
+  - `data/nbc105-2025-annex-c.json`: all 753 Annex C rows (district, local unit, PGA, page). The rows were cross-checked between two independent text parses.
+  - `hazard.js`: Z lookup that accepts English or Nepali names and spelling variants. Renamed units are matched (Pokhara → Pokhara Lekhnath). It also handles Table 4-3 soil D wards and Ch(T) with Ta = 0 for the ESM.
+  - `model.js`: storeys, slab levels, columns and beams from the plan geometry and drawing-set layout. Walls are weighed wall by wall from the plan, with openings deducted. Also stair waist, parapets on exposed roof edges and the overhead tank. Slabs are split into 0.1 m cells, each assigned to the nearest column (tributary) and nearest beam (45° share).
+  - `seismic.js`:
+    - seismic weight (0.3 LL, roof nil);
+    - period: 1.25 × 0.075 H^0.75 against the Rayleigh period, lesser adopted;
+    - C = Ch Z I; Cd = C/(Rμ Ωu) for ULS and 0.2C/Ωs for SLS; V = Cd W;
+    - force distribution with the k exponent;
+    - storey stiffness by the D-value (Muto) method with Table 3-1 cracked factors;
+    - drifts × Rμ × kd against 0.025 / 0.006;
+    - torsion: centre of mass vs centre of rigidity, ±0.05b, Δmax/Δmin;
+    - column shears and moments, beam seismic moments and frame axial forces;
+    - IS 1893 cross-check of the period and Ah.
+  - `sections.js`: IS 456 limit-state formulas:
+    - Mu,lim and Ast;
+    - τc from the Table 19 formula (reproduces the table to ±0.01);
+    - strain-compatibility column interaction and the biaxial αn check.
+  - `members.js`:
+    - *Takedown.* Gravity takedown with an equilibrium check.
+    - *Beams.* Coefficients, NBC combinations, ρmin = 0.24√fck/fy, Annex A bottom/top rules, capacity shear 1.4(Ms+Mh)/L and link spacing.
+    - *Columns.* All combinations with minimum eccentricity, 1–4 % and ≥ 8 bars, plus confinement lo, s and Ash.
+    - *Footings.* Bearing with +50 % seismic, punching, one-way shear and bending.
+  - `index.js`:
+    - irregularities: soft, mass, vertical geometric, torsion, re-entrant, diaphragm opening and floating columns;
+    - ESM applicability;
+    - strong column – weak beam (1.2) and joint shear (Ajh where needed);
+    - ldh at exterior joints;
+    - overturning; tie-beam force; separation;
+    - NBC 205 eligibility.
+    
+    **Sizing.** Frame sizes are stepped up from the layout (350 mm columns, 230 × 355 beams) until every check passes. Each trial is reported. `lockSizes` reports a failing frame instead of enlarging it.
+  - `report.js`: step-by-step HTML calculation. Each line carries the formula, substituted numbers, result and citation (e.g. "NBC 105:2025 6.1.1 eq 6.1(1), PDF p.60"). Worked beam and column examples and full schedules are included. Professional fields stay blank.
+- **Website.** API `format:'structure'` (HTML) and `format:'structure-json'`, with optional inputs: soil type, SBC, Z, starting sizes, concrete grade. The studio has a "Structural calculation inputs" panel and an "Open structural load calculation" button.
+- **Result for the rental 3.5-storey Kathmandu fixture.**
+  - *Seismic inputs.* Z = 0.35 (S.N. 345); soil D (KMC ward 10, Table 4-3).
+  - *Period.* T = 0.604 s (Rayleigh 0.64 s).
+  - *Base shear.* Cd = 0.1313 and W ≈ 4,620 kN, giving V ≈ 607 kN.
+  - *Sizing.* 350 mm columns fail on drift, beams or strong column. **400 × 400 columns with 300 × 450 beams pass.**
+  - *NBC 205.* Not eligible (panel 14.1 m² > 13.5 m²; third floor 47 % > 25 %), so the house must be designed to NBC 105.
+- **Tests.**
+  - *`test/nepal-structure.test.js`.* 10 tests, all passing: Annex C, soil, spectrum branches, distribution, IS 456 table checks, equilibrium, ESM values, adopted sizes, citations, locked sizes, unknown soil (C and D enveloped), second fixture.
+  - *Nepal suite.* 88/89. The only failure is the existing missing-original-PDF catalog test: the originals live in `Codes/`, not `Design Files/`, and the Vastu books are absent.
+  - *Frontend.* Builds.
+- **Limitations.**
+  - *Not a stamped design.* This is a preliminary aid for a licensed engineer.
+  - *Analysis method.* D-value and tributary methods, not a 3D FE model. NBC 205 cl 6.4 expects a 3D bare-frame model; run one and compare.
+  - *Unverified values.* IS 456 / IS 875 values must be checked against official copies.
+  - *Site data.* Soil type and SBC need a soil test.
+  - *Not designed.* Slabs, stair reinforcement, the underground reservoir and parapet anchorage.
+  - *Plot shape.* Irregular plots are still not planned.
+- **Next.**
+  1. Slab (IS 456 Annex D) and stair design.
+  2. Point the rule catalog at `Codes/` originals.
+  3. Optional 3D frame export (e.g. to ETABS/STAAD text) for the engineer's model.

@@ -96,6 +96,7 @@ export function NepalBrief() {
   const [previewing, setPreviewing] = useState(false);
   const [massing, setMassing] = useState(null);
   const [massingIndex, setMassingIndex] = useState(0);
+  const [structureInputs, setStructureInputs] = useState({ soil: '', sbc: '', columnMm: '', fck: '' });
   useEffect(() => { try { localStorage.setItem(DRAFT_KEY, JSON.stringify(form)); } catch { /* private browser */ } }, [form]);
   const set = key => value => { setForm(prev => ({ ...prev, [key]: value })); setReport(null); setMassing(null); };
   const setLevel = (key, index) => value => { setForm(prev => {
@@ -131,6 +132,16 @@ export function NepalBrief() {
       const res = await fetch('/api/nepal/concepts', { method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ surveyData: buildNepalSurvey(form), format: 'drawings', candidateIndex }) });
       if (!res.ok) { tab?.close(); const e = await res.json().catch(() => ({})); setReport(prev => ({ ...prev, message: e.message || 'Could not create the drawing set.' })); return; }
+      const url = URL.createObjectURL(new Blob([await res.text()], { type: 'text/html' }));
+      if (tab) tab.location.href = url; else window.location.href = url;
+    } catch { tab?.close(); setReport(prev => ({ ...prev, message: 'Could not reach the local review-plan server.' })); }
+  }
+  async function openStructure(candidateIndex) {
+    const tab = window.open('about:blank', '_blank');
+    try {
+      const res = await fetch('/api/nepal/concepts', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ surveyData: buildNepalSurvey(form), format: 'structure', candidateIndex, structure: structureInputs }) });
+      if (!res.ok) { tab?.close(); const e = await res.json().catch(() => ({})); setReport(prev => ({ ...prev, message: e.message || 'Could not run the structural calculation.' })); return; }
       const url = URL.createObjectURL(new Blob([await res.text()], { type: 'text/html' }));
       if (tab) tab.location.href = url; else window.location.href = url;
     } catch { tab?.close(); setReport(prev => ({ ...prev, message: 'Could not reach the local review-plan server.' })); }
@@ -343,6 +354,30 @@ export function NepalBrief() {
         </button>
         <button type="button" className="studio-btn" onClick={() => downloadDxf(massingIndex)}>
           Download AutoCAD drawing (.dxf, millimetres)
+        </button>
+        <details style={{ margin: '10px 0', fontSize: 12 }}>
+          <summary>Structural calculation inputs (optional)</summary>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 8 }}>
+            <label style={{ display: 'grid', gap: 4 }}>Soil type (NBC 105 Table 4-2)
+              <select value={structureInputs.soil} onChange={e => setStructureInputs(v => ({ ...v, soil: e.target.value }))}>
+                <option value="">Not tested — use code default</option>
+                <option value="A">A — rock</option><option value="B">B — very dense / very stiff</option>
+                <option value="C">C — dense / medium dense, stiff</option><option value="D">D — loose / soft</option>
+              </select></label>
+            <label style={{ display: 'grid', gap: 4 }}>Safe bearing capacity (kN/m²)
+              <input type="number" min="50" step="5" placeholder="100 if unknown" value={structureInputs.sbc}
+                onChange={e => setStructureInputs(v => ({ ...v, sbc: e.target.value }))}/></label>
+            <label style={{ display: 'grid', gap: 4 }}>Column size (mm, starting trial)
+              <input type="number" min="300" step="25" placeholder="from layout" value={structureInputs.columnMm}
+                onChange={e => setStructureInputs(v => ({ ...v, columnMm: e.target.value }))}/></label>
+            <label style={{ display: 'grid', gap: 4 }}>Concrete grade (MPa)
+              <select value={structureInputs.fck} onChange={e => setStructureInputs(v => ({ ...v, fck: e.target.value }))}>
+                <option value="">Code minimum (M20; M25 above 12 m)</option><option value="20">M20</option><option value="25">M25</option><option value="30">M30</option>
+              </select></label>
+          </div>
+        </details>
+        <button type="button" className="studio-btn" onClick={() => openStructure(massingIndex)}>
+          Open structural load calculation (NBC 105:2025, step by step)
         </button>
         <Suspense fallback={<p className="studio-empty-note">Loading 3D view…</p>}>
           <NepalModel3D key={massing[massingIndex].id} geometry={massing[massingIndex]}/>
