@@ -5,7 +5,7 @@ The backend calculates loads and a preliminary design for a residential RC momen
 ## Sources (physical PDF pages)
 | Source | File | Use |
 |---|---|---|
-| NBC 105:2025 (`nbc105-2025`) | `Codes/NBC 2025.pdf` | Governing: Table 3-1 (p39), 3.6/3.7 combinations (p39–41), 3.8 bearing (p41), spectra 4.1–4.2 (p41–49), Table 4-3 soil D (p46), Table 4-4 importance (p48), period 5.1 (p50–52), seismic weight Table 5-1 (p52), Table 5-2 Rμ/Ω (p54), irregularity 5.4 (p55–57), drift 5.5 (p58–59), ESM chapter 6 (p60–61), Annex A detailing (p80–97), Annex C zoning (p122–137) |
+| NBC 105:2025 (`nbc105-2025`) | `Codes/NBC 2025.pdf` | Governing: Table 3-1 (p39), 3.6/3.7 combinations (p39–41), 3.8 bearing (p41), spectra 4.1–4.2 (p41–49), Table 4-3 soil D (p46), Table 4-4 importance (p48), period 5.1 (p50–52), seismic weight Table 5-1 (p52), Table 5-2 Rμ/Ω (p54), irregularity 5.4 (p55–57), drift 5.5 (p58–59), ESM chapter 6 (p60–61), Annex A detailing (p80–97), Annex C zoning (p122–136) |
 | NBC 205:2024 (`nbc205-2024`) | `Codes/NBC_205_READY-TO-USE…pdf` | Layout restrictions 4.2 (p15–17), SBC Table 3-2 (p14), design basis 7.2–7.4 (p24–26) |
 | IS 1893 (Part 1):2016 (`is1893-2016`) | `Codes/Seismic design code/kupdf.net_is-1893-2016.pdf` | Cross-check only (period 7.6.2, Sa/g) |
 | IS 456:2000, IS 875 | not supplied | Member strength, unit weights, live loads — shown with "*", verify |
