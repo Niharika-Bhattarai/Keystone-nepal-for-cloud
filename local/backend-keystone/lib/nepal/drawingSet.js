@@ -8,6 +8,7 @@
 // Sheets are drawn true to scale for A3 landscape (420 x 297 mm).
 const {exportCandidateGeometry}=require('./geometryExport');
 const {AREA_SQFT}=require('./units');
+const {furnishLevel}=require('./furniture');
 
 const SHEET_W=420,SHEET_H=297,STRIP=26,MARGIN=10,BIND=20;
 const DRAW={x1:BIND,y1:MARGIN+8,x2:SHEET_W-MARGIN,y2:SHEET_H-MARGIN-STRIP-2};
@@ -187,7 +188,7 @@ function exteriorTicks(level,face){
 }
 
 // ---------- floor plan ----------
-function planDrawing(candidate,level,schedule,area,scale,{showSection=false,structural=false}={}){
+function planDrawing(candidate,level,schedule,area,scale,{showSection=false,structural=false,furnish=null}={}){
   const slabs=level.footprint.slabs,b=outerBounds(slabs),g=candidate.grid;
   const pad=2600;// room for chains and bubbles (model mm)
   const bounds={x1:b.x1-pad,y1:b.y1-pad,x2:b.x2+pad,y2:b.y2+pad};
@@ -235,6 +236,8 @@ function planDrawing(candidate,level,schedule,area,scale,{showSection=false,stru
     // columns
     for(const c of g.columns)if(slabs.some(sl=>c.xMm>=sl.x1&&c.xMm<=sl.x2&&c.yMm>=sl.y1&&c.yMm<=sl.y2)){
       const h=c.widthMm/2;s+=rectSvg(v,{x1:c.xMm-h,y1:c.yMm-h,x2:c.xMm+h,y2:c.yMm+h},'fill="#111"');}
+    // furniture and fixtures (thin lines, under the room labels)
+    if(furnish)s+=furnitureSvg(v,furnish(level).items);
     // room labels
     for(const r of level.rooms?.rooms||[]){const c=r.clearBox||r.box,cx=v.x((c.x1+c.x2)/2),cy=v.y((c.y1+c.y2)/2);
       s+=text(cx,cy-0.6,roomName(r),2.1,'text-anchor="middle" font-weight="700"');
@@ -358,6 +361,32 @@ function notes(x,y,title,lines,{size=2.1,width=95}={}){
   return {svg:s,bottom:yy};
 }
 
+// ---------- furniture symbols ----------
+function furnitureSvg(v,items){
+  const st='fill="none" stroke="#333" stroke-width="0.13"';let s='';
+  for(const it of items){const b=it.box,X=v.x(b.x1),Y=v.y(b.y2),W=(b.x2-b.x1)*v.k,H=(b.y2-b.y1)*v.k;
+    const cx=X+W/2,cy=Y+H/2;
+    if(it.kind==='coffeeTable'||it.kind==='diningTable'){
+      s+=`<rect x="${X}" y="${Y}" width="${W}" height="${H}" rx="0.4" ${st}/>`;
+      if(it.chairsZone){const n=it.kind==='diningTable'&&W>H?2:1;
+        for(let i=0;i<n;i++){const xx=X+W*(i+0.5)/n;s+=`<rect x="${xx-1.6}" y="${Y-2.9}" width="3.2" height="2.4" ${st}/><rect x="${xx-1.6}" y="${Y+H+0.5}" width="3.2" height="2.4" ${st}/>`;}}
+      continue;}
+    if(it.kind==='wc'){s+=`<rect x="${X}" y="${Y}" width="${W}" height="${H}" ${st}/><ellipse cx="${cx}" cy="${cy}" rx="${Math.min(W,H)*0.35}" ry="${Math.max(W,H)*0.3}" ${st}/>`;continue;}
+    if(it.kind==='basin'||it.kind==='sink'){s+=`<rect x="${X}" y="${Y}" width="${W}" height="${H}" ${st}/><ellipse cx="${cx}" cy="${cy}" rx="${W*0.32}" ry="${H*0.3}" ${st}/>`;}
+    else if(it.kind==='stove'){s+=`<rect x="${X}" y="${Y}" width="${W}" height="${H}" ${st}/>`;
+      for(const [dx,dy] of [[-1,-1],[1,-1],[-1,1],[1,1]])s+=`<circle cx="${cx+dx*W/5}" cy="${cy+dy*H/5}" r="${Math.min(W,H)/8}" ${st}/>`;}
+    else if(it.kind==='doubleBed'||it.kind==='singleBed'){s+=`<rect x="${X}" y="${Y}" width="${W}" height="${H}" ${st}/>`;
+      // pillows on the headboard (wall) side
+      const pw=it.wall==='south'||it.wall==='north'?W:H*0.18,ph=it.wall==='south'||it.wall==='north'?H*0.18:H;
+      const px=it.wall==='east'?X+W-pw:X,py=it.wall==='south'?Y+H-ph:Y;
+      s+=`<rect x="${px+0.4}" y="${py+0.4}" width="${pw-0.8}" height="${ph-0.8}" rx="0.5" ${st}/>`;}
+    else if(it.kind==='shower'){s+=`<rect x="${X}" y="${Y}" width="${W}" height="${H}" ${st}/><line x1="${X}" y1="${Y}" x2="${X+W}" y2="${Y+H}" ${st}/><line x1="${X+W}" y1="${Y}" x2="${X}" y2="${Y+H}" ${st}/>`;}
+    else s+=`<rect x="${X}" y="${Y}" width="${W}" height="${H}" ${st}${it.tall?' stroke-dasharray="0.6 0.4"':''}/>`;
+    if(it.label&&W>5&&H>2.2)s+=text(cx,cy+0.6,it.label,1.4,'text-anchor="middle" fill="#555"');
+  }
+  return s;
+}
+
 // ---------- the set ----------
 function renderDrawingSet(candidate,brief,{option='Option 1',date=new Date().toISOString().slice(0,10)}={}){
   const geometry=exportCandidateGeometry(candidate,brief);
@@ -367,6 +396,9 @@ function renderDrawingSet(candidate,brief,{option='Option 1',date=new Date().toI
     plot:`${r1(siteArea)} m² (${rapd(siteArea)} R-A-P-D)`,option:`${option} · ${candidate.id}`,
     kind:no=>no.startsWith('ST')?'STRUCTURAL LAYOUT (PRELIMINARY)':'ARCHITECTURAL DRAWING'};
   const bearing=geometry.northBearingDegrees??0,sheets=[];
+  const beams=structure.beams,furnishings=new Map();
+  const furnish=level=>{if(!furnishings.has(level.id))furnishings.set(level.id,furnishLevel(level,{bearingDegrees:bearing,beams,columns:candidate.grid.columns,
+    wardrobes:brief.buildingProgram?.ownerProgram?.otherBedroomWardrobes?'all':'primary'}));return furnishings.get(level.id);};
   const add=(no,title,scale,inner)=>sheets.push({no,title,html:frame({no,title,scale,project,date,inner:DEFS+inner})});
 
   // AR-00 site plan, area statement and drawing list
@@ -405,7 +437,7 @@ function renderDrawingSet(candidate,brief,{option='Option 1',date=new Date().toI
     const area={x1:DRAW.x1,y1:DRAW.y1+4,x2:DRAW.x2-10,y2:DRAW.y2-8};
     const scale=fitScale({x1:0,y1:0,x2:outerBounds(level.footprint.slabs).x2-outerBounds(level.footprint.slabs).x1+5200,
       y2:outerBounds(level.footprint.slabs).y2-outerBounds(level.footprint.slabs).y1+5200},area);
-    const d=planDrawing(candidate,level,schedule,area,scale,{showSection:i===0});
+    const d=planDrawing(candidate,level,schedule,area,scale,{showSection:i===0,furnish});
     const gross=level.footprint.slabs.reduce((n,b)=>n+boxArea(b),0);
     let s=d.svg+text((DRAW.x1+DRAW.x2)/2,DRAW.y2-1,`${level.id.toUpperCase()} FLOOR PLAN — FLOOR AREA ${Math.round(sqft(gross))} SQ.FT (${r1(gross)} m²) — SCALE 1:${scale}`,3,'text-anchor="middle" font-weight="700"');
     s+=northArrow(DRAW.x2-12,DRAW.y1+12,bearing);
@@ -469,6 +501,7 @@ function renderDrawingSet(candidate,brief,{option='Option 1',date=new Date().toI
   const html=`<!doctype html><html><head><meta charset="utf-8"><title>Keystone Nepal review drawing set — ${esc(candidate.id)}</title>`+
     `<style>@page{size:420mm 297mm;margin:0}body{margin:0;background:#888}.sheet{width:420mm;height:297mm;background:#fff;margin:0 auto 8mm;page-break-after:always;break-after:page}`+
     `@media print{body{background:#fff}.sheet{margin:0}}svg{display:block}</style></head><body>${sheets.map(s=>s.html).join('')}</body></html>`;
-  return {html,sheets:sheets.map(({no,title})=>({no,title})),openingSchedule:schedule.rows,structure};
+  return {html,sheets:sheets.map(({no,title})=>({no,title})),openingSchedule:schedule.rows,structure,
+    furniture:candidate.levels.map(l=>furnish(l))};
 }
 module.exports={renderDrawingSet,buildOpeningSchedule,structuralLayout,ftin,rapd};
