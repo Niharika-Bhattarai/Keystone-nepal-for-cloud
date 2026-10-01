@@ -453,3 +453,61 @@ No implementation is claimed complete. Future agents should not mistake proposed
   3. Rental parking.
   4. Connect the Nepal geometry to the CAD/GLB exporters.
   5. Install `axe-core` and run the a11y scan.
+
+## 2026-10-01 — drawing standard, rental parking, zone-first orders, A3 drawing set
+
+- **Owner instructions (2026-10-01).**
+  - *Zone-first allocation:* implement it.
+  - *Setbacks:* vary by **municipality, not ward**; to be added at a later stage. The 1 m working setbacks stay flagged until then.
+  - *Rental parking:* reduce one ground room and add it on an upper floor, or remove the family balcony.
+  - *Professional items:* all must be acknowledged.
+  - *Drawings:* the samples added in `example of drawings/` are the drawing standard.
+- **Drawing standard (`knowledge/DRAWING-STANDARD.md`).**
+  - *Inputs read:* all 8 PDFs (106 pages): the municipal A1 set (architecture S-1/2, structure S-2/2), the 60-page structural design report, three A3/A4 architectural sets, a client-options set and the Madhav KC A1 structural set. The `.dwg` and `.bak` files cannot be opened here and were not reviewed.
+  - *Content:* the spec records the sheet list, title blocks, units (architecture ft-in, structure mm), schedules and structural notes. It also records which content Keystone produces and which stays with licensed professionals.
+- **Rental parking (`programVariants.js`, `roomPlanner.js planCompactRental`).**
+  - *Trigger.* When no candidate places the requested parking, an owner-approved program variant runs: the ground rental flat keeps one bedroom, and the moved bedroom goes to the owner's partial top floor as an extra family bedroom (`secondaryBedroomsOnly`, not a second primary).
+  - *Ground layout.* An open bike bay of 3.33 × 4.58 m sits at the road-side front corner; the kitchen moves to the rear row off the cross hall.
+  - *Top-floor bedroom.* Partial-floor bedrooms stop at the stair-core row so no fixed column stands inside them. The bedroom is 2.42 × 4.30 m clear, and the rest stays terrace.
+  - *Visibility.* Variant candidates are returned separately (`parkingProgramVariant`) and flagged `PROGRAM_CHANGED_FOR_PARKING_OWNER_REVIEW` (needs household confirmation). They appear in the review page, the 3D JSON and the drawing set. Original candidates are byte-identical.
+  - *Not used.* The family-balcony option was not needed: the rental fixture has no family balcony, and the owner fixture already places its bike bay.
+  - *Open point.* The moved bedroom has no bathroom on its floor; the owner floor below has two.
+- **Zone-first room orders (`zoneFirstOrder`, orders `vastu-zones` and `vastu-zones-entry`).**
+  - *Method.* Each strip slot is scored for each room's own Vaastu preference on the floor's true-north domain. Core rooms and rooms with the most to lose choose first.
+  - *Pure order, rental fixture.* Every kitchen and the primary bedroom land fully in SE/SW (core score 0.69 vs 0.40), but the entrances open into the corridor (`ENTRY_NOT_FACING_LIVING`), so it ranks below living-first.
+  - *Entry-pinned order.* It keeps the owner's "entry opens into living" convention, but does not beat the compact living-first layout (0.35 vs 0.40).
+  - *Conclusion.* On this east-road site, the entry zone is also the kitchen/living/puja zone. Fully meeting kitchen SE on every floor needs **an owner decision: entry into kitchen–dining instead of living**.
+  - *Review set.* The numbered review now takes the top 4 owner and top 6 rental hypotheses; plan 9 is the pure zone-first rental plan.
+- **A3 review drawing set (`drawingSet.js`; tool `local/tools/nepal-drawing-set.cjs`; API `format:'drawings'`; studio button).**
+  - *Sheets.* AR-00 site plan, area statement and drawing list; AR-01… floor plans; elevations; section X-X with opening schedule; ST-01 column and beam layout.
+  - *Scale and units.* True to scale at A3. Architecture in ft-in, structure in mm.
+  - *Openings.* Tags and the schedule come from the engine's reserved openings.
+  - *Structure.* Preliminary sizes use the sample report's rules of thumb (beam span/12, slab span/(26 × MF)). Reinforcement and footings say "by structural design".
+  - *Stamps.* Every sheet is stamped "for review only — not for construction or permit". Checked-by, NEC no. and signature stay blank.
+  - *Verified.* Rendered and inspected visually, PDF 8 × A3 pages, and opened from the running studio with no page errors.
+- **Professional acknowledgements.** The professional-review list is printed on the site sheet of every set:
+  - municipal adoption;
+  - structural analysis and design;
+  - soil and footings;
+  - soft storey and torsion;
+  - stair headroom;
+  - doors and egress;
+  - daylight;
+  - balcony guards;
+  - tanks;
+  - sanitary design;
+  - NEC signatures.
+- **Tests.** Nepal Node suite **71/72**; the only failure is still the missing-original-PDF test. New tests cover:
+  - the parking variant;
+  - zone-first ordering at two bearings;
+  - unit conversions;
+  - the sheet list and blank professional fields;
+  - opening-schedule completeness;
+  - structural beam placement and sizing.
+- **Next.**
+  1. Owner decision on entry-into-living versus kitchen SE.
+  2. Municipal setback profiles.
+  3. Sanitary sheet (fixtures, stacks, septic tank and soak pit).
+  4. Roof plan sheet.
+  5. Furniture in plans.
+  6. DXF export of the same geometry for the architect.
